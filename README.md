@@ -20,6 +20,5 @@ Official Trello and task management link https://trello.com/invite/b/iPAnwGp0/AT
 
 
 ## Disclaimer
-Please contact the authors and/or the client for any disclosures or further information about the project
-Please refer to the Creative Commons Zero v1.0 Universal License for information regarding the use of any source code for
+Please contact the authors and/or the client for any disclosures or further information about the project and refer to the Creative Commons Zero v1.0 Universal License for information regarding the use of any source code for
 this project.
