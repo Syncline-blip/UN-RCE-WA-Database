@@ -1,4 +1,5 @@
-<h1 align="center">United Nations Regional Centre of Expertise (WA) Database/Web Application</h1>
+
+<h1 align="center"> ![picture alt](http://www.rcenetwork.org/portal/sites/default/files/transparent_colour_rce_logo.png)United Nations Regional Centre of Expertise (WA) Database/Web Application</h1>
 
 
 
