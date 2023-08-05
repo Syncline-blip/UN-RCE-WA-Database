@@ -9,12 +9,6 @@
     height: 100px;
     background: #555;
   }
-  
-  .header h1 {
-    position: relative;
-    top: 18px;
-    left: 10px;
-  }
 </style>
 ## Authors and Clients
 This project was created by CITS3200 Group 39, Year 2023: 
