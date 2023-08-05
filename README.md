@@ -1,4 +1,8 @@
+<p align="center">
 # United Nations Regional Centre of Expertise (WA) Database/Web Application
+</p>
+
+
 
 ## Authors and Clients
 This project was created by CITS3200 Group 39, Year 2023: 
