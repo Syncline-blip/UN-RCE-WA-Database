@@ -1,4 +1,19 @@
-<h1 id="logo"><a href="/"><img src="http://www.rcenetwork.org/portal/sites/default/files/transparent_colour_rce_logo.png" alt="logo" />United Nations Regional Centre of Expertise (WA) Database/Web Application</a></h1>
+<div class="header">
+  <img src="img/logo.png" alt="logo" />
+  <h1 align="center">United Nations Regional Centre of Expertise (WA) Database/Web Application</h1>
+</div>
+.header img {
+  float: left;
+  width: 100px;
+  height: 100px;
+  background: #555;
+}
+
+.header h1 {
+  position: relative;
+  top: 18px;
+  left: 10px;
+}
 
 ## Authors and Clients
 This project was created by CITS3200 Group 39, Year 2023: 
