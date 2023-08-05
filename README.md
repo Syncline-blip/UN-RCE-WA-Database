@@ -1,6 +1,6 @@
 <div class="header" align="center">
   <img src="https://www.universitiesaustralia.edu.au/wp-content/uploads/2019/06/UWA-300x300.png" alt="logo" align="center" width="300" height="300"/>
-  <img src="http://www.rcenetwork.org/portal/sites/default/files/transparent_colour_rce_logo.png" alt="logo" align="center" width="300" height="300"/>
+  <img src="http://www.rcenetwork.org/portal/sites/default/files/transparent_colour_rce_logo.png" alt="logo" align="center" width="400" height="200"/>
   <h1 align="center">United Nations Regional Centre of Expertise (WA) Database/Web Application</h1>
 </div>
 
