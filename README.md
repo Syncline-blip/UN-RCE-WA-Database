@@ -2,7 +2,7 @@
 
 ## Authors and Clients
 This project was created by CITS3200 Group 39, Year 2023:
-    - Milton Yong (23060611)
+    -Milton Yong (23060611)
     - Ayodhya Jayawickrema (22880852)
     - Josh Brian Kurniawan (22953358)
     - Sam Weight (21491625)
