@@ -1,12 +1,7 @@
 # United Nations Regional Centre of Expertise (WA) Database/Web Application
 
 ## Authors and Clients
-This project was created by CITS3200 Group 39, Year 2023:
-    -Milton Yong (23060611)
-    - Ayodhya Jayawickrema (22880852)
-    - Josh Brian Kurniawan (22953358)
-    - Sam Weight (21491625)
-    - John Lumagbas (23419439)
+This project was created by CITS3200 Group 39, Year 2023: - Milton Yong (23060611) - Ayodhya Jayawickrema (22880852) - Josh Brian Kurniawan (22953358) - Sam Weight (21491625) - John Lumagbas (23419439)
 
 The project was developed for the UN RCE with Kate McGee as our primary contact. 
 In this particular academic period, the Unit Coordinator is Professor Michael Wise of the University of Western Australia. 
