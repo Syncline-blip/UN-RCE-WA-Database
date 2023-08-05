@@ -1,8 +1,7 @@
 <div class="header">
   <img src="http://www.rcenetwork.org/portal/sites/default/files/transparent_colour_rce_logo.png" alt="logo" />
   <h1 align="center">United Nations Regional Centre of Expertise (WA) Database/Web Application</h1>
-</div>
-<style>
+  <style>
   .header img {
     float: left;
     width: 100px;
@@ -10,6 +9,9 @@
     background: #555;
   }
 </style>
+</div>
+https://www.universitiesaustralia.edu.au/wp-content/uploads/2019/06/UWA-300x300.png
+
 ## Authors and Clients
 This project was created by CITS3200 Group 39, Year 2023: 
   - Milton Yong (23060611)
