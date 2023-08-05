@@ -1,4 +1,4 @@
-<div class="header">
+<div class="header" align="center">
   <img src="https://www.universitiesaustralia.edu.au/wp-content/uploads/2019/06/UWA-300x300.png" alt="logo" align="center" />
   <h1 align="center">United Nations Regional Centre of Expertise (WA) Database/Web Application</h1>
 </div>
