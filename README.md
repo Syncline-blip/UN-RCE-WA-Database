@@ -1,6 +1,8 @@
-![picture alt](http://www.rcenetwork.org/portal/sites/default/files/transparent_colour_rce_logo.png)
-<h1 align="center">United Nations Regional Centre of Expertise (WA) Database/Web Application</h1>
 
+<div class="header">
+  <img src="http://www.rcenetwork.org/portal/sites/default/files/transparent_colour_rce_logo.png" alt="logo" />
+  <h1 align="center">United Nations Regional Centre of Expertise (WA) Database/Web Application</h1>
+</div>
 
 
 ## Authors and Clients
