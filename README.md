@@ -7,7 +7,7 @@ This project was created by CITS3200 Group 39, Year 2023:
     Milton Yong
     Sam Weight
 
-The project was developed for the UN RCE with Kate McGee as our primary contact
+The project was developed for the UN RCE with Kate McGee as our primary contact. 
 In this particular academic period, the Unit Coordinator is Professor Michael Wise
 
 ## About
