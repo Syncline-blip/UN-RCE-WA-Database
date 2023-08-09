@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Landing Page</title>
+    <style>
+        /* ... (your existing styles) ... */
+
+        /* Style for the image slider */
+        .slider-container {
+            max-width: 100%;
+            overflow: hidden;
+            margin-top: 20px; /* Add some space between the content and slider */
+        }
+
+        .slider {
+            display: flex;
+            width: 300%; /* Each slide takes up 100% / 3 = 33.33% of the container */
+            animation: slide 15s infinite; /* Change slide every 15 seconds */
+        }
+
+        .slide {
+            flex: 1;
+            min-width: 100%;
+            background-size: cover;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            33.33% { transform: translateX(-100%); }
+            66.66% { transform: translateX(-200%); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>United Nation Regional Centre of Expertise (WA)</h1>
+    </div>
+
+    <div class="menu-bar">
+        <a href="#express-interest">Expression of Interest</a>
+        <a href="#un-rce-project">UN RCE Project Available</a>
+        <button class="openbtn" onclick="openNav()">☰ Menu</button>
+    </div>
+
+    <div class="content">
+        <h1 id="express-interest">Express Their Interest</h1>
+        <p>This is where you can express your interest in our projects and initiatives.</p>
+        <!-- Image Slider -->
+        <div class="slider-container">
+            <div class="slider">
+                <div class="slide" style="background-image: url('https://www.mdpi.com/sustainability/sustainability-13-02560/article_deploy/html/images/sustainability-13-02560-g001-550.jpg');"></div>
+                <div class="slide" style="background-image: url('https://media.istockphoto.com/id/1405728317/vector/global-network-connection-world-map-point-and-line-composition-concept-of-global-business.jpg?s=1024x1024&w=is&k=20&c=-qVzw6OgAeMmQqLBNL0SgDA_Wl0xuZdCqA5KdD0Fh9Q=');"></div>
+                <div class="slide" style="background-image: url('https://via.placeholder.com/1200x800');"></div>
+            </div>
+        </div>
+
+        <h1 id="un-rce-project">UN RCE Project Available</h1>
+        <p>Learn about the United Nations Regional Centres of Expertise (RCE) project that we are involved in.</p>
+    </div>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="#">About</a>
+        <a href="#">Profile</a>
+        <a href="#"></a>
+        <a href="#">Contact</a>
+    </div>
+</body>
+</html>
