@@ -106,6 +106,107 @@
             .sidebar {padding-top: 15px;}
             .sidebar a {font-size: 18px;}
         }
+
+        .forms {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: #ede6f6;
+        }
+
+        form{
+            display:flex;
+            flex-direction: column;
+            align-items:center;
+        }
+        
+        .main {
+        height: 230px;
+        width: 50vw;
+        box-sizing: border-box;
+        background-color: white;
+        border-top: 12px solid #663ab5;
+        border-radius: 10px;
+        margin: 13px;
+        margin-bottom: 0;
+        padding: 10px;
+        padding-left: 30px;
+        font-size: 13px;
+        }
+
+        .main h1 {
+        font-size: 25px;
+        }
+
+        .name {
+        background-color: white;
+        box-sizing: border-box;
+        height: 150px;
+        width: 50vw;
+        margin: 13px;
+        padding: 10px;
+        padding-left: 30px;
+        margin-bottom: 0;
+        border-radius: 10px;
+        }
+
+        input[type="text"],
+        [type="email"] {
+        border: none;
+        border-bottom: 1px solid black;
+        width: 90%;
+        padding: 5px;
+        }
+
+        .email {
+        background-color: white;
+        box-sizing: border-box;
+        height: 150px;
+        width: 50vw;
+        margin: 13px;
+        margin-bottom: 0;
+        padding: 10px;
+        padding-left: 30px;
+        border-radius: 10px;
+        }
+
+        .submit {
+        width: 50vw;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        }
+
+        .main {
+          height: 180px;
+          font-size: 12px;
+        }
+        .name, .email {
+          height: 110px;
+          font-size: 12px;
+        }
+
+        .main h1 {
+          font-size: 18px;
+        }
+        .main p,h4 {
+          margin: 10px 0px;
+        }
+        h1 {
+          font-size: 25px;
+        }
+        input[type="text"],
+        [type="email"] {
+          padding: 5;
+        }
+
+        button {
+          padding: 10px 22px;
+          border-radius: 5px;
+        }
+      
+
+
     </style>
 </head>
 <body>
@@ -119,13 +220,6 @@
         <button class="openbtn" onclick="openNav()">☰</button>
     </div>
 
-    <div class="content">
-        <h1 id="express-interest">Express Their Interest</h1>
-        <p>This is where you can express your interest in our projects and initiatives.</p>
-
-        <h1 id="un-rce-project">UN RCE Project Available</h1>
-        <p>Learn about the United Nations Regional Centres of Expertise (RCE) project that we are involved in.</p>
-    </div>
 
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
@@ -147,6 +241,40 @@
             document.getElementById("main").style.marginLeft= "0";
         }
     </script>
+
+
+    <form action="">
+    <div class = forms>
+      <div class="main">
+        <h1>Open Letter Maker</h1>
+        <hr />
+        <p>
+          All the Submissions to this form will be appended into a table as
+          signatures in the style of open letter.
+        </p>
+        <h4 style="color: red;">* Required</h4>
+      </div>
+      <div class="name">
+        <h3>Name <span style="color: red;">*</span></h3>
+        <input type="text" name="name" id="" required />
+      </div>
+      <div class="email">
+        <h3>Email <span style="color: red;">*</span></h3>
+        <input type="email" name="name" id="" required />
+      </div>
+      <div class="submit">
+        <button>Submit</button>
+      </div>
+      <p class="rule">Never submit passwords through Google Forms</p>
+      <p class="policy">
+        This content is neither created nor endrosed by Google.
+        <a href="#">Report Abuse.</a> <a href="#">Terms of condition.</a>
+        <a href="#">Privacy Policy.</a>
+        <h1 class="Google" style="color: grey; font-weight: 550; width: 50vw;">Google Forms</h1>
+      </p>
+    </div>
+    </form>
+
+    
 </body>
 </html>
-
