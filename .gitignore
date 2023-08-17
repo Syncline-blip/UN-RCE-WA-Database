@@ -158,3 +158,16 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+unrce_project/unrce/__pycache__/__init__.cpython-38.pyc
+unrce_project/unrce/__pycache__/admin.cpython-38.pyc
+unrce_project/unrce/__pycache__/apps.cpython-38.pyc
+unrce_project/unrce/__pycache__/forms.cpython-38.pyc
+unrce_project/unrce/__pycache__/models.cpython-38.pyc
+unrce_project/unrce/__pycache__/urls.cpython-38.pyc
+unrce_project/unrce/__pycache__/views.cpython-38.pyc
+unrce_project/unrce/migrations/__pycache__/__init__.cpython-38.pyc
+unrce_project/unrce/migrations/__pycache__/0001_initial.cpython-38.pyc
+unrce_project/unrce_project/__pycache__/__init__.cpython-38.pyc
+unrce_project/unrce_project/__pycache__/settings.cpython-38.pyc
+unrce_project/unrce_project/__pycache__/urls.cpython-38.pyc
+unrce_project/unrce_project/__pycache__/wsgi.cpython-38.pyc

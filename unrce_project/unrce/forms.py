@@ -13,5 +13,5 @@ class ReportForm(forms.ModelForm):
             'audience', 
             'current_partners', 
             'sdg_focus', 
-            'contact'
+            'contact',
         ]
