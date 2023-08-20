@@ -64,6 +64,24 @@
     resize: vertical;
   }
 
+  .form-group.full-width {
+    width: 100%;
+  }
+
+  select, input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+  }
+  
+  select {
+    background-color: #fff;
+  }
+
+
   button[type="submit"], button[type="button"] {
     background-color: #007bff;
     color: #fff;
@@ -99,8 +117,33 @@
       <input type="text" id="report-title" name="report-title" required>
     </div>
     <div class="form-group">
-      <label for="report-content">Report Content</label>
-      <textarea id="report-content" name="report-content" rows="6" required></textarea>
+      <label for="lead-organisation">Lead Organisation</label>
+      <input type="text" id="lead-organisation" name="lead-organisation" required>
+    </div>
+    <div class="form-group">
+      <label for="name-project">Name of Project</label>
+      <input type="text" id="name-project" name="name-project" required>
+    </div>
+    <div class="form-group">
+      <label for="project-description">Project Description</label>
+      <textarea id="project-description" name="project-description" rows="6" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="Type">Project Type
+      <select id="Type" name="Type" required>
+        <option value="" disabled selected>Select Type option</option>
+        <option value="S">S</option>
+        <option value="E">E</option>
+        <option value="O">O</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="current-partners">Current Partners</label>
+      <textarea id="current-partners" name="current-partners" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="contact">Contact</label>
+      <input type="email" id="contact" name="contact" required>
     </div>
     <div class="save-options">
       <button type="button" id="save-partial">Save</button>
