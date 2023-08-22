@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import ReportForm, RegistrationForm
 from .models import Report
@@ -57,8 +59,14 @@ def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('to be established')  
+            user = form.save()
+            # Log in the user after registration if needed
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('report_list')  # Redirect to a success page
     else:
-        form = UserCreationForm()
+        form = RegistrationForm()
     return render(request, 'unrce/register.html', {'form': form})
