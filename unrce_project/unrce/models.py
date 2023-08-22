@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+
+
+
 # Create your models here.
 class Report(models.Model):
     lead_organisation = models.CharField(max_length=200)
@@ -50,3 +54,16 @@ class Expression_of_interest(models.Model):
     pictures = models.CharField(max_length=200)
     sdg = models.CharField(max_length=200)
     priority = models.CharField(max_length=200)
+
+# Account Model
+class Account(models.Model):
+    ''' 
+        OneToOneField: Foreign Key 1:1 relationship between Account and User model
+        use CASCADE to delete both account and user object
+    '''
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    organization = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user.username
+    
