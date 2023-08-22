@@ -1,11 +1,135 @@
-{% block content %}
-{% load crispy_forms_tags %}
-<div>
-    <h1>Register</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button class="btn btn-primary" type="submit">Register</button>
-    </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-image: url(https://images.pexels.com/photos/17592404/pexels-photo-17592404/free-photo-of-delicate-arch-rock-formation.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
+    background-size:cover;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .auth-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+  }
+
+  .auth-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-group {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  .form-group input {
+    width: 94%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .form-group button {
+    background-color:#003087;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s;
+  }
+
+  .form-group button:hover {
+    background-color: #0056b3;
+  }
+
+  .auth-options {
+    margin-top: 20px;
+    font-size: 14px;
+  }
+
+  .auth-options a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+
+  .auth-options a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="auth-container">
+  <h2>Sign Up</h2>
+  <form class="auth-form" action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Username" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+    </div>
+    <div class="form-group">
+        <label for="password1">Password</label>
+        <input type="password" id="password1" name="password1" placeholder="Password" required>
+    </div>
+    <div class="form-group">
+        <label for="password2">Confirm Password</label>
+        <input type="password" id="password2" name="password2" placeholder="Confirm Password" required>
+    </div>
+    <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+    </div>
+    <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
+    </div>
+    <div class="form-group">
+        <label for="org">Organization</label>
+        <input type="text" id="org" name="org" placeholder="Organization" required>
+    </div>
+    <div class="form-group">
+        <button type="submit">Sign Up</button>
+    </div>
+    <div class="auth-options">
+        <span>Already have an account? <a href="login.html">Log In</a></span>
+    </div>
+</form>
+
 </div>
-{% endblock %}
+</body>
+</html>
