@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .forms import ReportForm
+from .forms import ReportForm, RegistrationForm
 from .models import Report
 
 # sample data, not to be used, just for testing
@@ -55,10 +55,10 @@ def report_edit(request, pk):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home_landing')  
+            return redirect('to be established')  
     else:
         form = UserCreationForm()
     return render(request, 'unrce/register.html', {'form': form})
