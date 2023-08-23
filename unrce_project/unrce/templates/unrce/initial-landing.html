@@ -40,14 +40,6 @@
             color: black;
         }
 
-        .content {
-            padding: 20px;
-        }
-
-        .content h1 {
-            margin-top: 0;
-        }
-
         .sidebar {
             height: 100%;
             width: 0;
@@ -111,6 +103,24 @@
         html {
             scroll-behavior: smooth;
         }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .flex-item {
+            width: 50%;
+            padding: 10px; /* Optional: for some spacing */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items:center;
+            border:2px solid blue;
+            background-color: #e6f2ff;
+            margin: 10px;
+        }
     </style>
 </head>
 <body>
@@ -119,17 +129,10 @@
     </div>
 
     <div class="menu-bar">
+        <a href="initial-landing.html"><i class="fa fa-home"></i></a>
         <a href="forms.html">Expression of Interest</a>
-        <a href="#un-rce-project">UN RCE Project Available</a>
+        <a href="create_report.html">Project Reporting</a>
         <button class="openbtn" onclick="openNav()">☰</button>
-    </div>
-
-    <div class="content">
-        <h1 id="express-interest">Express Their Interest</h1>
-        <p>This is where you can express your interest in our projects and initiatives.</p>
-    </div>
-        <h1 id="un-rce-project">UN RCE Project Available</h1>
-        <p>Learn about the United Nations Regional Centres of Expertise (RCE) project that we are involved in.</p>
     </div>
 
     <div id="mySidebar" class="sidebar">
@@ -137,8 +140,20 @@
         <a href="#">About</a>
         <a href="#">Profile</a>
         <a href="#">Clients</a>
-        <a href="#">Contact</a>
+        <a href="https://www.rcenetwork.org/portal/contact-us">Contact Us</a>
     </div>
+
+    <div class="content flex-container">
+        <div class="flex-item">
+            <h1 id="express-interest">Express Your Interest</h1>
+            <p>This is where you can express your interest in our projects and initiatives.</p>
+        </div>
+        <div class="flex-item">
+            <h1 id="un-rce-project">Project Reporting</h1>
+            <p>Learn about the United Nations Regional Centres of Expertise (RCE) project that we are involved in.</p>
+        </div>
+    </div>
+
     <script>
         function openNav() {
             document.getElementById("mySidebar").style.width = "250px";
