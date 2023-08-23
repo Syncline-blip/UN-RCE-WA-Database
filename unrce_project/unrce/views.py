@@ -86,6 +86,6 @@ def register(request):
     return render(request, 'unrce/register.html', {'form': form})
 
 
-
+@login_required
 def profile(request):
     return render(request, 'unrce/profile.html')
