@@ -80,3 +80,9 @@ body {
   .auth-options a:hover {
     text-decoration: underline;
   }
+
+  #password-strength-meter {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+}

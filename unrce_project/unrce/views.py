@@ -8,6 +8,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import ReportForm, RegistrationForm
 from .models import Report
+from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
+
+import logging
 
 # sample data, not to be used, just for testing
 project = [
@@ -56,17 +59,31 @@ def report_edit(request, pk):
     return render(request, 'unrce/report_edit.html', {'form': form})
 
 def register(request):
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            # Log in the user after registration if needed
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            return redirect('report_list')  # Redirect to a success page
-    else:
-        form = RegistrationForm()
+    try:
+        if request.method == 'POST':
+            form = RegistrationForm(request.POST)
+            if form.is_valid():
+                logging.debug("Form is valid")
+                user = form.save()
+                # Log in the user after registration if needed
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password1']
+                logging.debug(f"Username: {username}, Password: {password}")
+                user = authenticate(username=username, password=password)
+                if user:
+                    login(request, user)
+                    logging.debug("User logged in successfully")
+                    return redirect('report_list')  # Redirect to a success page
+                else:
+                    logging.error("Authentication failed")  # Log authentication failure
+                    return HttpResponseServerError("Authentication failed")  # Return an error response
+    except Exception as e:
+        logging.error(f"An exception occurred during registration: {str(e)}")  # Log the exception
+        return HttpResponseServerError("An error occurred during registration")  # Return an error response
+
+    # If the registration process was not successful, return the registration form
+    form = RegistrationForm()
     return render(request, 'unrce/register.html', {'form': form})
+
+
+
