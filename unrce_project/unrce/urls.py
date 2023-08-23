@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView
 from . import views
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('', views.home, name='home_landing'),
@@ -9,6 +10,7 @@ urlpatterns = [
     path('reports/', views.report_list, name='report_list'),
     path('reports/edit/<int:pk>/', views.report_edit, name='report_edit'),
     path('register/', views.register, name='register'),
-    path('login/', LoginView.as_view(template_name='unrce/login_temp.html'), name='login'),
+    path('login/', LoginView.as_view(template_name='unrce/login.html'), name='login'),
+    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),
 ]
 

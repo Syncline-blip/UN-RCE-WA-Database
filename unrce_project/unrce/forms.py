@@ -2,7 +2,8 @@ from .models import Report, Account
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from zxcvbn import zxcvbn  # Import the zxcvbn library
+from django.core.validators import MinLengthValidator
 
 class ReportForm(forms.ModelForm):
     class Meta:
@@ -18,14 +19,26 @@ class ReportForm(forms.ModelForm):
             'sdg_focus', 
             'contact',
         ]
+
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)
     org = forms.CharField(max_length=100, required=True)
 
+    # Add MinLengthValidator with custom error messages for username and password
+    username = forms.CharField(
+        validators=[
+            MinLengthValidator(limit_value=5, message="Username must be at least 5 characters long."),
+        ]
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput,
+        help_text="Password must be at least 8 characters long and contain at least one uppercase letter, one special character, and one number."
+    )
+
     class Meta:
-        model = User  # Use the User model here
+        model = User
         fields = ("username", "email", "password1", "password2", "first_name", "last_name")
 
     def save(self, commit=True):
@@ -36,6 +49,17 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
             account = Account(user=user, organization=self.cleaned_data['org'])
-            account.save()  # Create the associated Account
+            account.save() 
         return user
 
+    "Validate the password"
+    def clean_password1(self):
+        password1 = self.cleaned_data.get("password1")
+        if password1:
+            # Use zxcvbn to evaluate password strength
+            result = zxcvbn(password1)
+            if result['score'] < 3:
+                raise forms.ValidationError(
+                    "Password is too weak. Please choose a stronger password."
+                )
+        return password1
