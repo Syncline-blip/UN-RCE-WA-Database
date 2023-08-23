@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import ReportForm
+from .forms import UserCreationForm
 from .models import Report
 
 # sample data, not to be used, just for testing
@@ -25,18 +27,18 @@ def projects(request):
     return render(request, 'unrce/project_upload.html', context)
 # Create your views here.
 
-def add_report(request):
+def create_report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST)
         if form.is_valid():
             report = form.save(commit=False)
             report.author = request.user
-            form.save()
+            report.save()
             return redirect('/')  
     else:
         form = ReportForm()
 
-    return render(request, 'unrce/report_form.html', {'form': form})
+    return render(request, 'unrce/create_report.html', {'form': form})
 
 def report_list(request):
     reports = Report.objects.all()
@@ -53,12 +55,14 @@ def report_edit(request, pk):
         form = ReportForm(instance=report)
     return render(request, 'unrce/report_edit.html', {'form': form})
 
-def register(request):
+def sign_up(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('home_landing')  
+            user = form.save() 
+            login(request, user)
+            return redirect('home_landing')
     else:
         form = UserCreationForm()
-    return render(request, 'unrce/register.html', {'form': form})
+    
+    return render(request, 'unrce/sign_up.html', {'form': form})

@@ -106,56 +106,38 @@
 </style>
 </head>
 <body>
+  
+{% block content %}
 <div class="header">
-  <h1>Create Report</h1>
-  <button onclick="window.location.href='home.html'">Back to Home</button>
+  <h2>Create a New Report</h2>
+  <button onclick="window.location.href='/'">Back to Home</button>
 </div>
+
 <div class="report-container">
-  <form action="#" method="post">
+  <form method="post">
+    {% csrf_token %}
+    
+    {% for field in form %}
     <div class="form-group">
-      <label for="report-title">Report Title</label>
-      <input type="text" id="report-title" name="report-title" required>
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
     </div>
-    <div class="form-group">
-      <label for="lead-organisation">Lead Organisation</label>
-      <input type="text" id="lead-organisation" name="lead-organisation" required>
-    </div>
-    <div class="form-group">
-      <label for="name-project">Name of Project</label>
-      <input type="text" id="name-project" name="name-project" required>
-    </div>
-    <div class="form-group">
-      <label for="project-description">Project Description</label>
-      <textarea id="project-description" name="project-description" rows="6" required></textarea>
-    </div>
-    <div class="form-group">
-      <label for="Type">Project Type
-      <select id="Type" name="Type" required>
-        <option value="" disabled selected>Select Type option</option>
-        <option value="S">S</option>
-        <option value="E">E</option>
-        <option value="O">O</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="current-partners">Current Partners</label>
-      <textarea id="current-partners" name="current-partners" rows="3" required></textarea>
-    </div>
-    <div class="form-group">
-      <label for="contact">Contact</label>
-      <input type="email" id="contact" name="contact" required>
-    </div>
+    {% endfor %}
+
     <div class="save-options">
-      <button type="button" id="save-partial">Save</button>
-      <button type="submit">Create Report</button>
+      <button type="submit">Save Report</button>
     </div>
+
   </form>
 </div>
-<script>
-  // Simulate saving partial content
-  document.getElementById('save-partial').addEventListener('click', function() {
-    alert('Report partially saved!');
-  });
-</script>
-</body>
-</html>
+{% endblock %}
+  
+  <script>
+    // Simulate saving partial content
+    document.getElementById('save-partial').addEventListener('click', function() {
+      alert('Report partially saved!');
+    });
+  </script>
+  </body>
+  </html>
+  
