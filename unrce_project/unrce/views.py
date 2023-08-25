@@ -21,7 +21,7 @@ project = [
     }
 ]
 def home(request):
-    return render(request, 'unrce/templates/initial_landing.html')
+    return render(request, 'unrce/initial-landing.html')
 
 def projects(request):
     context = {
@@ -86,6 +86,6 @@ def register(request):
     return render(request, 'unrce/register.html', {'form': form})
 
 
-@login_required
+
 def profile(request):
     return render(request, 'unrce/profile.html')
