@@ -21,7 +21,7 @@ project = [
     }
 ]
 def home(request):
-    return render(request, 'unrce/home_landing.html')
+    return render(request, 'unrce/templates/initial_landing.html')
 
 def projects(request):
     context = {
