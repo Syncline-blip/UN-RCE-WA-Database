@@ -85,8 +85,8 @@
   <table>
     <thead>
       <tr>
-        <th>Project ID</th>
-        <th>Project Name</th>
+        <th>Report ID</th>
+        <th>Report Name</th>
         <th>Category</th>
         <th>Project Description</th>
         <th>Date Released</th>
@@ -138,5 +138,32 @@
     </tbody>
   </table>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll("tbody tr");
+    
+    rows.forEach((row) => {
+      row.addEventListener("click", () => {
+        const reportId = row.querySelector("td:first-child").textContent;
+        const reportName = row.querySelector("td:nth-child(2)").textContent;
+        const category = row.querySelector("td:nth-child(3)").textContent;
+        const projectDescription = row.querySelector("td:nth-child(4)").textContent;
+        const dateReleased = row.querySelector("td:nth-child(5)").textContent;
+        
+        const reportData = {
+          reportId: reportId,
+          reportName: reportName,
+          category: category,
+          projectDescription: projectDescription,
+          dateReleased: dateReleased
+        };
+        
+        localStorage.setItem("selectedReport", JSON.stringify(reportData));
+        
+        window.location.href = `report_details.html?reportId=${reportId}`;
+      });
+    });
+  });
+  </script>
 </body>
 </html>

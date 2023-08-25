@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Details</title>
+</head>
+<body>
+  <div class="details-container">
+    <h2>Report Details</h2>
+    <div id="report-details">
+  
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const reportDataJSON = localStorage.getItem("selectedReport");
+      
+      if (reportDataJSON) {
+        const reportData = JSON.parse(reportDataJSON);
+        const reportName = reportData.reportName;
+        const category = reportData.category;
+        const projectDescription = reportData.projectDescription;
+        const dateReleased = reportData.dateReleased;
+        
+        const reportDetailsElement = document.getElementById("report-details");
+        reportDetailsElement.innerHTML = `
+          <h3>${reportName}</h3>
+          <p><strong>Category:</strong> ${category}</p>
+          <p><strong>Project Description:</strong> ${projectDescription}</p>
+          <p><strong>Date Released:</strong> ${dateReleased}</p>
+        `;
+        
+        // Clear the stored data after using it
+        localStorage.removeItem("selectedReport");
+      } else {
+        const reportDetailsElement = document.getElementById("report-details");
+        reportDetailsElement.innerHTML = `<p>Report details not found.</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
