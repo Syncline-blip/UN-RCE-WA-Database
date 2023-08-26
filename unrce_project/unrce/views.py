@@ -23,6 +23,9 @@ project = [
 def home(request):
     return render(request, 'unrce/initial-landing.html')
 
+def forms(request): 
+    return render(request, 'unrce/forms.html')
+
 def projects(request):
     context = {
         'project': project
