@@ -14,5 +14,7 @@ urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),
     path('profile/', views.profile, name='profile'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('edit_report/', views.edit_reporting, name='edit_report'),
+    path('report_details/', views.reportDetails, name='report_details'),
 ]
 

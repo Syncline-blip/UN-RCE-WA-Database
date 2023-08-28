@@ -12,26 +12,29 @@
     padding: 0;
   }
 
-  .header {
+  .header{
     text-align: center;
     background-color: #007bff;
     color: #fff;
     padding: 20px;
-  }
+  } 
 
-  .header button {
-    background-color: #fff;
-    color: #007bff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-  }
 
-  .header button:hover {
-    background-color: #ddd;
-  }
+.header button {
+  background-color: #fff;
+  color: #007bff;
+  border: none;
+  padding: 5px 15px;
+  margin: 0px 150px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+
+.header button:hover {
+  background-color: #ddd;
+}
 
   .table-container {
     max-width: 4000px;
@@ -82,13 +85,14 @@
 <div class="header">
   <h1>Report List</h1>
   <button onclick="window.location.href='initial-landing.html'">Back to Home</button>
+  <button onclick="window.location.href='create_report.html'"> New Report</button>
 </div>
 <div class="table-container">
   <table>
     <thead>
       <tr>
         <th>Report ID</th>
-        <th>Leac Organization</th>
+        <th>Lead Organization</th>
         <th>Name of Project</th>
         <th>Project Description</th>
         <th>Delivery</th>
@@ -209,22 +213,52 @@
     rows.forEach((row) => {
       row.addEventListener("click", () => {
         const reportId = row.querySelector("td:first-child").textContent;
-        const reportName = row.querySelector("td:nth-child(2)").textContent;
-        const category = row.querySelector("td:nth-child(3)").textContent;
+        const lead_organization = row.querySelector("td:nth-child(2)").textContent;
+        const project_name = row.querySelector("td:nth-child(3)").textContent;
         const projectDescription = row.querySelector("td:nth-child(4)").textContent;
-        const dateReleased = row.querySelector("td:nth-child(5)").textContent;
-        
+        const delivery= row.querySelector("td:nth-child(5)").textContent;
+        const frequency= row.querySelector("td:nth-child(6)").textContent;
+        const audience= row.querySelector("td:nth-child(7)").textContent;
+        const current_partner= row.querySelector("td:nth-child(8)").textContent;
+        const SDG1= row.querySelector("td:nth-child(9)").textContent;
+        const SDG2=row.querySelector("td:nth-child(10)").textContent;
+        const SDG3=row.querySelector("td:nth-child(11)").textContent;
+        const contact= row.querySelector("td:nth-child(12)").textContent;
+
         const reportData = {
           reportId: reportId,
-          reportName: reportName,
-          category: category,
+          lead_organization:lead_organization,
+          project_name:project_name ,
           projectDescription: projectDescription,
-          dateReleased: dateReleased
+          delivery:delivery,
+          frequency:frequency,
+          audience:audience,
+          current_partner:current_partner,
+          SDG1:SDG1,
+          SDG2:SDG2,
+          SDG3:SDG3,
+          contact:contact
         };
         
         localStorage.setItem("selectedReport", JSON.stringify(reportData));
         
         window.location.href = `report_details.html?reportId=${reportId}`;
+
+        document.addEventListener("DOMContentLoaded", function () {
+          const updatedReportJSON = localStorage.getItem("updatedReport");
+          
+          if (updatedReportJSON) {
+            const updatedReportData = JSON.parse(updatedReportJSON);
+            const reportId = updatedReportData.reportId;
+            const rows = document.querySelectorAll("tbody tr");
+            const rowToUpdate = Array.from(rows).find(row => row.querySelector("td:first-child").textContent === reportId);
+            rowToUpdate.querySelector("td:nth-child(2)").textContent = updatedReportData.lead_organization;
+            rowToUpdate.querySelector("td:nth-child(3)").textContent = updatedReportData.project_name;
+            rowToUpdate.querySelector("td:nth-child(4)").textContent = updatedReportData.projectDescription;
+    
+            localStorage.removeItem("updatedReport");
+          }
+        });
       });
     });
   });

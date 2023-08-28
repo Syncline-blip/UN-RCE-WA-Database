@@ -89,3 +89,8 @@ def register(request):
 
 def profile(request):
     return render(request, 'unrce/profile.html')
+
+def edit_reporting(request):
+    return render(request, 'unrce/edit_report.html')
+def reportDetails(request):
+    return render(request, 'unrce/report_details.html')
