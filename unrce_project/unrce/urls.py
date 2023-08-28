@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 from django.views.generic.base import RedirectView
@@ -14,5 +14,6 @@ urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),
     path('profile/', views.profile, name='profile'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    
 ]
 

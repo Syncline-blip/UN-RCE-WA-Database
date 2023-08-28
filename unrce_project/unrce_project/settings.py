@@ -44,13 +44,29 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
+    "django.contrib.sites",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
 ]
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '900344755311-mecg4hvm9c4gs7qc37c00gk75tltc9gv.apps.googleusercontent.com',
+            'secret': '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',
+            'key': '',
+        },
+        'SCOPE': ['profile', 'email'],
+    }
+}
 
+SITE_ID = 2
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
