@@ -163,11 +163,28 @@ border-radius: 10px;
 }
 
 .submit {
-width: 50vw;
-display: flex;
-flex-direction: row;
-justify-content: flex-start;
+    width: 100%; /* Use full width of the container */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin-top: 20px; /* Add some space between the previous content and the button */
+    margin-bottom:20px;
 }
+
+.submit button {
+    padding: 10px 30px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit button:hover {
+    background-color: #0056b3;
+}
+
 
 .main {
   height: 180px;
@@ -196,8 +213,6 @@ button {
   padding: 10px 22px;
   border-radius: 5px;
 }
-
-/* ... [Your other CSS code] ... */
 
 .details {
   background-color: white;
