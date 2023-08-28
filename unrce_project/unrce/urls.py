@@ -8,6 +8,7 @@ urlpatterns = [
     path('project/', views.projects, name='unrce-project'),
     path('add/', views.add_report, name='add_report'),
     path('reports/', views.report_list, name='report_list'),
+    path('forms/', views.forms, name='forms'),
     path('reports/edit/<int:pk>/', views.report_edit, name='report_edit'),
     path('register/', views.register, name='register'),
     path('login/', LoginView.as_view(template_name='unrce/login.html', success_url='profile'), name='login'),
