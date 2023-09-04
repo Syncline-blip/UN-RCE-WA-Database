@@ -14,6 +14,7 @@ class Report(models.Model):
     contact = models.CharField(max_length=200)
     created_at = models.DateField(auto_now_add=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.name_project}   {self.created_at}"
@@ -50,3 +51,4 @@ class Expression_of_interest(models.Model):
     pictures = models.CharField(max_length=200)
     sdg = models.CharField(max_length=200)
     priority = models.CharField(max_length=200)
+

@@ -29,7 +29,7 @@ def projects(request):
 
 def create_report(request):
     if request.method == 'POST':
-        form = ReportForm(request.POST)
+        form = ReportForm(request.POST, request.FILES)
         if form.is_valid():
             report = form.save(commit=False)
             report.author = request.user
@@ -41,7 +41,7 @@ def create_report(request):
     return render(request, 'unrce/create_report.html', {'form': form})
 
 def report_list(request):
-    reports = Report.objects.all()
+    reports = Report.objects.filter(author=request.user)
     return render(request, 'unrce/report_list.html', {'reports': reports})
 
 def report_edit(request, pk):

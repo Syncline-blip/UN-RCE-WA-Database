@@ -1,6 +1,8 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home_landing'),
@@ -12,3 +14,5 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='unrce/login_temp.html'), name='login'),
 ]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
