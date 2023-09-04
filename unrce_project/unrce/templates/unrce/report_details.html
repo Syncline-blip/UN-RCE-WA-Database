@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Details</title>
+</head>
+<body>
+  <div class="details-container">
+    <h2>Report Details</h2>
+    <div id="report-details">
+  
+    </div>
+  </div>
+  
+  <!-- ... (your report details content) ... -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const reportDataJSON = localStorage.getItem("selectedReport");
+    
+    if (reportDataJSON) {
+      const reportData = JSON.parse(reportDataJSON);
+      const reportId = reportData.reportId;
+      let lead_organization = reportData.lead_organization;
+      let project_name = reportData.project_name;
+      let projectDescription = reportData.projectDescription;
+      let delivery = reportData.delivery;
+      let frequency = reportData.frequency;
+      let audience = reportData.audience;
+      let current_partner = reportData.current_partner;
+      let SDG1 = reportData.SDG1;
+      let SDG2 = reportData.SDG2;
+      let SDG3 = reportData.SDG3;
+      let contact = reportData.contact;
+      
+      const reportDetailsElement = document.getElementById("report-details");
+      reportDetailsElement.innerHTML = `
+        <h3>Report ID: ${reportId}</h3>
+        <label>Lead Organization: </label>
+        <input type="text" id="lead-organization" value="${lead_organization}" disabled><br>
+        <label>Project Name: </label>
+        <input type="text" id="project-name" value="${project_name}" disabled><br>
+        <label>Project Description: </label>
+        <textarea id="project-description" rows="4" cols="50" disabled>${projectDescription}</textarea><br>
+        <label>Delivery: </label>
+        <input type="text" id="delivery" value="${delivery}" disabled><br>
+        <label>Frequency: </label>
+        <input type="text" id="frequency" value="${frequency}" disabled><br>
+        <label>Audience: </label>
+        <input type="text" id="audience" value="${audience}" disabled><br>
+        <label>Current Partner: </label>
+        <input type="text" id="current-partner" value="${current_partner}" disabled><br>
+        <label>SDG1: </label>
+        <input type="text" id="sdg1" value="${SDG1}" disabled><br>
+        <label>SDG2: </label>
+        <input type="text" id="sdg2" value="${SDG2}" disabled><br>
+        <label>SDG3: </label>
+        <input type="text" id="sdg3" value="${SDG3}" disabled><br>
+        <label>Contact: </label>
+        <input type="text" id="contact" value="${contact}" disabled><br>
+        <button id="edit-button">Edit</button>
+        <button id="save-button" style="display: none;">Save</button>
+      `;
+      
+      const editButton = document.getElementById("edit-button");
+      const saveButton = document.getElementById("save-button");
+      const inputFields = document.querySelectorAll("input, textarea");
+      
+      editButton.addEventListener("click", () => {
+        inputFields.forEach(field => field.removeAttribute("disabled"));
+        editButton.style.display = "none";
+        saveButton.style.display = "inline";
+      });
+      
+      saveButton.addEventListener("click", () => {
+        lead_organization = document.getElementById("lead-organization").value;
+        project_name = document.getElementById("project-name").value;
+        projectDescription = document.getElementById("project-description").value;
+        delivery = document.getElementById("delivery").value;
+        frequency = document.getElementById("frequency").value;
+        audience = document.getElementById("audience").value;
+        current_partner = document.getElementById("current-partner").value;
+        SDG1 = document.getElementById("sdg1").value;
+        SDG2 = document.getElementById("sdg2").value;
+        SDG3 = document.getElementById("sdg3").value;
+        contact = document.getElementById("contact").value;
+        // Update the report data
+        reportData.lead_organization = lead_organization;
+        reportData.project_name = project_name;
+        reportData.projectDescription = projectDescription;
+        reportData.delivery = delivery;
+        reportData.frequency = frequency;
+        reportData.audience = audience;
+        reportData.current_partner = current_partner;
+        reportData.SDG1 = SDG1;
+        reportData.SDG2 = SDG2;
+        reportData.SDG3 = SDG3;
+        reportData.contact = contact;
+        
+        localStorage.setItem("updatedReport", JSON.stringify(reportData));
+        // Redirect back to the table page
+        window.location.href = `edit_report.html`;
+      });
+    } else {
+      const reportDetailsElement = document.getElementById("report-details");
+      reportDetailsElement.innerHTML = `<p>Report details not found.</p>`;
+    }
+  });
+</script>
+</body>
+</html>

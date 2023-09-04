@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,7 +30,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/profile/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
 
 # Application definition
 
@@ -40,7 +44,28 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',  # Adjust the log level as needed (DEBUG, INFO, ERROR, etc.)
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -57,7 +82,7 @@ ROOT_URLCONF = "unrce_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'unrce/templates')],
+        "DIRS": [os.path.join(BASE_DIR, 'unrce/templates/unrce')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -80,8 +105,8 @@ DATABASES = {
     "default": {
         "ENGINE": 'django.db.backends.postgresql',
         "NAME": 'unrce',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
+        'USER': 'postgres',
+        'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -122,8 +147,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root/")
 
+# Additional locations of static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "unrce/static"),  # Add this line
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

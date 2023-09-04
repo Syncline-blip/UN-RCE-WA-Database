@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import ReportForm
-from .forms import UserCreationForm
+from .forms import ReportForm, RegistrationForm
 from .models import Report
+from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
+
+import logging
 
 # sample data, not to be used, just for testing
 project = [
@@ -18,7 +21,10 @@ project = [
     }
 ]
 def home(request):
-    return render(request, 'unrce/home_landing.html')
+    return render(request, 'unrce/initial-landing.html')
+
+def forms(request): 
+    return render(request, 'unrce/forms.html')
 
 def projects(request):
     context = {
@@ -27,18 +33,18 @@ def projects(request):
     return render(request, 'unrce/project_upload.html', context)
 # Create your views here.
 
-def create_report(request):
+def add_report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES)
         if form.is_valid():
             report = form.save(commit=False)
             report.author = request.user
-            report.save()
+            form.save()
             return redirect('/')  
     else:
         form = ReportForm()
 
-    return render(request, 'unrce/create_report.html', {'form': form})
+    return render(request, 'unrce/report_form.html', {'form': form})
 
 def report_list(request):
     reports = Report.objects.filter(author=request.user)
@@ -55,14 +61,39 @@ def report_edit(request, pk):
         form = ReportForm(instance=report)
     return render(request, 'unrce/report_edit.html', {'form': form})
 
-def sign_up(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save() 
-            login(request, user)
-            return redirect('home_landing')
-    else:
-        form = UserCreationForm()
-    
-    return render(request, 'unrce/sign_up.html', {'form': form})
+def register(request):
+    try:
+        if request.method == 'POST':
+            form = RegistrationForm(request.POST)
+            if form.is_valid():
+                logging.debug("Form is valid")
+                user = form.save()
+                # Log in the user after registration if needed
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password1']
+                logging.debug(f"Username: {username}, Password: {password}")
+                user = authenticate(username=username, password=password)
+                if user:
+                    login(request, user)
+                    logging.debug("User logged in successfully")
+                    return redirect('profile')  # Redirect to a success page
+                else:
+                    logging.error("Authentication failed")  # Log authentication failure
+                    return HttpResponseServerError("Authentication failed")  # Return an error response
+    except Exception as e:
+        logging.error(f"An exception occurred during registration: {str(e)}")  # Log the exception
+        return HttpResponseServerError("An error occurred during registration")  # Return an error response
+
+    # If the registration process was not successful, return the registration form
+    form = RegistrationForm()
+    return render(request, 'unrce/register.html', {'form': form})
+
+
+
+def profile(request):
+    return render(request, 'unrce/profile.html')
+
+def edit_reporting(request):
+    return render(request, 'unrce/edit_report.html')
+def reportDetails(request):
+    return render(request, 'unrce/report_details.html')
