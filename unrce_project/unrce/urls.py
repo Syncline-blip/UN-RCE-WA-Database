@@ -19,6 +19,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('edit_report/', views.edit_reporting, name='edit_report'),
     path('report_details/', views.reportDetails, name='report_details'),
+    path('create_report/', views.create_report, name='create_report'),
 ]
 
 if settings.DEBUG:
