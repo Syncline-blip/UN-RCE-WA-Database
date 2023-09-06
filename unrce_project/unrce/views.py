@@ -7,7 +7,7 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import ReportForm, RegistrationForm
-from .models import Report
+from .models import Report, Account
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
 
 import logging
@@ -91,7 +91,10 @@ def register(request):
 
 
 def profile(request):
-    return render(request, 'unrce/profile.html')
+    user = request.user  # Assuming you are using Django's authentication system
+    account = Account.objects.get(user=user)  # Retrieve the Account associated with the user
+    return render(request, 'unrce/profile.html', {'user': user, 'account': account})
+
 
 def edit_reporting(request):
     return render(request, 'unrce/edit_report.html')
