@@ -1,47 +1,12 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <title>Landing Page</title>
-    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
-</head>
-<body>
-    <div class="header">
-        <h1>United Nation Regional Centre of Expertise (WA)</h1>
-    </div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <div class="menu-bar">
-        <a href="initial-landing.html"><i class="fa fa-home"></i></a>
-        <a href="forms.html">Expression of Interest</a>
-        <a href="create_report.html">Project Reporting</a>
-        <button class="openbtn" onclick="openNav()">☰</button>
-    </div>
-
-
-    <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        <a href="#">About</a>
-        <a href="#">Profile</a>
-        <a href="#">Clients</a>
-        <a href="#">Contact</a>
-    </div>
-    
-
-    <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-        }
-        
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginLeft= "0";
-        }
-    </script>
-
+<title>{% block title %}EOI{% endblock %}</title>
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
 
     <form action="">
     <div class = forms>
@@ -83,6 +48,15 @@
     </div>
     </form>
 
-    
-</body>
-</html>
+    <script>
+      function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+      }
+      
+      function closeNav() {
+          document.getElementById("mySidebar").style.width = "0";
+          document.getElementById("main").style.marginLeft= "0";
+      }
+    </script>
+{% endblock %}

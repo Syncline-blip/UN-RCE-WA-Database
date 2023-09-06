@@ -6,7 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.home, name='home_landing'),
+    path('', views.home, name='initial-landing'),
     path('project/', views.projects, name='unrce-project'),
     path('add/', views.add_report, name='add_report'),
     path('reports/', views.report_list, name='report_list'),

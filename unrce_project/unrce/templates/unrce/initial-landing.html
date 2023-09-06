@@ -1,33 +1,11 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <title>Landing Page</title>
-    <link rel="stylesheet" href="{% static 'css/initial-landing.css' %}">
-</head>
-<body>
-    <div class="header">
-        <h1>United Nation Regional Centre of Expertise (WA)</h1>
-    </div>
-
-    <div class="menu-bar">
-        <a href="home"><i class="fa fa-home"></i></a>
-        <a href="forms">Expression of Interest</a>
-        <a href="edit_report">Project Reporting</a>
-        <button class="openbtn" onclick="openNav()">☰</button>
-    </div>
-
-    <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        <a href="#">About</a>
-        <a href="#">Profile</a>
-        <a href="#">Clients</a>
-        <a href="#">Contact Us</a>
-    </div>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/initial-landing.css' %}">
+<title>{% block title %}Landing Page{% endblock %}</title>
+{% block content %}
     <div class="content flex-container">
         <div class="flex-item">
             <h1 id="express-interest">Express Your Interest</h1>
@@ -50,6 +28,6 @@
             document.getElementById("main").style.marginLeft= "0";
         }
     </script>
-</body>
-</html>
+{% endblock %}
+
 
