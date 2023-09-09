@@ -26,6 +26,11 @@ def home(request):
 def forms(request): 
     return render(request, 'unrce/forms.html')
 
+
+def create_report(request): 
+    return render(request, 'unrce/create_report.html')
+
+
 def projects(request):
     context = {
         'project': project
@@ -94,7 +99,6 @@ def profile(request):
     user = request.user  # Assuming you are using Django's authentication system
     account = Account.objects.get(user=user)  # Retrieve the Account associated with the user
     return render(request, 'unrce/profile.html', {'user': user, 'account': account})
-
 
 def edit_reporting(request):
     return render(request, 'unrce/edit_report.html')
