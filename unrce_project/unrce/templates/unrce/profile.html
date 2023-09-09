@@ -12,9 +12,7 @@
         background-color: #f4f4f6;
         margin: 40px;
         display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        flex-direction: row;
       }
 
       .profile-container {
@@ -24,6 +22,24 @@
         box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
         max-width: 600px;
         width: 100%;
+        margin-right: 30px;
+      }
+
+      table {
+        width: 70%;
+        border-collapse: collapse;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid #e1e1e1;
+      }
+
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
       }
 
       img.profile-picture {
@@ -68,6 +84,7 @@
   </head>
 
   <body>
+    <button type="button" id="homeButton">Home</button>
     <div class="profile-container">
       <center>
         <img
@@ -84,15 +101,14 @@
         />
       </center>
       <label for="name">Name:</label>
-        <span id="displayName">{{ user.first_name }} {{ user.last_name }}</span>
-        <input
+      <span id="displayName">{{ user.first_name }} {{ user.last_name }}</span>
+      <input
         type="text"
         id="name"
         name="name"
         placeholder="Enter your name"
         style="display: none"
-        />
-
+      />
 
       <label for="username">Username:</label>
       <span id="displayUsername">{{ user.username }}</span>
@@ -130,13 +146,57 @@
           Update Profile
         </button>
         <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
+          {% csrf_token %}
+          <button type="submit">Logout</button>
         </form>
       </center>
     </div>
 
+    <table>
+      <thead>
+        <tr>
+          <th>UNRCE GLOBAL NETWORK</th>
+          <th>Project</th>
+          <th>Contributing Organisation(s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            "How do we know it’s working? Monitoring and evaluating education
+            for sustainable development in Higher Education"
+          </td>
+          <td>
+            <ul>
+              University of St Andrews EAUC (The Alliance for Sustainability
+              Leadership in Education)
+            </ul>
+            <ul>
+              Scotland Students Organising for Sustainability UK Sparqs (Student
+              Partnerships in Quality Scotland )
+            </ul>
+            <ul>
+              University of Edinburgh Learning for Sustainability Scotland (RCE
+              Scotland)
+            </ul>
+            <ul>
+              UK Quality Assurance Agency (QAA)for Higher Education (funder)
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Data 1</td>
+          <td>Data 2</td>
+        </tr>
+      </tbody>
+    </table>
+
     <script>
+      document.getElementById("homeButton").addEventListener("click", () => {
+        window.location.href = "home_landing.html";
+      });
       let isEditing = false;
 
       const toggleEditing = () => {
@@ -185,5 +245,4 @@
     </script>
   </body>
 </html>
-
 {% endblock %}
