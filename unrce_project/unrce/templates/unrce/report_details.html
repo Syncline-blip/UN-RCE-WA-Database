@@ -32,7 +32,7 @@
       let SDG2 = reportData.SDG2;
       let SDG3 = reportData.SDG3;
       let contact = reportData.contact;
-      
+      console.log(reportData)
       const reportDetailsElement = document.getElementById("report-details");
       reportDetailsElement.innerHTML = `
         <h3>Report ID: ${reportId}</h3>
@@ -85,6 +85,7 @@
         SDG3 = document.getElementById("sdg3").value;
         contact = document.getElementById("contact").value;
         // Update the report data
+
         reportData.lead_organization = lead_organization;
         reportData.project_name = project_name;
         reportData.projectDescription = projectDescription;
@@ -96,7 +97,7 @@
         reportData.SDG2 = SDG2;
         reportData.SDG3 = SDG3;
         reportData.contact = contact;
-        
+        console.log("Setting updatedReport to localStorage:", reportData);
         localStorage.setItem("updatedReport", JSON.stringify(reportData));
         // Redirect back to the table page
         window.location.href = `edit_report.html`;
