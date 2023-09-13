@@ -6,9 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import ReportForm, RegistrationForm
-from .models import Report, Account
+from .forms import ReportForm, RegistrationForm, ExcelForm, ReportImageFormSet
+from .models import Report, Account, ReportImages
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
+import pandas as pd
 
 import logging
 
@@ -40,23 +41,34 @@ def projects(request):
 
 def add_report(request):
     if request.method == 'POST':
-        form = ReportForm(request.POST, request.FILES)
-        if form.is_valid():
-            report = form.save(commit=False)
+        report_form = ReportForm(request.POST)
+        formset = ReportImageFormSet(request.POST, request.FILES, queryset=ReportImages.objects.none())
+        
+        if report_form.is_valid() and formset.is_valid():
+            report = report_form.save(commit=False)
             report.author = request.user
-            form.save()
-            return redirect('/')  
-    else:
-        form = ReportForm()
+            report.save()
 
-    return render(request, 'unrce/report_form.html', {'form': form})
+            for form_data in formset:
+                image = form_data.cleaned_data.get('image')
+                if image:
+                    ReportImages.objects.create(image=image, report=report)
+            return redirect('report_list')
+    else:
+        report_form = ReportForm()
+        formset = ReportImageFormSet(queryset=ReportImages.objects.none())
+
+    return render(request, 'unrce/create_report.html', {'form': report_form, 'formset': formset})
+
+
+
 
 def report_list(request):
     reports = Report.objects.filter(author=request.user)
     return render(request, 'unrce/report_list.html', {'reports': reports})
 
-def report_edit(request, pk):
-    report = get_object_or_404(Report, pk=pk)
+def report_edit(request, report_id):
+    report = get_object_or_404(Report, id = report_id)
     if request.method == 'POST':
         form = ReportForm(request.POST, instance=report)
         if form.is_valid():
@@ -101,6 +113,38 @@ def profile(request):
     return render(request, 'unrce/profile.html', {'user': user, 'account': account})
 
 def edit_reporting(request):
-    return render(request, 'unrce/edit_report.html')
+    return render(request, 'unrce/report_list.html')
 def reportDetails(request):
     return render(request, 'unrce/report_details.html')
+
+def upload_excel(request):
+    if request.method == 'POST':
+        form = ExcelForm(request.POST, request.FILES)
+        if form.is_valid():
+            excel_file_instance = form.save()
+            
+            # Read Excel File
+            df = pd.read_excel(excel_file_instance.excel_file.path)
+
+            # Process and Save Data
+            for index, row in df.iterrows():
+                Report.objects.create(
+                    lead_organisation=row[0],
+                    name_project=row[1],
+                    project_description = row[2],
+                    delivery = row[3],
+                    frequency = row[4],
+                    audience = row[5],
+                    current_partners = row[6],
+                    sdg_focus = row[7],
+                    contact = row[7],
+                    author=request.user
+                )
+            
+            return redirect('/')
+    else:
+        form = ExcelForm()
+    
+    return render(request, 'unrce/excel_upload.html', {'form': form})
+
+

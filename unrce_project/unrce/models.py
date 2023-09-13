@@ -3,9 +3,6 @@ from django.contrib.auth.models import User
 
 
 
-
-
-# Create your models here.
 class Report(models.Model):
     lead_organisation = models.CharField(max_length=200)
     name_project = models.CharField(max_length=200)
@@ -17,11 +14,21 @@ class Report(models.Model):
     sdg_focus = models.CharField(max_length=200)
     contact = models.CharField(max_length=200)
     created_at = models.DateField(auto_now_add=True, null=True)
+    last_modified = models.DateTimeField(auto_now=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    image = models.ImageField(upload_to='images/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.name_project}   {self.created_at}"
+    
+class ReportImages(models.Model):
+    report = models.ForeignKey(Report, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/')
+    
+
+class ExcelUpload(models.Model):
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    excel_file = models.FileField(upload_to='excels/')
+
 
 class Expression_of_interest(models.Model):
     title_of_project = models.CharField(max_length=200)

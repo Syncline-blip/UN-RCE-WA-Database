@@ -1,4 +1,4 @@
-from .models import Report, Account
+from .models import Report, Account, ExcelUpload, ReportImages
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -8,17 +8,8 @@ from django.core.validators import MinLengthValidator
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
-        fields = [
-            'lead_organisation', 
-            'name_project', 
-            'project_description', 
-            'delivery', 
-            'frequency', 
-            'audience', 
-            'current_partners', 
-            'sdg_focus', 
-            'contact',
-        ]
+        fields = '__all__'
+        exclude = ['author']
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -63,3 +54,14 @@ class RegistrationForm(UserCreationForm):
                     "Password is too weak. Please choose a stronger password."
                 )
         return password1
+    
+class ExcelForm(forms.ModelForm):
+    class Meta:
+        model = ExcelUpload
+        fields = ('excel_file',)
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = ReportImages
+        fields = ('image', )
+ReportImageFormSet = forms.modelformset_factory(ReportImages, form=ImageForm, extra=1)        

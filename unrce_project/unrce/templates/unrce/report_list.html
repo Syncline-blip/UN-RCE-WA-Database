@@ -2,16 +2,185 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database List Table</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+
+  .header{
+    text-align: center;
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+  } 
+
+
+.header button {
+  background-color: #fff;
+  color: #007bff;
+  border: none;
+  padding: 5px 15px;
+  margin: 0px 150px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+
+.header button:hover {
+  background-color: #ddd;
+}
+
+  .table-container {
+    max-width: 4000px;
+    margin: 10px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 6px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #444;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #e0e0e0;
+    transition: background-color 0.2s;
+  }
+
+  td {
+    font-size: 14px;
+    color: #333;
+  }
+  
+</style>
 </head>
 <body>
-    <h1>Reports</h1>
-    <ul>
+<div class="header">
+  <h1>Report List</h1>
+  <a href="{% url 'initial-landing' %}">home</a>
+  <a href="{% url 'create_report' %}">create report</a>
+</div>
+<div class="table-container">
+  <table border="1">
+    <thead>
+        <tr>
+            <th>Report ID</th>
+            <th>Lead Organisation</th>
+            <th>Name of Project</th>
+            <th>Project Description</th>
+            <th>Delivery</th>
+            <th>Frequency</th>
+            <th>Audience</th>
+            <th>Current Partners</th>
+            <th>SDG Focus</th>
+            <th>Contact</th>
+            <th>Created At</th>
+            <th>Last Modified</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for report in reports %}
-            <li>
-                <a href="{% url 'report_edit' report.pk %}">{{ report.name_project }}</a>
-            </li>
+              <tr onclick="window.location='{% url 'report_edit' report.id %}'" style="cursor: pointer;">
+                <td>{{ report.id }}</td>
+                <td>{{ report.lead_organisation }}</td>
+                <td>{{ report.name_project }}</td>
+                <td>{{ report.project_description }}</td>
+                <td>{{ report.delivery }}</td>
+                <td>{{ report.frequency }}</td>
+                <td>{{ report.audience }}</td>
+                <td>{{ report.current_partners }}</td>
+                <td>{{ report.sdg_focus }}</td>
+                <td>{{ report.contact }}</td>
+                <td>{{ report.created_at }}</td>
+                <td>{{ report.last_modified }}</td>
+            </tr>
         {% endfor %}
-    </ul>
-    <a href="{% url 'home_landing' %}">home</a>
+    </tbody>
+</table>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll("tbody tr");
+    
+    rows.forEach((row) => {
+      row.addEventListener("click", () => {
+        const reportId = row.querySelector("td:first-child").textContent;
+        const lead_organization = row.querySelector("td:nth-child(2)").textContent;
+        const project_name = row.querySelector("td:nth-child(3)").textContent;
+        const projectDescription = row.querySelector("td:nth-child(4)").textContent;
+        const delivery= row.querySelector("td:nth-child(5)").textContent;
+        const frequency= row.querySelector("td:nth-child(6)").textContent;
+        const audience= row.querySelector("td:nth-child(7)").textContent;
+        const current_partner= row.querySelector("td:nth-child(8)").textContent;
+        const SDG1= row.querySelector("td:nth-child(9)").textContent;
+        const SDG2=row.querySelector("td:nth-child(10)").textContent;
+        const SDG3=row.querySelector("td:nth-child(11)").textContent;
+        const contact= row.querySelector("td:nth-child(12)").textContent;
+
+        const reportData = {
+          reportId: reportId,
+          lead_organization:lead_organization,
+          project_name:project_name ,
+          projectDescription: projectDescription,
+          delivery:delivery,
+          frequency:frequency,
+          audience:audience,
+          current_partner:current_partner,
+          SDG1:SDG1,
+          SDG2:SDG2,
+          SDG3:SDG3,
+          contact:contact
+        };
+        
+        localStorage.setItem("selectedReport", JSON.stringify(reportData));
+        
+ //      window.location.href = `report_details.html?reportId=${reportId}`;
+
+        document.addEventListener("DOMContentLoaded", function () {
+          const updatedReportJSON = localStorage.getItem("updatedReport");
+          
+          if (updatedReportJSON) {
+            const updatedReportData = JSON.parse(updatedReportJSON);
+            const reportId = updatedReportData.reportId;
+            const rows = document.querySelectorAll("tbody tr");
+            const rowToUpdate = Array.from(rows).find(row => row.querySelector("td:first-child").textContent === reportId);
+            rowToUpdate.querySelector("td:nth-child(2)").textContent = updatedReportData.lead_organization;
+            rowToUpdate.querySelector("td:nth-child(3)").textContent = updatedReportData.project_name;
+            rowToUpdate.querySelector("td:nth-child(4)").textContent = updatedReportData.projectDescription;
+    
+            localStorage.removeItem("updatedReport");
+          }
+        });
+      });
+    });
+  });
+  </script>
 </body>
 </html>
