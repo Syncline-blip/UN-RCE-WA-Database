@@ -109,30 +109,41 @@
 </head>
 <body>
   
-{% block content %}
-<div class="header">
-  <h1>Create Report</h1>
-  <button onclick="window.location.href='initial-landing.html'">Back to Home</button>
-</div>
+  {% block content %}
+  <div class="header">
+    <h1>Create Report</h1>
+    <a href="{% url 'initial-landing' %}">home</a>
+  </div>
+  
+  <div class="report-container">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+      </div>
+      {% endfor %}
 
-<div class="report-container">
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    {% for field in form %}
-    <div class="form-group">
-      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-      {{ field }}
-    </div>
-    {% endfor %}
 
-    <div class="save-options">
-      <button type="submit">Save Report</button>
-    </div>
-
-  </form>
-</div>
-{% endblock %}
+      <h3>Images:</h3>
+      <div id="form-set">
+          {{ formset.management_form }}
+          {% for form in formset %}
+              {{ form.as_p }}
+          {% endfor %}
+      </div>
+      <button type="button" id="add-form">Add another image</button>
+      <br><br>
+      
+      <div class="save-options">
+        <button type="submit">Save Report</button>
+      </div>
+    </form>
+  </div>
+  {% endblock %}
+  
   
   <script>
     // Simulate saving partial content
@@ -140,6 +151,20 @@
       alert('Report partially saved!');
     });
   </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $('#add-form').click(function() {
+        let formIdx = $('#id_images-TOTAL_FORMS').val();
+        $('#form-set').append($('#empty-form').html().replace(/__prefix__/g, formIdx));
+        $('#id_images-TOTAL_FORMS').val(parseInt(formIdx) + 1);
+    });
+    </script>
   </body>
+  <div id="empty-form" style="display:none;">
+    <p>
+        <label for="id_images-__prefix__-image">Image:</label> 
+        <input type="file" name="images-__prefix__-image" id="id_images-__prefix__-image">
+    </p>
+</div>
   </html>
   

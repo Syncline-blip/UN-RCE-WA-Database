@@ -9,17 +9,17 @@ urlpatterns = [
     path('', views.home, name='initial-landing'),
     path('project/', views.projects, name='unrce-project'),
     path('add/', views.add_report, name='add_report'),
-    path('reports/', views.report_list, name='report_list'),
     path('forms/', views.forms, name='forms'),
-    path('reports/edit/<int:pk>/', views.report_edit, name='report_edit'),
     path('register/', views.register, name='register'),
     path('login/', LoginView.as_view(template_name='unrce/login.html', success_url='profile'), name='login'),
     path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),
     path('profile/', views.profile, name='profile'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('edit_report/', views.edit_reporting, name='edit_report'),
+    path('report_list/', views.report_list, name='report_list'),
     path('report_details/', views.reportDetails, name='report_details'),
-    path('create_report/', views.create_report, name='create_report'),
+    path('create_report/', views.add_report, name='create_report'),
+    path('report_edit/<int:report_id>/', views.report_edit, name='report_edit'),
+    path('excel_upload/', views.upload_excel, name='excel_upload'),
 ]
 
 if settings.DEBUG:
