@@ -7,55 +7,56 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="{% static 'css/forms.css' %}">
 
-    <form action="">
-    <div class = forms>
-      <div class="main">
-        <h1>Expression of Interest</h1>
-        <hr />
-        <p>
-          All the Submissions to this form will be appended into a table to be reviewed by the Secretariat.
-        </p>
-        <h4 style="color: red;">* Required</h4>
-      </div>
-      <div class="name">
-        <h3>Title of Project <span style="color: red;">*</span></h3>
-        <input type="text" name="name" id="" required />
-      </div>
-      <div class="email">
-        <h3>Contributing Organisations <span style="color: red;">*</span></h3>
-        <input type="email" name="name" id="" required />
-      </div>
-      <div class="details">
-        <h3>Details</Details> <span style="color: red;">*</span></h3>
-        <h5>Name</Details> <span style="color: red;">*</span></h5>
-        <input type="email" name="name" id="" required />
-        <h5>Organisation Affiliation</Details> <span style="color: red;">*</span></h5>
-        <input type="email" name="name" id="" required />
-        <h5>E-mail</E-mail></Details> <span style="color: red;">*</span></h5>
-        <input type="email" name="name" id="" required />
-        <form action="/upload-endpoint" method="post" enctype="multipart/form-data">
-          <label for="files">Additional Information:</label>
-          <input type="file" id="files" name="files[]" multiple>
-          <input type="submit" value="Upload">
-      </form>
-      
-      </div>
 
-      <div class="submit">
-        <button>Submit</button>
-      </div>
-    </div>
-    </form>
+<div class = "forms">
+  <form action="">
+  <div class="main">
+    <h1>Expression of Interest</h1>
+    <p>
+    All the Submissions to this form will be appended into a table to be reviewed by the Secretariat.
+    </p>
+    <h4 style="color: red;">* Required</h4>
+  </div>
+  <div class="name">
+    <h3>Title of Project <span style="color: red;">*</span></h3>
+    <input type="name" required />
+  </div>
+  <div class="email">
+    <h3>Contributing Organisations <span style="color: red;">*</span></h3>
+    <input type="email" required />
+  </div>
+  <div class="details">
+    <h3>Details</Details> <span style="color: red;">*</span></h3>
+    <h5>Name</Details> <span style="color: red;">*</span></h5>
+    <input type="text" required />
+    <h5>Organisation Affiliation</Details> <span style="color: red;">*</span></h5>
+    <input type="email" name="name" id="" required />
+    <h5>E-mail</E-mail></Details> <span style="color: red;">*</span></h5>
+    <input type="email" name="name" id="" required />
+    <form action="/upload-endpoint" method="post" enctype="multipart/form-data">
+    <label for="files">Additional Information:</label>
+    <input type="file" id="files" name="files[]" multiple>
+    <input type="submit" value="Upload">
+  </div>
 
-    <script>
-      function openNav() {
-          document.getElementById("mySidebar").style.width = "250px";
-          document.getElementById("main").style.marginLeft = "250px";
-      }
-      
-      function closeNav() {
-          document.getElementById("mySidebar").style.width = "0";
-          document.getElementById("main").style.marginLeft= "0";
-      }
-    </script>
+
+  <div class="submit">
+    <button>Submit</button>
+  </div>
+  </form>
+</div>
+
+
+
+
+<script>
+function openNav() {
+document.getElementById("mySidebar").style.width = "250px";
+document.getElementById("main").style.marginLeft = "250px";
+}
+function closeNav() {
+document.getElementById("mySidebar").style.width = "0";
+document.getElementById("main").style.marginLeft= "0";
+}
+</script>
 {% endblock %}
