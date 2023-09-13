@@ -93,7 +93,7 @@ def register(request):
                 if user:
                     login(request, user)
                     logging.debug("User logged in successfully")
-                    return redirect('profile')  # Redirect to a success page
+                    return redirect('initial-landing')  # Redirect to a success page
                 else:
                     logging.error("Authentication failed")  # Log authentication failure
                     return HttpResponseServerError("Authentication failed")  # Return an error response
