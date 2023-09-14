@@ -67,6 +67,10 @@ def report_list(request):
     reports = Report.objects.filter(author=request.user)
     return render(request, 'unrce/report_list.html', {'reports': reports})
 
+def report_review(request):
+    reports = Report.objects.filter()
+    return render(request, 'unrce/report_review.html', {'reports': reports})
+
 def report_edit(request, report_id):
     report = get_object_or_404(Report, id = report_id)
     if request.method == 'POST':
