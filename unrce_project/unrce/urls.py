@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.home, name='initial-landing'),
     path('project/', views.projects, name='unrce-project'),
     path('add/', views.add_report, name='add_report'),
-    path('forms/', views.forms, name='forms'),
+    path('forms/', views.add_interest, name='forms'),
     path('register/', views.register, name='register'),
     path('login/', LoginView.as_view(template_name='unrce/login.html', success_url='profile'), name='login'),
     path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),

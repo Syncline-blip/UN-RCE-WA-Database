@@ -6,10 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import ReportForm, RegistrationForm, ExcelForm, ReportImageFormSet
+from .forms import ReportForm, RegistrationForm, ExcelForm, ReportImageFormSet, InterestForm
 from .models import Report, Account, ReportImages
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
 import pandas as pd
+import os
 
 import logging
 
@@ -24,8 +25,6 @@ project = [
 def home(request):
     return render(request, 'unrce/initial-landing.html')
 
-def forms(request): 
-    return render(request, 'unrce/forms.html')
 
 
 def create_report(request): 
@@ -40,6 +39,11 @@ def projects(request):
 # Create your views here.
 
 def add_report(request):
+    """
+    Handles the creation of a new report. This view allows for the upload of multiple images
+    related to the report through a formset. The function first validates the main report form and
+    the image formset before saving them.
+    """
     if request.method == 'POST':
         report_form = ReportForm(request.POST)
         formset = ReportImageFormSet(request.POST, request.FILES, queryset=ReportImages.objects.none())
@@ -60,18 +64,53 @@ def add_report(request):
 
     return render(request, 'unrce/create_report.html', {'form': report_form, 'formset': formset})
 
+def add_interest(request):
+    """
+    Handles the creation of a new Expression of Interest. This view initializes and validates
+    the InterestForm. Upon validation, it associates the current user as the author, saves the form,
+    and redirects to the initial landing page.
+    """
+    if request.method == 'POST':
+        Interest_Form = InterestForm(request.POST)
+
+        if Interest_Form.is_valid():
+            interest = Interest_Form.save(commit=False)
+            interest.author = request.user
+            interest.save()
+            return redirect('initial-landing')
+    else:
+        report_form = InterestForm()
+
+    return render(request, 'unrce/forms.html', {'form': InterestForm})
+
+
 
 
 
 def report_list(request):
+    """
+    Lists all the Report objects authored by the currently logged-in user.
+    Fetches and filters the Report objects by the current user and renders them in 'unrce/report_list.html'.
+    """
     reports = Report.objects.filter(author=request.user)
     return render(request, 'unrce/report_list.html', {'reports': reports})
 
+
 def report_review(request):
+    """
+    Lists all the Report objects available in the system, without filtering by author.
+    Fetches all the Report objects and renders them in 'unrce/report_review.html'.
+    """
     reports = Report.objects.filter()
     return render(request, 'unrce/report_review.html', {'reports': reports})
 
+
 def report_edit(request, report_id):
+    """
+    Handles the editing of an existing Report object identified by report_id.
+    If the request is POST, validates the changes and saves them.
+    Redirects to the report list upon successful edit.
+    """
     report = get_object_or_404(Report, id = report_id)
     if request.method == 'POST':
         form = ReportForm(request.POST, instance=report)
@@ -122,14 +161,17 @@ def reportDetails(request):
     return render(request, 'unrce/report_details.html')
 
 def upload_excel(request):
+    """
+    Handles the upload of an Excel file for mass creation of Report objects.
+    Validates the uploaded file through ExcelForm, reads the Excel file using Pandas,
+    iterates through its rows to create Report objects, and then redirects to the home page.
+    """
     if request.method == 'POST':
         form = ExcelForm(request.POST, request.FILES)
         if form.is_valid():
             excel_file_instance = form.save()
-            
             # Read Excel File
             df = pd.read_excel(excel_file_instance.excel_file.path)
-
             # Process and Save Data
             for index, row in df.iterrows():
                 Report.objects.create(
@@ -144,11 +186,10 @@ def upload_excel(request):
                     contact = row[7],
                     author=request.user
                 )
-            
+            os.remove(excel_file_instance.excel_file.path)
             return redirect('/')
     else:
         form = ExcelForm()
-    
     return render(request, 'unrce/excel_upload.html', {'form': form})
 
 
