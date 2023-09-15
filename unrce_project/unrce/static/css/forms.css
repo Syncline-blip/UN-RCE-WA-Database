@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 body{
     background-color: rgb(120, 173, 228);
     }
@@ -6,6 +7,12 @@ body{
 .forms {
     background-color: #ffffff;
     max-width: 90%;
+=======
+
+.forms {
+    background-color: #be0909;
+    max-width: 800px;
+>>>>>>> Stashed changes
     margin: 50px auto;
     padding: 10px 20px;
     border-radius: 5px;
@@ -22,7 +29,7 @@ body{
     
     
 .main h1 {
-    color: #333;
+    color: #0cc033;
     font-size: 24px;
     margin-bottom: 10px;
 }
