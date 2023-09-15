@@ -1,4 +1,4 @@
-from .models import Report, Account, ExcelUpload, ReportImages
+from .models import Report, Account, ExcelUpload, ReportImages, Expression_of_interest
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -8,6 +8,12 @@ from django.core.validators import MinLengthValidator
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
+        fields = '__all__'
+        exclude = ['author']
+        
+class InterestForm(forms.ModelForm):
+    class Meta:
+        model = Expression_of_interest
         fields = '__all__'
         exclude = ['author']
 
