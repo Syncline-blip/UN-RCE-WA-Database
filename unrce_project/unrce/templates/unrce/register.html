@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+    <title>Sign Up</title>
+</head>
+<body>
+<div class="auth-container">
+    <h2>Sign Up</h2>
+    <form class="auth-form" action="{% url 'register' %}" method="post" id="signup-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <small class="form-text text-muted">
+               User name must be 5 characters long
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
+        </div>
+        <div class="form-group">
+            <label for="org">Organization</label>
+            <input type="text" id="org" name="org" placeholder="Organization" required>
+        </div>
+        <div class="form-group">
+            <label for="password1">Password</label>
+            <input type="password" id="password1" name="password1" placeholder="Password" required>
+            <meter max="4" id="password-strength-meter"></meter>
+            <p id="password-strength-text"></p>
+        </div>
+        
+        <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            <input type="password" id="password2" name="password2" placeholder="Confirm Password" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" id="signup-button" disabled>Sign Up</button>
+        </div>
+        <div class="auth-options">
+            <span>Already have an account? <a href="{% url 'login' %}">Log In</a></span>
+            <span><a href="{% url 'initial-landing' %}">Home</a></span>
+        </div>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const usernameField = document.getElementById('username');
+        const passwordField = document.getElementById('password1');
+        const passwordConfirmField = document.getElementById('password2');
+        const signupButton = document.getElementById('signup-button');
+        const strengthMeter = document.getElementById('password-strength-meter');
+        const strengthText = document.getElementById('password-strength-text');
+    
+        function updateSignupButton() {
+            // Check if the username length is correct and if the password is valid
+            const isUsernameValid = usernameField.value.length >= 5; // Adjust the minimum username length
+            const password = passwordField.value;
+            const isPasswordValid = zxcvbn(password).score >= 3; // Adjust the password strength score
+    
+            // Enable or disable the signup button based on validation
+            signupButton.disabled = !(isUsernameValid && isPasswordValid);
+        }
+    
+        // Listen for input in username and password fields
+        usernameField.addEventListener('input', updateSignupButton);
+        passwordField.addEventListener('input', updateSignupButton);
+    
+        // Password strength meter code (same as before)
+        passwordField.addEventListener('input', function () {
+            const password = passwordField.value;
+            const result = zxcvbn(password);
+    
+            strengthMeter.style.backgroundColor = '#FF0000'; // Default to red
+    
+            strengthMeter.value = result.score;
+            strengthText.textContent = result.feedback.suggestions.join(' ');
+    
+            const colors = ['#FF0000', '#FF5E00', '#FFD700', '#7FFF00', '#00FF00'];
+            strengthMeter.style.backgroundColor = colors[result.score];
+    
+            updateSignupButton(); // Call the update function to check password validity
+        });
+    });
+</script>
+</body>
+</html>

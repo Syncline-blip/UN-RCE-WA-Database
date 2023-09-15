@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+    <h1>Reports</h1>
+    <ul>
+        {% for report in reports %}
+            <li>
+                <a href="{% url 'report_edit' report.pk %}">{{ report.name_project }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'home_landing' %}">home</a>
+</body>
+</html>

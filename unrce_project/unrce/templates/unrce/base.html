@@ -1,0 +1,98 @@
+{% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<title>{% block title %}Landing Page{% endblock %}</title>
+<body>
+    <div class="header">
+        <h1>United Nation Regional Centre of Expertise (WA)</h1>
+    </div>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="#">About</a>
+        <a href="#">Profile</a>
+        <a href="#">Clients</a>
+        <a href="#">Contact Us</a>
+    </div>
+
+    <div class="navbar">
+        <a href="{% url 'initial-landing' %}"><i class="fa fa-home"></i></a>
+        
+        <div class="dropdown">
+            <button onclick="window.location.href='{% url 'forms' %}';" class="dropbtn">Expression of Interest</button>
+            <div class="dropdown-content">
+                <div>Expression of Interest allows users to express their interest in a specific project.</div>
+            </div>
+        </div>
+        
+    
+        <div class="dropdown">
+            <button onclick="window.location.href='{% url 'report_list' %}';" class="dropbtn">Edit</button>
+            <div class="dropdown-content">
+                <div>Expression of Interest allows users to express their interest in a specific project.</div>
+            </div>
+        </div>
+        
+
+        <div class="dropdown">
+            <button onclick="window.location.href='{% url 'create_report' %}';" class="dropbtn">Create</button>
+            <div class="dropdown-content">
+                <div>Expression of Interest allows users to express their interest in a specific project.</div>
+            </div>
+        </div>
+        
+
+        <div class="dropdown">
+            <button onclick="window.location.href='{% url 'excel_upload' %}';" class="dropbtn">Excel</button>
+            <div class="dropdown-content">
+                <div>Expression of Interest allows users to express their interest in a specific project.</div>
+            </div>
+        </div>
+        
+        <div class="dropdown">
+            <button onclick="window.location.href='{% url 'login' %}';" class="dropbtn">Login (testing)</button>
+            <div class="dropdown-content">
+                <div>Expression of Interest allows users to express their interest in a specific project.</div>
+            </div>
+        </div>
+        
+        <div class="dropdown">
+            <button onclick="window.location.href='{% url 'register' %}';" class="dropbtn">Register (testing)</button>
+            <div class="dropdown-content">
+                <div>Expression of Interest allows users to express their interest in a specific project.</div>
+            </div>
+        </div>
+        
+    <button class="openbtn" onclick="openNav()">☰</button>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="content flex-container">
+        {% block content %}{% endblock %}
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft= "0";
+        }
+    </script>
+</body>
+
+
+

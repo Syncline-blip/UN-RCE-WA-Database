@@ -1,280 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <title>Landing Page</title>
-    <style>
-        body {
-            font-family: proxima-nova;
-            margin: 0;
-            padding: 0;
-        }
+{% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}EOI{% endblock %}</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+<div class = "forms">
+  <form action="">
+  <div class="main">
+    <h1>Expression of Interest</h1>
+    <hr />
+    <p>
+      All the Submissions to this form will be appended into a table to be reviewed by the Secretariat.
+    </p>
+    <h4 style="color: red;">* Required</h4>
+  </div>
+  <div class="name">
+    <h3>Title of Project <span style="color: red;">*</span></h3>
+    <input type="text" name="name" id="" required />
+  </div>
+  <div class="email">
+    <h3>Contributing Organisations <span style="color: red;">*</span></h3>
+    <input type="email" name="name" id="" required />
+  </div>
+  <div class="details">
+    <h3>Details</Details> <span style="color: red;">*</span></h3>
+    <h5>Name</Details> <span style="color: red;">*</span></h5>
+    <input type="email" name="name" id="" required />
+    <h5>Organisation Affiliation</Details> <span style="color: red;">*</span></h5>
+    <input type="email" name="name" id="" required />
+    <h5>E-mail</E-mail></Details> <span style="color: red;">*</span></h5>
+    <input type="email" name="name" id="" required />
+    <form action="/upload-endpoint" method="post" enctype="multipart/form-data">
+      <label for="files">Additional Information:</label>
+      <input type="file" id="files" name="files[]" multiple>
+      <input type="submit" value="Upload">
+  </form>
+  </div>
 
-        .header {
-            background-color: #003087;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-        }
+<<<<<<< Updated upstream
+<!--
+  This is where Expression of interests are filled out, form popualted based on fields in model.
+-->
 
-        .menu-bar {
-            background-color: #333;
-            overflow: hidden;
-            position: relative; /* Add relative positioning */
-        }
+{% block content %}
 
-        .menu-bar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        .menu-bar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .content h1 {
-            margin-top: 0;
-        }
-
-        .sidebar {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            right: 0;
-            background-color: #111;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-        }
-
-        .sidebar a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #818181;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .sidebar a:hover {
-            color: #f1f1f1;
-        }
-
-        .sidebar .closebtn {
-            position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-        }
-
-        .openbtn {
-            position: absolute;
-            top: 0;
-            right: 0;
-            font-size: 20px;
-            cursor: pointer;
-            background-color: #111;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-        }
-
-        .openbtn:hover {
-            background-color: #444;
-        }
-
-        #main {
-            transition: margin-left .5s;
-            padding: 16px;
-        }
-
-        @media screen and (max-height: 450px) {
-            .sidebar {padding-top: 15px;}
-            .sidebar a {font-size: 18px;}
-        }
-
-        .forms {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        background-color: #ede6f6;
-        }
-
-        form{
-            display:flex;
-            flex-direction: column;
-            align-items:center;
-        }
-        
-        .main {
-        height: 230px;
-        width: 50vw;
-        box-sizing: border-box;
-        background-color: white;
-        border-top: 12px solid #663ab5;
-        border-radius: 10px;
-        margin: 13px;
-        margin-bottom: 0;
-        padding: 10px;
-        padding-left: 30px;
-        font-size: 13px;
-        }
-
-        .main h1 {
-        font-size: 25px;
-        }
-
-        .name {
-        background-color: white;
-        box-sizing: border-box;
-        height: 150px;
-        width: 50vw;
-        margin: 13px;
-        padding: 10px;
-        padding-left: 30px;
-        margin-bottom: 0;
-        border-radius: 10px;
-        }
-
-        input[type="text"],
-        [type="email"] {
-        border: none;
-        border-bottom: 1px solid black;
-        width: 90%;
-        padding: 5px;
-        }
-
-        .email {
-        background-color: white;
-        box-sizing: border-box;
-        height: 150px;
-        width: 50vw;
-        margin: 13px;
-        margin-bottom: 0;
-        padding: 10px;
-        padding-left: 30px;
-        border-radius: 10px;
-        }
-
-        .submit {
-        width: 50vw;
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        }
-
-        .main {
-          height: 180px;
-          font-size: 12px;
-        }
-        .name, .email {
-          height: 110px;
-          font-size: 12px;
-        }
-
-        .main h1 {
-          font-size: 18px;
-        }
-        .main p,h4 {
-          margin: 10px 0px;
-        }
-        h1 {
-          font-size: 25px;
-        }
-        input[type="text"],
-        [type="email"] {
-          padding: 5;
-        }
-
-        button {
-          padding: 10px 22px;
-          border-radius: 5px;
-        }
-      
-
-
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>United Nation Regional Centre of Expertise (WA)</h1>
-    </div>
-
-    <div class="menu-bar">
-        <a href="forms.html">Expression of Interest</a>
-        <a href="#un-rce-project">UN RCE Project Available</a>
-        <button class="openbtn" onclick="openNav()">☰</button>
-    </div>
-
-
-    <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        <a href="#">About</a>
-        <a href="#">Profile</a>
-        <a href="#">Clients</a>
-        <a href="#">Contact</a>
-    </div>
+<div class="report-container">
+  <form method="post" enctype="form-data">
+    {% csrf_token %}
     
-
-    <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-        }
-        
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginLeft= "0";
-        }
-    </script>
-
-
-    <form action="">
-    <div class = forms>
-      <div class="main">
-        <h1>Open Letter Maker</h1>
-        <hr />
-        <p>
-          All the Submissions to this form will be appended into a table as
-          signatures in the style of open letter.
-        </p>
-        <h4 style="color: red;">* Required</h4>
-      </div>
-      <div class="name">
-        <h3>Name <span style="color: red;">*</span></h3>
-        <input type="text" name="name" id="" required />
-      </div>
-      <div class="email">
-        <h3>Email <span style="color: red;">*</span></h3>
-        <input type="email" name="name" id="" required />
-      </div>
-      <div class="submit">
-        <button>Submit</button>
-      </div>
-      <p class="rule">Never submit passwords through Google Forms</p>
-      <p class="policy">
-        This content is neither created nor endrosed by Google.
-        <a href="#">Report Abuse.</a> <a href="#">Terms of condition.</a>
-        <a href="#">Privacy Policy.</a>
-        <h1 class="Google" style="color: grey; font-weight: 550; width: 50vw;">Google Forms</h1>
-      </p>
+    {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
     </div>
-    </form>
+    {% endfor %}    
+    <div class="save-options">
+      <button type="submit">Save Report</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
 
-    
-</body>
-</html>
+
+
+
+
+
+=======
+  <div class="submit">
+    <button>Submit</button>
+  </div>
+</div>
+
+<script>
+  function openNav() {
+      document.getElementById("mySidebar").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+  }
+  
+  function closeNav() {
+      document.getElementById("mySidebar").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+  }
+</script>
+>>>>>>> Stashed changes
