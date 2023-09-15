@@ -9,7 +9,6 @@ from django.http import HttpResponse
 from .forms import ReportForm, RegistrationForm, ExcelForm, ReportImageFormSet, InterestForm
 from .models import Report, Account, ReportImages
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
-import pandas as pd
 import os
 
 import logging
