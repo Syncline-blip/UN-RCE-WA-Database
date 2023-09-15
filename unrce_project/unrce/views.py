@@ -1,41 +1,24 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from .forms import ReportForm, RegistrationForm, ExcelForm, ReportImageFormSet, InterestForm
 from .models import Report, Account, ReportImages
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
 import os
-
 import logging
 
-# sample data, not to be used, just for testing
-project = [
-    {
-        'author': 'JOHN JOHN',
-        'project': 'PROJECT LIVE',
-        'project_code': 22341
-    }
-]
 def home(request):
+    """
+        Renders the landing page, nothign special
+    """
     return render(request, 'unrce/initial-landing.html')
 
-
-
+# @TODO 1; Ensure that this is tied into database to create projects properly
 def create_report(request): 
+    """
+        Renders user reporting page, it allows them to upload new report
+    """
     return render(request, 'unrce/create_report.html')
-
-
-def projects(request):
-    context = {
-        'project': project
-    }
-    return render(request, 'unrce/project_upload.html', context)
-# Create your views here.
 
 def add_report(request):
     """
@@ -80,11 +63,7 @@ def add_interest(request):
     else:
         report_form = InterestForm()
 
-    return render(request, 'unrce/forms.html', {'form': InterestForm})
-
-
-
-
+    return render(request, 'unrce/eoi.html', {'form': InterestForm})
 
 def report_list(request):
     """
@@ -103,7 +82,6 @@ def report_review(request):
     reports = Report.objects.filter()
     return render(request, 'unrce/report_review.html', {'reports': reports})
 
-
 def report_edit(request, report_id):
     """
     Handles the editing of an existing Report object identified by report_id.
@@ -121,6 +99,10 @@ def report_edit(request, report_id):
     return render(request, 'unrce/report_edit.html', {'form': form})
 
 def register(request):
+    """
+        Renders registration page, requires username, password.
+        Note that password1 is used as a form of user confirming their passwrod
+    """
     try:
         if request.method == 'POST':
             form = RegistrationForm(request.POST)
@@ -148,15 +130,25 @@ def register(request):
     return render(request, 'unrce/register.html', {'form': form})
 
 
-
+# @TODO 3; Ensure this renders relevant user projects
 def profile(request):
-    user = request.user  # Assuming you are using Django's authentication system
+    """
+        Renders the profile view. Page will load user and account models to ensure the correct data is there
+    """
+    user = request.user  
     account = Account.objects.get(user=user)  # Retrieve the Account associated with the user
     return render(request, 'unrce/profile.html', {'user': user, 'account': account})
 
 def edit_reporting(request):
+    """
+        View to render the reporting page
+    """
     return render(request, 'unrce/report_list.html')
+
 def reportDetails(request):
+    """
+        View to render the report details
+    """
     return render(request, 'unrce/report_details.html')
 
 def upload_excel(request):
