@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+import pandas as pd
 from .forms import ReportForm, RegistrationForm, ExcelForm, ReportImageFormSet, InterestForm
 from .models import Report, Account, ReportImages
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
