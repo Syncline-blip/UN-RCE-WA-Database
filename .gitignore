@@ -174,3 +174,7 @@ unrce_project/unrce_project/__pycache__/__init__.cpython-38.pyc
 unrce_project/unrce_project/__pycache__/settings.cpython-38.pyc
 unrce_project/unrce_project/__pycache__/urls.cpython-38.pyc
 unrce_project/unrce_project/__pycache__/wsgi.cpython-38.pyc
+
+
+# Python Settings
+settings.py
