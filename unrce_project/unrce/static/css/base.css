@@ -117,18 +117,24 @@ html {
   margin: 10px;
 }
 .navbar {
-    overflow: hidden;
+    display:flex;
+    align-items: center; 
     background-color: #333;
     font-family: Arial;
-    }
-    /* Links inside the navbar */
-    .navbar a {
-    float: left;
-    font-size: 16px;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+}
+/* Links inside the navbar */
+.navbar a {
+float: left;
+font-size: 16px;
+color: white;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+}
+
+    /* Add a red background color to navbar links on hover */
+.navbar a:hover, .dropdown:hover .dropbtn {
+    background-color: rgb(74, 103, 171);
     }
     
 /* The dropdown container */
@@ -177,3 +183,70 @@ html {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+.container {
+    margin-left: auto;
+    padding-right: 23px;  /* Adds 20px of padding to the right side */
+}
+.profile ul {
+    list-style-type: none;       /* Remove default bullet points */
+    margin: 0;                   
+    padding: 0;
+}
+
+.profile li {
+    display: flex;               /* For aligning the icon and text */
+    align-items: center;         /* Vertically aligns icon and text */
+    padding: 8px 16px;           /* Sample padding, adjust as needed */
+}
+
+.profile li span {
+    margin-left: 10px;           /* Space between icon and text */
+}
+
+.profile i.far.fa-user-circle {
+    cursor: pointer;             /* Hand cursor for clickability feel */
+}
+
+/* Position user-circle (profile) to the far right */
+.container .dropdown .profile {
+    margin-left: auto;           /* Pushes the element to the right */
+}
+
+.far.fa-user-circle {
+    margin-left: auto;           /* Pushes the icon to the right */
+    color: white;
+    font-size: 30px;
+    cursor: pointer;             /* Hand cursor for clickability feel */
+}
+
+.icon-content {
+    display: none;
+    position: absolute;
+    top:22%;
+    right:0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  /* Links inside the dropdown */
+.icon-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+  
+  /* Add a grey background color to dropdown links on hover */
+  .icon-content a:hover {
+    background-color: #ddd;
+  }
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .icon-content {
+    display: block;
+  }

@@ -1,15 +1,5 @@
-<<<<<<< Updated upstream
-body{
-    background-color: rgb(120, 173, 228);
-    }
-    
-    
-.forms {
-    background-color: #ffffff;
-    max-width: 90%;
-=======
 
-.forms {
+.report-container {
     background-color: #be0909;
     max-width: 800px;
 >>>>>>> Stashed changes
@@ -97,5 +87,10 @@ input[type="submit"]:hover, .submit button:hover {
     margin-top: 20px;
 }
     
-    
-    
+
+.hero{
+    width: 100%;
+    min-height: 100vh;
+    background: #eceaff;
+    color: #525252;
+}
