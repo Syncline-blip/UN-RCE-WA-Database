@@ -247,6 +247,6 @@ text-decoration: none;
   }
   
   /* Show the dropdown menu on hover */
-  .dropdown:hover .icon-content {
+  /* .profile:hover .icon-content {
     display: block;
   }

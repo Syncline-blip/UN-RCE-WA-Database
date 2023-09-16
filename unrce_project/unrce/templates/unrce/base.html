@@ -72,11 +72,8 @@
                     <i class='far fa-user-circle'></i>
                     <div class="icon-content"> 
                         <ul> 
-                            <li><i class='bx bx-cog' ></i><span>Settings</span></li> 
-                            <li><i class='bx bx-user' ></i><span>Profiles</span></li> 
-                            <li><i class='bx bx-cog' ></i><span>Inbox</span></li> 
-                            <li><i class='bx bx-cog' ></i><span>Help</span></li> 
-                            <li><i class='bx bx-log-in-circle'></i><span>Logout</span></li> 
+                            <li><i class='bx bx-user' ></i><span>Profile</span></li> 
+                            <li><a onclick="window.location.href='{% url 'login' %}';"><i class='bx bx-log-in-circle'></i><span>Logout</span></a></li>
                         </ul> 
                     </div> 
                 </div>
@@ -99,6 +96,25 @@
             document.getElementById("mySidebar").style.width = "0";
             document.getElementById("main").style.marginLeft= "0";
         }
+
+        document.querySelector('.profile').addEventListener('click', function() {
+            var content = this.querySelector('.icon-content');
+            if(content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        });
+        
+        document.addEventListener('click', function(event) {
+            var dropdown = document.querySelector('.icon-content');
+            var profile = document.querySelector('.profile');
+            
+            if (!profile.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+        
     </script>
 </body>
 
