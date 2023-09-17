@@ -80,7 +80,7 @@ def add_interest(request):
     else:
         report_form = InterestForm()
 
-    return render(request, 'unrce/forms.html', {'form': InterestForm})
+    return render(request, 'unrce/eoi.html', {'form': InterestForm})
 
 
 
