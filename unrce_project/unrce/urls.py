@@ -24,6 +24,7 @@ urlpatterns = [
     path('excel_upload/', views.upload_excel, name='excel_upload'),
     path('delete_image/<int:image_id>/', views.delete_image, name='delete_image'),
     path('users_list/', views.users_list, name='users_list'),
+    path('eoi_review/', views.eoi_review, name='eoi_review')
 ]
 
 if settings.DEBUG:

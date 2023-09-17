@@ -7,7 +7,7 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import ReportForm, RegistrationForm, ExcelForm, InterestForm, ReportImagesForm
-from .models import Report, Account, ReportImages
+from .models import Report, Account, ReportImages, Expression_of_interest
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
 import os
 
@@ -138,6 +138,14 @@ def report_details(request, report_id):
         'existing_images': existing_images
     }
     return render(request, 'unrce/report_details.html', context)
+
+def eoi_review(request):
+    """
+    Lists all the Report objects available in the system, without filtering by author.
+    Fetches all the Report objects and renders them in 'unrce/report_review.html'.
+    """
+    eois = Expression_of_interest.objects.filter()
+    return render(request, 'unrce/eoi_review.html', {'eois': eois})
 
 
 def report_edit(request, report_id):
