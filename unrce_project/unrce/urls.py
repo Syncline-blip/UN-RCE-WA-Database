@@ -19,6 +19,7 @@ urlpatterns = [
     path('report_review/', views.report_review, name='report_review'),
     path('report_details/', views.reportDetails, name='report_details'),
     path('create_report/', views.add_report, name='create_report'),
+    path('redirect/', views.must_be_signed_in, name='redirect'),
     path('report_edit/<int:report_id>/', views.report_edit, name='report_edit'),
     path('excel_upload/', views.upload_excel, name='excel_upload'),
 ]
