@@ -11,25 +11,43 @@
 
 <div class="login-container">
     <h2>Login</h2>
+    
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" placeholder="Username" required>
+            {{ form.username.errors }}
         </div>
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Password" required>
+            {{ form.password.errors }}
         </div>
         <div class="form-group">
             <button type="submit">Login</button>
         </div>
+        {% if form.errors %}
+        <div class="error-message" id="error-message">
+            <p>Invalid Username or Password</p>
+        </div>
+        {% endif %}
+
         <div class="auth-options">
             <a href="signup.html">Create an account</a>
             <a href="{% url 'initial-landing' %}">Home</a>
         </div>
     </form>
 </div>
+<script>
+    // Delays the appearance of error message
+    setTimeout(function () {
+        const errorMessage = document.getElementById('error-message');
+        if (errorMessage) {
+            errorMessage.style.display = 'none';
+        }
+    }, 3000);
+</script>
 
 </body>
 </html>
