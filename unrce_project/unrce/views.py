@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import ReportForm, RegistrationForm, ExcelForm, ReportImageFormSet, InterestForm
+from .forms import ReportForm, RegistrationForm, ExcelForm, InterestForm, ReportImagesForm
 from .models import Report, Account, ReportImages
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
 import os
@@ -39,29 +39,36 @@ def projects(request):
 
 def add_report(request):
     """
-    Handles the creation of a new report. This view allows for the upload of multiple images
-    related to the report through a formset. The function first validates the main report form and
-    the image formset before saving them.
+    Handles the creation of a new report and its associated images.
     """
     if request.method == 'POST':
         report_form = ReportForm(request.POST)
-        formset = ReportImageFormSet(request.POST, request.FILES, queryset=ReportImages.objects.none())
-        
-        if report_form.is_valid() and formset.is_valid():
+        images_form = ReportImagesForm(request.POST, request.FILES)
+        images = request.FILES.getlist('image')
+
+        if report_form.is_valid():
             report = report_form.save(commit=False)
             report.author = request.user
             report.save()
-
-            for form_data in formset:
-                image = form_data.cleaned_data.get('image')
-                if image:
-                    ReportImages.objects.create(image=image, report=report)
+    
+            if images:  # Check if any images are uploaded
+                for image in images:
+                    ReportImages.objects.create(
+                        report=report,
+                        image=image
+                    )
             return redirect('report_list')
+
     else:
         report_form = ReportForm()
-        formset = ReportImageFormSet(queryset=ReportImages.objects.none())
+        images_form = ReportImagesForm()
+    context = {
+        'report_form': report_form,
+        'images_form': images_form
+    }
 
-    return render(request, 'unrce/create_report.html', {'form': report_form, 'formset': formset})
+    return render(request, 'unrce/create_report.html', context)
+
 
 def add_interest(request):
     """
@@ -84,8 +91,6 @@ def add_interest(request):
 
 
 
-
-
 def report_list(request):
     """
     Lists all the Report objects authored by the currently logged-in user.
@@ -95,6 +100,23 @@ def report_list(request):
     return render(request, 'unrce/report_list.html', {'reports': reports})
 
 
+def delete_image(request, image_id):
+    """
+    Allows users to delete images they have uploaded to reports
+    """
+    image = get_object_or_404(ReportImages, id=image_id)
+    report = image.report
+    if image.report.author == request.user:
+        image.delete()
+    return redirect('report_edit', report_id=report.id)
+
+def users_list(request):
+    users = User.objects.all().prefetch_related('groups', 'account')  
+    context = {
+        'users': users,
+    }
+    return render(request, 'unrce/users_list.html', context)
+
 def report_review(request):
     """
     Lists all the Report objects available in the system, without filtering by author.
@@ -103,22 +125,46 @@ def report_review(request):
     reports = Report.objects.filter()
     return render(request, 'unrce/report_review.html', {'reports': reports})
 
+def report_details(request, report_id):
+    """
+    Lists the entire report for review, this is accessed from the report_review list of all reports
+    """
+    report = get_object_or_404(Report, id=report_id)
+    report_form = ReportForm(instance=report)
+    existing_images = ReportImages.objects.filter(report=report)
+    
+    context = {
+        'form': report_form, 
+        'existing_images': existing_images
+    }
+    return render(request, 'unrce/report_details.html', context)
+
 
 def report_edit(request, report_id):
-    """
-    Handles the editing of an existing Report object identified by report_id.
-    If the request is POST, validates the changes and saves them.
-    Redirects to the report list upon successful edit.
-    """
-    report = get_object_or_404(Report, id = report_id)
+    report = get_object_or_404(Report, id=report_id)
     if request.method == 'POST':
         form = ReportForm(request.POST, instance=report)
         if form.is_valid():
             form.save()
-            return redirect('report_list')
+
+        # Handle new image uploads
+        images = request.FILES.getlist('image')
+        for image in images:
+            ReportImages.objects.create(
+                report=report,
+                image=image
+            )
+
+        return redirect('report_list')  # Redirect to the list of reports
     else:
         form = ReportForm(instance=report)
-    return render(request, 'unrce/report_edit.html', {'form': form})
+
+    existing_images = ReportImages.objects.filter(report=report)
+    context = {
+        'form': form,
+        'existing_images': existing_images,
+    }
+    return render(request, 'unrce/report_edit.html', context)
 
 def register(request):
     try:
@@ -127,6 +173,8 @@ def register(request):
             if form.is_valid():
                 logging.debug("Form is valid")
                 user = form.save()
+                group, created = Group.objects.get_or_create(name='Visitor')
+                user.groups.add(group)
                 # Log in the user after registration if needed
                 username = form.cleaned_data['username']
                 password = form.cleaned_data['password1']

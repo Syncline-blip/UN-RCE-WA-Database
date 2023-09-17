@@ -20,7 +20,10 @@ urlpatterns = [
     path('report_details/', views.reportDetails, name='report_details'),
     path('create_report/', views.add_report, name='create_report'),
     path('report_edit/<int:report_id>/', views.report_edit, name='report_edit'),
+    path('report_details/<int:report_id>/', views.report_details, name='report_details'),
     path('excel_upload/', views.upload_excel, name='excel_upload'),
+    path('delete_image/<int:image_id>/', views.delete_image, name='delete_image'),
+    path('users_list/', views.users_list, name='users_list'),
 ]
 
 if settings.DEBUG:

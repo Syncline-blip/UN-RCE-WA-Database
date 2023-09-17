@@ -4,13 +4,28 @@
 <meta charset="UTF-8">
 </head>
 <body>
-<h1>Edit Report</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save changes</button>
-</form>
-<a href="{% url 'report_list' %}">Cancel</a>
-
-</body>
+    <h1>Edit Report</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save changes</button>
+    </form>
+    
+    <h2>Existing Images</h2>
+    {% for img in existing_images %}
+        <img src="{{ img.image.url }}" alt="Image" width="100"><br>
+        <a href="{% url 'delete_image' img.id %}">Delete</a><br>
+    {% endfor %}
+    
+    <h2>Upload New Images</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="image" multiple>
+        <button type="submit">Upload</button>
+    </form>
+    
+    <a href="{% url 'report_list' %}">Return</a>
+    </body>
+    
 </html>

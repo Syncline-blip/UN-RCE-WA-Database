@@ -9,8 +9,14 @@ class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
         fields = '__all__'
-        exclude = ['author']
-        
+        exclude = ['author', 'created_at', 'last_modified']
+
+class ReportImagesForm(forms.ModelForm):
+    class Meta:
+        model = ReportImages
+        fields = ['image']
+
+
 class InterestForm(forms.ModelForm):
     class Meta:
         model = Expression_of_interest
@@ -66,8 +72,3 @@ class ExcelForm(forms.ModelForm):
         model = ExcelUpload
         fields = ('excel_file',)
 
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model = ReportImages
-        fields = ('image', )
-ReportImageFormSet = forms.modelformset_factory(ReportImages, form=ImageForm, extra=1)        
