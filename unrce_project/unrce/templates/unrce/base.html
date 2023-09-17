@@ -31,7 +31,7 @@
                 <div>Expression of Interest allows users to express their interest in a specific project.</div>
             </div>
         </div>
-        
+
         <div class="dropdown">
             <button onclick="window.location.href='{% url 'report_list' %}';" class="dropbtn">Edit</button>
             <div class="dropdown-content">
@@ -56,7 +56,7 @@
         
         {% if not user.is_authenticated %}
         <div class="dropdown">
-            <button onclick="window.location.href='{% url 'login' %}';" class="dropbtn">Login (testing)</button>
+            <button onclick="window.location.href='{% url 'login' %}';" class="dropbtn">Login</button>
             <div class="dropdown-content">
                 <div>Expression of Interest allows users to express their interest in a specific project.</div>
             </div>
@@ -76,6 +76,7 @@
                     <div class="icon-content"> 
                         <ul> 
                             <li><i class='bx bx-user' ></i><span>Profile</span></li> 
+                            <li><a onclick="window.location.href='{% url 'profile' %}';"><i class='bx bx-log-in-circle'></i><span>Profile</span></a></li>
                             <li><a onclick="window.location.href='{% url 'logout' %}';"><i class='bx bx-log-in-circle'></i><span>Logout</span></a></li>
                         </ul> 
                     </div> 
