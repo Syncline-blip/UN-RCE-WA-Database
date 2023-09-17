@@ -22,6 +22,9 @@
     <div class="navbar">
         <a href="{% url 'initial-landing' %}"><i class="fa fa-home"></i></a>
         
+        
+        
+        {% if user.is_authenticated %}
         <div class="dropdown">
             <button onclick="window.location.href='{% url 'eoi' %}';" class="dropbtn">Expression of Interest</button>
             <div class="dropdown-content">
@@ -29,7 +32,6 @@
             </div>
         </div>
         
-        {% if user.is_authenticated %}
         <div class="dropdown">
             <button onclick="window.location.href='{% url 'report_list' %}';" class="dropbtn">Edit</button>
             <div class="dropdown-content">
