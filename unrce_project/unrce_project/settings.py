@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 LOGIN_REDIRECT_URL = '/profile/'
 LOGOUT_REDIRECT_URL = '/'
-LOGIN_URL = '/login/'
+LOGIN_URL = '/redirect/'
 
 # Application definition
 
@@ -106,7 +106,7 @@ DATABASES = {
         "ENGINE": 'django.db.backends.postgresql',
         "NAME": 'unrce',
         'USER': 'postgres',
-        'PASSWORD': '123',
+        'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '5432',
     }
