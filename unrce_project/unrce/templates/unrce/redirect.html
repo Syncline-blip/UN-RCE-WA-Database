@@ -2,9 +2,52 @@
 <html>
 <head>
     <title>You Must Be Signed In</title>
+    <style>
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 500px;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(198, 197, 243, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 254, 254, 0.5);
+            color: white;
+        }
+
+        h1 {
+            font-size: 46px;
+            color: #DAAA00; 
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 30px;
+            margin-bottom: 30px;
+            color:#003087
+        }
+
+        a {
+            text-decoration: none;
+            color: #DAAA00; 
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #003087; 
+        }
+    </style>
 </head>
-<body>
-    <h1>You Must Be Signed In</h1>
-    <p>Please <a href="{% url 'login' %}">sign in</a> to access this page.</p>
-</body>
-</html>
+
+{% extends "base.html" %}
+
+{% block title %}You Must Be Signed In{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>You Must Be Signed In</h1>
+        <p>Please <a href="{% url 'login' %}">sign in</a> to access this page.</p>
+    </div>
+{% endblock %}
