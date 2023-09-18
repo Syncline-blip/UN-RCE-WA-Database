@@ -1,0 +1,91 @@
+
+.site-navbar {
+    margin-bottom: 0px;
+    z-index: 1999;
+    position: absolute;
+    top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid #daaa00;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    width: calc(100% - 40px); /* Adjust the space as needed */
+    max-width: 100%;
+}
+
+.left-content {
+    display: flex; /* Use flex to align logo and title side by side */
+    align-items: center; /* Center vertically */
+}
+
+.site-logo {
+    width: 50px; /* Adjust logo size as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Adjust margin as needed */
+}
+
+.site-title {
+    font-size: 18px; 
+    font-weight: bold;
+}
+
+
+.nav-buttons {
+    display: inline-block;
+}
+.nav-buttons .nav-button {
+    background-color: transparent;
+    border: none;
+    color: #333;
+    padding: 10px 20px;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 30px;
+     display: inline-block;
+    transition: background-color 0.3s, border-radius 0.3s;
+    margin-left: 5px; 
+    margin-right: 10px;
+}
+
+.nav-buttons .nav-button:hover {
+    border: 2px solid #daaa00;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 20px;
+}
+
+/* Dropdown Styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content button {
+    width: 100%;
+    padding: 10px 20px;
+    text-align: left;
+    border: none;
+    background-color: transparent;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+.dropdown-content button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
