@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
+<!--
+    Alows for users to upload an excel file, and it be added to the database
+-->
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form }}
