@@ -25,11 +25,11 @@ def home(request):
     return render(request, 'unrce/initial-landing.html')
 
 
-
+@login_required
 def create_report(request): 
     return render(request, 'unrce/create_report.html')
 
-
+@login_required
 def projects(request):
     context = {
         'project': project
@@ -37,6 +37,7 @@ def projects(request):
     return render(request, 'unrce/project_upload.html', context)
 # Create your views here.
 
+@login_required
 def add_report(request):
     """
     Handles the creation of a new report and its associated images.
@@ -87,10 +88,12 @@ def add_interest(request):
     else:
         report_form = InterestForm()
 
-    return render(request, 'unrce/forms.html', {'form': InterestForm})
+    return render(request, 'unrce/eoi.html', {'form': InterestForm})
 
 
 
+
+@login_required
 def report_list(request):
     """
     Lists all the Report objects authored by the currently logged-in user.
@@ -99,7 +102,7 @@ def report_list(request):
     reports = Report.objects.filter(author=request.user)
     return render(request, 'unrce/report_list.html', {'reports': reports})
 
-
+@login_required
 def delete_image(request, image_id):
     """
     Allows users to delete images they have uploaded to reports
@@ -204,17 +207,29 @@ def register(request):
     return render(request, 'unrce/register.html', {'form': form})
 
 
-
+@login_required
 def profile(request):
-    user = request.user  # Assuming you are using Django's authentication system
-    account = Account.objects.get(user=user)  # Retrieve the Account associated with the user
+    try:
+        user = request.user  # Assuming you are using Django's authentication system
+        account = Account.objects.get(user=user)  # Retrieve the Account associated with the user
+    except Account.DoesNotExist:
+
+        account = None
     return render(request, 'unrce/profile.html', {'user': user, 'account': account})
 
+def must_be_signed_in(request):
+    return render(request, 'unrce/redirect.html')
+
+
+@login_required
 def edit_reporting(request):
     return render(request, 'unrce/report_list.html')
+
+@login_required
 def reportDetails(request):
     return render(request, 'unrce/report_details.html')
 
+@login_required
 def upload_excel(request):
     """
     Handles the upload of an Excel file for mass creation of Report objects.

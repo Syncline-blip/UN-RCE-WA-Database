@@ -1,0 +1,83 @@
+{% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}EOI{% endblock %}</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+<div class = "forms">
+  <form action="">
+  <div class="main">
+    <h1>Expression of Interest</h1>
+    <hr />
+    <p>
+      All the Submissions to this form will be appended into a table to be reviewed by the Secretariat.
+    </p>
+    <h4 style="color: red;">* Required</h4>
+  </div>
+  <div class="name">
+    <h3>Title of Project <span style="color: red;">*</span></h3>
+    <input type="text" name="name" id="" required />
+  </div>
+  <div class="email">
+    <h3>Contributing Organisations <span style="color: red;">*</span></h3>
+    <input type="email" name="name" id="" required />
+  </div>
+  <div class="details">
+    <h3>Details</Details> <span style="color: red;">*</span></h3>
+    <h5>Name</Details> <span style="color: red;">*</span></h5>
+    <input type="email" name="name" id="" required />
+    <h5>Organisation Affiliation</Details> <span style="color: red;">*</span></h5>
+    <input type="email" name="name" id="" required />
+    <h5>E-mail</E-mail></Details> <span style="color: red;">*</span></h5>
+    <input type="email" name="name" id="" required />
+    <form action="/upload-endpoint" method="post" enctype="multipart/form-data">
+      <label for="files">Additional Information:</label>
+      <input type="file" id="files" name="files[]" multiple>
+      <input type="submit" value="Upload">
+  </form>
+  </div>
+
+<!--
+  This is where Expression of interests are filled out, form popualted based on fields in model.
+-->
+
+<!-- {% block content %} 
+
+<div class="report-container">
+  <form method="post" enctype="form-data">
+    {% csrf_token %}
+    
+    {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+    </div>
+    {% endfor %}    
+    <div class="save-options">
+      <button type="submit">Save Report</button>
+    </div>
+  </form>
+</div>
+{% endblock %} -->
+
+
+
+
+
+
+  <div class="submit">
+    <button>Submit</button>
+  </div>
+</div>
+
+<script>
+  function openNav() {
+      document.getElementById("mySidebar").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+  }
+  
+  function closeNav() {
+      document.getElementById("mySidebar").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+  }
+</script>

@@ -12,22 +12,26 @@
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         <a href="#">About</a>
-        <a href="#">Profile</a>
-        <a href="#">Clients</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}">Profile</a> <!-- Display "Profile" when logged in -->
+        <a href="{% url 'report_list' %}">Clients</a> <!-- Display "Clients" when logged in -->
+        {% endif %}
         <a href="#">Contact Us</a>
     </div>
 
     <div class="navbar">
         <a href="{% url 'initial-landing' %}"><i class="fa fa-home"></i></a>
         
+        
+        
+        {% if user.is_authenticated %}
         <div class="dropdown">
-            <button onclick="window.location.href='{% url 'forms' %}';" class="dropbtn">Expression of Interest</button>
+            <button onclick="window.location.href='{% url 'eoi' %}';" class="dropbtn">Expression of Interest</button>
             <div class="dropdown-content">
                 <div>Expression of Interest allows users to express their interest in a specific project.</div>
             </div>
         </div>
-        
-    
+
         <div class="dropdown">
             <button onclick="window.location.href='{% url 'report_list' %}';" class="dropbtn">Edit</button>
             <div class="dropdown-content">
@@ -35,7 +39,6 @@
             </div>
         </div>
         
-
         <div class="dropdown">
             <button onclick="window.location.href='{% url 'create_report' %}';" class="dropbtn">Create</button>
             <div class="dropdown-content">
@@ -43,16 +46,17 @@
             </div>
         </div>
         
-
         <div class="dropdown">
             <button onclick="window.location.href='{% url 'excel_upload' %}';" class="dropbtn">Excel</button>
             <div class="dropdown-content">
                 <div>Expression of Interest allows users to express their interest in a specific project.</div>
             </div>
         </div>
+        {% endif %}
         
+        {% if not user.is_authenticated %}
         <div class="dropdown">
-            <button onclick="window.location.href='{% url 'login' %}';" class="dropbtn">Login (testing)</button>
+            <button onclick="window.location.href='{% url 'login' %}';" class="dropbtn">Login</button>
             <div class="dropdown-content">
                 <div>Expression of Interest allows users to express their interest in a specific project.</div>
             </div>
@@ -64,6 +68,22 @@
                 <div>Expression of Interest allows users to express their interest in a specific project.</div>
             </div>
         </div>
+        {% else %}
+        <div class="container"> 
+            <div class="dropdown"> 
+                <div class="profile"> 
+                    <i class='far fa-user-circle'></i>
+                    <div class="icon-content"> 
+                        <ul> 
+                            <li><i class='bx bx-user' ></i><span>Profile</span></li> 
+                            <li><a onclick="window.location.href='{% url 'profile' %}';"><i class='bx bx-log-in-circle'></i><span>Profile</span></a></li>
+                            <li><a onclick="window.location.href='{% url 'logout' %}';"><i class='bx bx-log-in-circle'></i><span>Logout</span></a></li>
+                        </ul> 
+                    </div> 
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
         <div class="dropdown">
             <button onclick="window.location.href='{% url 'report_review' %}';" class="dropbtn">Review</button>
@@ -86,18 +106,7 @@
             </div>
         </div>
         
-    <button class="openbtn" onclick="openNav()">☰</button>
-
-
-
-
-
-
-
-
-
-
-
+        <button class="openbtn" onclick="openNav()">☰</button>
     </div>
 
     <div class="content flex-container">
@@ -112,8 +121,24 @@
             document.getElementById("mySidebar").style.width = "0";
             document.getElementById("main").style.marginLeft= "0";
         }
+
+        document.querySelector('.profile').addEventListener('click', function() {
+            var content = this.querySelector('.icon-content');
+            if(content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        });
+        
+        document.addEventListener('click', function(event) {
+            var dropdown = document.querySelector('.icon-content');
+            var profile = document.querySelector('.profile');
+            
+            if (!profile.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+        
     </script>
 </body>
-
-
-
