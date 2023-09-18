@@ -208,22 +208,22 @@ text-decoration: none;
     cursor: pointer;             /* Hand cursor for clickability feel */
 }
 
-/* Position user-circle (profile) to the far right */
+
 .container .dropdown .profile {
-    margin-left: auto;           /* Pushes the element to the right */
+    margin-left: auto;          
 }
 
 .far.fa-user-circle {
-    margin-left: auto;           /* Pushes the icon to the right */
+    margin-left: auto;      
     color: white;
     font-size: 30px;
-    cursor: pointer;             /* Hand cursor for clickability feel */
+    cursor: pointer;            
 }
 
 .icon-content {
     display: none;
     position: absolute;
-    top:17%;
+    top:22%;
     right:0;
     background-color: #f9f9f9;
     min-width: 160px;
