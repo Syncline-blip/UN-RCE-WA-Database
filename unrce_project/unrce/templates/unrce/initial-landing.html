@@ -1,33 +1,78 @@
-{% extends "base.html" %}
-{% load static %}
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="{% static 'css/initial-landing.css' %}">
-<title>{% block title %}Landing Page{% endblock %}</title>
-{% block content %}
-    <div class="content flex-container">
-        <div class="flex-item">
-            <h1 id="express-interest">Express Your Interest</h1>
-            <p>This is where you can express your interest in our projects and initiatives.</p>
-        </div>
-        <div class="flex-item">
-            <h1 id="un-rce-project">Project Reporting</h1>
-            <p>Learn about the United Nations Regional Centres of Expertise (RCE) project that we are involved in.</p>
-        </div>
-    </div>
+{% extends "base.html" %} {% load static %}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+/>
+<link rel="stylesheet" href="{% static 'css/initial-landing.css' %}" />
 
-    <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-        }
-        
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginLeft= "0";
-        }
-    </script>
+{%block content %}
+<body>
+  <div class="tooltip-container">
+    <span><img src="{% static 'css/sdg_1.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_2.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_3.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_4.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_5.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_6.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_7.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_8.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_9.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_10.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_11.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_12.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_13.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_14.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_15.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_16.png' %}" alt="SDGs" /></span>
+    <span><img src="{% static 'css/sdg_17.png' %}" alt="SDGs" /></span>
+
+
+  </div>
+
+  <footer class="footer">
+    <ul class="social-icon">
+      <li class="social-icon__item">
+        <a class="social-icon__link" href="#">
+          <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+      </li>
+      <li class="social-icon__item">
+        <a class="social-icon__link" href="#">
+          <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+      </li>
+      <li class="social-icon__item">
+        <a class="social-icon__link" href="#">
+          <ion-icon name="logo-linkedin"></ion-icon>
+        </a>
+      </li>
+      <li class="social-icon__item">
+        <a class="social-icon__link" href="#">
+          <ion-icon name="logo-instagram"></ion-icon>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu">
+      <li class="menu__item"><a class="menu__link" href="#">Home</a></li>
+      <li class="menu__item"><a class="menu__link" href="#">About</a></li>
+      <li class="menu__item"><a class="menu__link" href="#">Services</a></li>
+      <li class="menu__item"><a class="menu__link" href="#">Team</a></li>
+      <li class="menu__item"><a class="menu__link" href="#">Contact</a></li>
+    </ul>
+    <p>&copy; UNRCE | All Rights Reserved</p>
+  </footer>
+  <script
+    type="module"
+    src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+  ></script>
+  <script
+    nomodule
+    src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+  ></script>
+
+  
+</body>
+
 {% endblock %}
-
-
