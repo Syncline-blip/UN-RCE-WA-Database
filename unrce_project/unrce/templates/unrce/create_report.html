@@ -4,8 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
 <title>Create Report</title>
 
 <style>
@@ -27,6 +25,7 @@
   .header h1 {
     color:#DAAA00;
   }
+
   .header a {
     background-color: #fff;
     color: #DAAA00;
@@ -44,7 +43,7 @@
   .report-container {
     max-width: 800px;
     margin: 20px auto;
-    background-color: #ffffff;
+    background-color:rgba(255, 255, 255, 0.8);;
     border-radius: 10px;
     border: none;
     border-left: 8px solid #dce286;
@@ -120,7 +119,7 @@
   {% block content %}
   <div class="header">
     <h1>Create Report</h1>
-    <a href="{% url 'initial-landing' %}"><i class="fa fa-home"></i></a>
+    <a href="{% url 'initial-landing' %}">home</a>
   </div>
   
   <div class="report-container">
@@ -154,8 +153,9 @@
   
   
   <script>
-    document.getElementsByClassName('save-options').addEventListener('click', function() {
-      alert('Report saved!');
+    // Simulate saving partial content
+    document.getElementById('save-partial').addEventListener('click', function() {
+      alert('Report partially saved!');
     });
   </script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -173,5 +173,5 @@
         <input type="file" name="images-__prefix__-image" id="id_images-__prefix__-image">
     </p>
 </div>
-</html>
+  </html>
   
