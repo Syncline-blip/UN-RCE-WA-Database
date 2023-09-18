@@ -12,7 +12,7 @@ body {
 }
 
 .menu-bar {
-    background-color: #333;
+    background-color: #333; 
     overflow: hidden;
     position: relative; /* Add relative positioning */
 }
