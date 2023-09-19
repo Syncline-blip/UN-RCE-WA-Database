@@ -1,12 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!--
-    Alows for users to upload an excel file, and it be added to the database
--->
+<h1>Upload Excel File</h1>
+
+<!-- Form for file upload -->
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form }}
-    <button type="submit">Upload</button>
+    <button type="submit">Preview</button>
 </form>
+
+<!-- Preview Table -->
+{% if preview_data %}
+    <h2>Preview Data</h2>
+    <table border="1">
+        <!-- Table Header -->
+        <tr>
+            <th>Lead Organisation</th>
+            <th>Name Project</th>
+            <th>Project Description Short</th>
+            <th>Project Description Long</th>
+            <th>Delivery</th>
+            <th>Frequency</th>
+            <th>Audience</th>
+            <th>Current Partners</th>
+            <th>SDG Focus</th>
+            <th>Contact</th>
+            <th>Errors</th>
+        </tr>
+        <!-- Table Data -->
+        {% for report in preview_data %}
+            <tr>
+                <td>{{ report.lead_organisation }}</td>
+                <td>{{ report.name_project }}</td>
+                <td>{{ report.project_description_short }}</td>
+                <td>{{ report.project_description_long }}</td>
+                <td>{{ report.delivery.0 }}</td>
+                <td>{{ report.frequency }}</td>
+                <td>{{ report.audience.0 }}</td>
+                <td>{{ report.current_partners.0 }}</td>
+                <td>{{ report.sdg_focus }}</td>
+                <td>{{ report.contact }}</td>
+                <td>
+                    {% if report.errors %}
+                        {% for error in report.errors %}
+                            <span class="error">{{ error }}</span><br>
+                        {% endfor %}
+                    {% else %}
+                        No errors
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Confirm and Upload Button -->
+    <form method="post">
+        {% csrf_token %}
+        <button name="confirm" type="submit">Confirm and Upload</button>
+    </form>
+{% endif %}
+
 {% endblock %}

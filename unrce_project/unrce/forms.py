@@ -1,4 +1,4 @@
-from .models import Report, Account, ExcelUpload, ReportImages, Expression_of_interest
+from .models import Report, Account, ExcelUpload, ReportImages, Expression_of_interest, AUDIENCE_CHOICES, DELIVERY_CHOICES
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -6,6 +6,15 @@ from zxcvbn import zxcvbn  # Import the zxcvbn library
 from django.core.validators import MinLengthValidator
 
 class ReportForm(forms.ModelForm):
+    audience = forms.MultipleChoiceField(
+        choices=AUDIENCE_CHOICES,
+        widget=forms.CheckboxSelectMultiple
+    )
+    delivery = forms.MultipleChoiceField(
+        choices=DELIVERY_CHOICES,
+        widget=forms.CheckboxSelectMultiple
+    )
+    
     class Meta:
         model = Report
         fields = '__all__'

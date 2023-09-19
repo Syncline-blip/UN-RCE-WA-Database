@@ -1,16 +1,61 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.contrib.postgres.fields import ArrayField
 
 #This model is for the reports 
+FREQUENCY_CHOICES = [
+    ('weekly', 'Weekly'),
+    ('monthly', 'Monthly'),
+    ('annually', 'Annually'),
+    ('biannually', 'Biannually'),
+    ('quarterly', 'Quarterly'),
+    ('seasonally', 'Seasonally'),
+    ('as_required', 'As Required'),
+    ('custom', 'Custom'),
+]
+
+AUDIENCE_CHOICES = [
+    ('community', 'Community'),
+    ('primary_students', 'Primary School Students'),
+    ('secondary_students', 'Secondary School Students'),
+    ('higher_education', 'Higher Education'),
+    ('teacher_ed', 'Teacher Ed'),
+    ('youth_informal', 'Youth(informal)'),
+    ('youth_formal', 'Youth(formal)'),
+    ('professionals', 'Professionals'),
+    ('public_anyage', 'General Public (any age)'),
+    ('public_older', 'General Public (>60)'),
+    ('public_adults', 'General Public (adults)'),
+    ('public_younger', 'General Public (< 20)'),
+    ('buisness_government', 'Buisness and Government'),
+]
+
+DELIVERY_CHOICES = [
+    ('hands_on_interactive', 'Hands-on/Interactive'),
+    ('community_asset', 'Community Asset'),
+    ('supported_workplace', 'Supported Workplace Placement'),
+    ('document', 'Documemt'),
+    ('group_meetings', 'Group Meetings'),
+
+]
+
 class Report(models.Model):
     lead_organisation = models.CharField(max_length=200)
     name_project = models.CharField(max_length=200)
-    project_description = models.CharField(max_length=200)
-    delivery = models.CharField(max_length=200)
-    frequency = models.CharField(max_length=200)
-    audience = models.CharField(max_length=200)
-    current_partners = models.CharField(max_length=200)
+    project_description_short = models.CharField(max_length=200)
+    project_description_long = models.CharField(max_length=5000 , null=True)
+    delivery = ArrayField(
+        models.CharField(max_length=20, choices=DELIVERY_CHOICES),
+        blank=True,
+        null=True,
+    )
+    frequency = models.CharField(max_length=200, choices=FREQUENCY_CHOICES)
+    audience = ArrayField(
+        models.CharField(max_length=20, choices=AUDIENCE_CHOICES),
+        blank=True,
+        null=True,
+    )
+    current_partners = ArrayField(models.CharField(max_length=200), blank=True, null=True)
     sdg_focus = models.CharField(max_length=200)
     contact = models.CharField(max_length=200)
     created_at = models.DateField(auto_now_add=True, null=True)

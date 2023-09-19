@@ -5,9 +5,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import ReportForm, RegistrationForm, ExcelForm, InterestForm, ReportImagesForm
-from .models import Report, Account, ReportImages, Expression_of_interest
+from .models import Report, Account, ReportImages, Expression_of_interest, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
 import os
 import pandas as pd
@@ -231,35 +231,60 @@ def reportDetails(request):
 
 @login_required
 def upload_excel(request):
-    """
-    Handles the upload of an Excel file for mass creation of Report objects.
-    Validates the uploaded file through ExcelForm, reads the Excel file using Pandas,
-    iterates through its rows to create Report objects, and then redirects to the home page.
-    """
+    preview_data = []
+    errors = []
+
     if request.method == 'POST':
         form = ExcelForm(request.POST, request.FILES)
         if form.is_valid():
             excel_file_instance = form.save()
+
             # Read Excel File
             df = pd.read_excel(excel_file_instance.excel_file.path)
-            # Process and Save Data
+
+            # Process and validate data without saving
             for index, row in df.iterrows():
-                Report.objects.create(
-                    lead_organisation=row[0],
-                    name_project=row[1],
-                    project_description = row[2],
-                    delivery = row[3],
-                    frequency = row[4],
-                    audience = row[5],
-                    current_partners = row[6],
-                    sdg_focus = row[7],
-                    contact = row[7],
-                    author=request.user
-                )
+                report_data = {
+                    'lead_organisation': row['lead_organisation'],
+                    'name_project': row['name_project'],
+                    'project_description_short': row['project_description_short'],
+                    'project_description_long': row['project_description_long'],
+                    'delivery': [val.strip() for val in str(row['delivery']).split(';')],
+                    'frequency': row['frequency'],
+                    'audience': [val.strip() for val in str(row['audience']).split(';')],
+                    'current_partners': [val.strip() for val in str(row['current_partners']).split(';')],
+                    'sdg_focus': row['sdg_focus'],
+                    'contact': row['contact'],
+                    'errors': [],
+                }
+
+                # Validation
+                if row['delivery'] not in [key for key, _ in DELIVERY_CHOICES]:
+                    report_data['errors'].append('Invalid delivery choice')
+                if row['frequency'] not in [key for key, _ in FREQUENCY_CHOICES]:
+                    report_data['errors'].append('Invalid frequency choice')
+                if row['audience'] not in [key for key, _ in AUDIENCE_CHOICES]:
+                    report_data['errors'].append('Invalid audience choice')
+
+                preview_data.append(report_data)
+
             os.remove(excel_file_instance.excel_file.path)
-            return redirect('/')
+
+            # If user confirms, then save to the database
+            if 'confirm' in request.POST:
+                for report_data in preview_data:
+                    if not report_data['errors']:
+                        Report.objects.create(
+                            author=request.user,
+                            **{key: val for key, val in report_data.items() if key != 'errors'}
+                        )
+                return redirect('/')
+
     else:
         form = ExcelForm()
-    return render(request, 'unrce/excel_upload.html', {'form': form})
+
+    return render(request, 'unrce/excel_upload.html', {'form': form, 'preview_data': preview_data})
+
+
 
 
