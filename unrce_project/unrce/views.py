@@ -10,7 +10,7 @@ from .forms import ReportForm, RegistrationForm, ExcelForm, InterestForm, Report
 from .models import Report, Account, ReportImages, Expression_of_interest
 from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
 import os
-
+import pandas as pd
 import logging
 
 # sample data, not to be used, just for testing
