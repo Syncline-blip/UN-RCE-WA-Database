@@ -1,13 +1,29 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create Report</title>
+<style>
+  .user-item {
+      cursor: pointer;
+      padding: 5px;
+      border: 1px solid #ccc;
+      margin: 3px;
+      display: inline-block;
+  }
 
+  .user-item:hover {
+      background-color: #f5f5f5;
+  }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'admin/js/jquery.init.js' %}"></script>
+<script src="{% static 'admin/js/actions.js' %}"></script>
+<script src="{% static 'admin/js/inlines.js' %}"></script>
 
 </head>
+
 <body>
   <!--
     This block is for the creation of the reports, it contains the form that is populated based on the fields
@@ -18,39 +34,236 @@
     <h1>Create Report</h1>
     <a href="{% url 'initial-landing' %}">home</a>
   </div>
-  
+
+  {% if report_form.non_field_errors %}
+    <div class="alert alert-danger">
+      {% for error in report_form.non_field_errors %}
+        {{ error }}
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <div class="report-container">
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
+      
+      <div class="organization-formsets">
+        {{ organization_formset.management_form }}
+        {% for form in organization_formset %}
+        <div class="organization-formset">
+            {% for field in form %}
+            <div class="form-group {% if field.errors %}has-error{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button type="button" class="remove-organization">Remove</button>
+        </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-organization">Add Another Organization</button>
+    
 
       <!-- Render report fields -->
       {% for field in report_form %}
-      <div class="form-group">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-      </div>
+        {% if not field.name == "linked_users" %}
+          <div class="form-group {% if field.errors %}has-error{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}
+              <span class="help-block">{{ error }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
       {% endfor %}
+
+      <div class="form-group">
+        <label>Linked Users</label>
+    
+
+        <div id="available-users-section">
+            <h4>Available Users</h4>
+            <input type="text" id="user-search" placeholder="Search by name..." onkeyup="filterUsers()">
+            <div id="all-users">
+                {% for user in all_users %}
+                    <div class="user-item" data-user-id="{{ user.id }}" data-user-name="{{ user.first_name }} {{ user.last_name }}" onclick="addUser(this)" style="display: none;">
+                        {{ user.first_name }} {{ user.last_name }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div id="linked-users-section">
+            <h4>Linked Users</h4>
+            <div id="selected-users"></div>
+        </div>
+
+        <select multiple name="linked_users" id="linked-users-select" style="display:none;">
+        </select>
+    </div>
+    
+      <div id="sdg-container">
+          {% for i in sdg_list %}
+              <div class="sdg-item">
+                  <img src="{% static 'css/images/SDG_'|add:i|add:'.jpg' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
+                  <div class="sdg-options">
+                      <input type="radio" name="sdg_option_{{ i }}" value="direct"> Direct
+                      <input type="radio" name="sdg_option_{{ i }}" value="indirect"> Indirect
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+      
+      </div>
+    </div>
+
+    
+
 
       <!-- Render image upload -->
       <div class="form-group">
         <label for="image">Upload Images</label>
         <input type="file" name="image" id="image" multiple>
-      </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="files">Upload Files</label>
+        <input type="file" name="file" id="files" multiple>
+    </div>
+    
       
       <div class="save-options">
         <button type="submit">Save Report</button>
       </div>
     </form>
   </div>
-{% endblock %}
 
-  
+  {% endblock %}
+
   <script>
-    // Simulate saving partial content
-    document.getElementById('save-partial').addEventListener('click', function() {
-      alert('Report partially saved!');
-    });
-  </script>
+    document.addEventListener('DOMContentLoaded', function() {
 
-  </html>
-  
+// Handle radio button behavior
+let radios = document.querySelectorAll('input[type="radio"]');
+radios.forEach(function(radio) {
+    radio.addEventListener('click', function() {
+        if (radio.getAttribute('data-checked') == 'true') {
+            radio.checked = false;
+            radio.removeAttribute('data-checked');
+        } else {
+            radio.setAttribute('data-checked', 'true');
+        }
+    });
+});
+
+function updateRemoveButtonVisibility() {
+    let allOrganizationFormsets = document.querySelectorAll('.organization-formset');
+    // If there's only one organization, hide its remove button
+    if (allOrganizationFormsets.length === 1) {
+        allOrganizationFormsets[0].querySelector('.remove-organization').style.display = 'none';
+    } else {
+        // If there are multiple organizations, show all remove buttons
+        allOrganizationFormsets.forEach(function(formset) {
+            formset.querySelector('.remove-organization').style.display = 'block';
+        });
+    }
+}
+
+// Vanilla JS functions for user operations
+window.addUser = function(element) {
+    var userId = element.getAttribute('data-user-id');
+    var userName = element.textContent;
+    var userElement = document.createElement('div');
+    userElement.className = 'user-item';
+    userElement.setAttribute('data-user-id', userId);
+    userElement.textContent = userName;
+    userElement.onclick = function() { removeUser(userElement); };
+    document.getElementById('selected-users').appendChild(userElement);
+
+    var optionElement = document.createElement('option');
+    optionElement.value = userId;
+    optionElement.textContent = userName;
+    optionElement.selected = true;
+    document.getElementById('linked-users-select').appendChild(optionElement);
+    element.style.display = 'none';
+};
+
+window.removeUser = function(element) {
+    var userId = element.getAttribute('data-user-id');
+    document.querySelector('#all-users [data-user-id="' + userId + '"]').style.display = 'block';
+    element.remove();
+    var optionElement = document.querySelector('#linked-users-select option[value="' + userId + '"]');
+    optionElement.remove();
+};
+
+window.filterUsers = function() {
+    var searchQuery = document.getElementById('user-search').value.toLowerCase();
+    var allUserElements = document.querySelectorAll('#all-users .user-item');
+    var displayedCount = 0;
+    allUserElements.forEach(function(userElement) {
+        var userName = userElement.getAttribute('data-user-name').toLowerCase();
+        if (userName.includes(searchQuery) && displayedCount < 10) {
+            userElement.style.display = 'block';
+            displayedCount++;
+        } else {
+            userElement.style.display = 'none';
+        }
+    });
+};
+
+// Add another formset
+document.getElementById('add-organization').addEventListener('click', function() {
+    let prefix = 'organization_set';
+    let totalForms = document.getElementById('id_' + prefix + '-TOTAL_FORMS');
+    let nextFormNum = parseInt(totalForms.value, 10);
+    let formElem = document.querySelector('.organization-formset').cloneNode(true);
+
+    // Use multiple selectors combined to replace ':input' in vanilla JS
+    let inputs = formElem.querySelectorAll('input, select, textarea, button');
+
+    for(let input of inputs) {
+        let nameAttr = input.getAttribute('name');
+        let idAttr = input.getAttribute('id');
+        if(nameAttr) {
+            input.setAttribute('name', nameAttr.replace(/-\d+-/, '-' + nextFormNum + '-'));
+        }
+        if(idAttr) {
+            input.setAttribute('id', idAttr.replace(/-\d+-/, '-' + nextFormNum + '-'));
+        }
+        if(input.type === 'text' || input.type === 'textarea' || input.type === 'number') {
+            input.value = '';
+        }
+    }
+
+    let formsetsContainer = document.querySelector('.organization-formsets');
+    if(formsetsContainer) {  // Ensure the container exists before appending
+        formsetsContainer.appendChild(formElem);
+    }
+    totalForms.value = nextFormNum + 1;
+
+    updateRemoveButtonVisibility();
+});
+
+// Use event delegation for all the delete buttons
+document.querySelector('.organization-formsets').addEventListener('click', function(event) {
+    if(event.target.classList.contains('remove-organization')) {
+        let formset = event.target.closest('.organization-formset');
+        if (formset) {
+            formset.remove();
+            let totalForms = document.getElementById('id_organization_set-TOTAL_FORMS');
+            totalForms.value = parseInt(totalForms.value, 10) - 1;
+
+            updateRemoveButtonVisibility();
+        }
+    }
+});
+
+// Set the initial state of the remove buttons on page load
+updateRemoveButtonVisibility();
+
+});
+</script>
+    

@@ -6,12 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .forms import ReportForm, RegistrationForm, ExcelForm, InterestForm, ReportImagesForm
-from .models import Report, Account, ReportImages, Expression_of_interest, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
-from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
-import os
+from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, OrganizationInlineFormSet
+from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
+from django.http import HttpResponseServerError, JsonResponse  
+import os, json
 import pandas as pd
 import logging
+from django.db.models import Q
 
 # sample data, not to be used, just for testing
 project = [
@@ -27,49 +28,72 @@ def home(request):
 
 @login_required
 def create_report(request): 
-    return render(request, 'unrce/create_report.html')
-
-@login_required
-def projects(request):
-    context = {
-        'project': project
-    }
-    return render(request, 'unrce/project_upload.html', context)
-# Create your views here.
-
-@login_required
-def add_report(request):
-    """
-    Handles the creation of a new report and its associated images.
-    """
+    # Handle POST request
     if request.method == 'POST':
         report_form = ReportForm(request.POST)
         images_form = ReportImagesForm(request.POST, request.FILES)
+        files_form = ReportFilesForm(request.POST, request.FILES)
         images = request.FILES.getlist('image')
+        files = request.FILES.getlist('file')
 
+        # Handling SDG direct/indirect options
+        direct_sdgs = []
+        indirect_sdgs = []
+        for i in range(1, 18):
+            option = request.POST.get(f'sdg_option_{i}')
+            if option == 'direct':
+                direct_sdgs.append(str(i))
+            elif option == 'indirect':
+                indirect_sdgs.append(str(i))
+
+        # Check if form is valid
         if report_form.is_valid():
             report = report_form.save(commit=False)
             report.author = request.user
-            report.save()
-    
-            if images:  # Check if any images are uploaded
+            report.direct_sdgs = direct_sdgs  
+            report.indirect_sdgs = indirect_sdgs 
+            report.save()  # Save the report first to get its pk
+            organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
+            if organization_formset.is_valid():
+                organization_formset.save()
+            report_form.save_m2m()  
+
+            # Handle image upload
+            if images:
                 for image in images:
                     ReportImages.objects.create(
                         report=report,
                         image=image
                     )
+
+            # Handle file upload
+            if files:
+                for file in files:
+                    # Assuming you have a ReportFiles model or similar for handling file uploads.
+                    ReportFiles.objects.create(
+                        report=report,
+                        file=file
+                    )
+
             return redirect('report_list')
 
+    # Handle GET request
     else:
         report_form = ReportForm()
         images_form = ReportImagesForm()
+        report = Report()  # Create an empty report instance
+        organization_formset = OrganizationInlineFormSet(instance=report)
+
+    sdg_list = [str(i) for i in range(1, 18)]
     context = {
         'report_form': report_form,
-        'images_form': images_form
+        'organization_formset': organization_formset,
+        'images_form': images_form,
+        'sdg_list': sdg_list,
+        'all_users': User.objects.all(),
     }
 
     return render(request, 'unrce/create_report.html', context)
-
 
 def add_interest(request):
     """
@@ -228,63 +252,4 @@ def edit_reporting(request):
 @login_required
 def reportDetails(request):
     return render(request, 'unrce/report_details.html')
-
-@login_required
-def upload_excel(request):
-    preview_data = []
-    errors = []
-
-    if request.method == 'POST':
-        form = ExcelForm(request.POST, request.FILES)
-        if form.is_valid():
-            excel_file_instance = form.save()
-
-            # Read Excel File
-            df = pd.read_excel(excel_file_instance.excel_file.path)
-
-            # Process and validate data without saving
-            for index, row in df.iterrows():
-                report_data = {
-                    'lead_organisation': row['lead_organisation'],
-                    'name_project': row['name_project'],
-                    'project_description_short': row['project_description_short'],
-                    'project_description_long': row['project_description_long'],
-                    'delivery': [val.strip() for val in str(row['delivery']).split(';')],
-                    'frequency': row['frequency'],
-                    'audience': [val.strip() for val in str(row['audience']).split(';')],
-                    'current_partners': [val.strip() for val in str(row['current_partners']).split(';')],
-                    'sdg_focus': row['sdg_focus'],
-                    'contact': row['contact'],
-                    'errors': [],
-                }
-
-                # Validation
-                if row['delivery'] not in [key for key, _ in DELIVERY_CHOICES]:
-                    report_data['errors'].append('Invalid delivery choice')
-                if row['frequency'] not in [key for key, _ in FREQUENCY_CHOICES]:
-                    report_data['errors'].append('Invalid frequency choice')
-                if row['audience'] not in [key for key, _ in AUDIENCE_CHOICES]:
-                    report_data['errors'].append('Invalid audience choice')
-
-                preview_data.append(report_data)
-
-            os.remove(excel_file_instance.excel_file.path)
-
-            # If user confirms, then save to the database
-            if 'confirm' in request.POST:
-                for report_data in preview_data:
-                    if not report_data['errors']:
-                        Report.objects.create(
-                            author=request.user,
-                            **{key: val for key, val in report_data.items() if key != 'errors'}
-                        )
-                return redirect('/')
-
-    else:
-        form = ExcelForm()
-
-    return render(request, 'unrce/excel_upload.html', {'form': form, 'preview_data': preview_data})
-
-
-
 

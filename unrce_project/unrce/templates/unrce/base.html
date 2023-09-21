@@ -46,12 +46,6 @@
             </div>
         </div>
         
-        <div class="dropdown">
-            <button onclick="window.location.href='{% url 'excel_upload' %}';" class="dropbtn">Excel</button>
-            <div class="dropdown-content">
-                <div>Expression of Interest allows users to express their interest in a specific project.</div>
-            </div>
-        </div>
         {% endif %}
         
         {% if not user.is_authenticated %}

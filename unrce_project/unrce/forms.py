@@ -1,11 +1,20 @@
-from .models import Report, Account, ExcelUpload, ReportImages, Expression_of_interest, AUDIENCE_CHOICES, DELIVERY_CHOICES
+from .models import Report, Account, ReportImages, Expression_of_interest, Organization, ReportFiles,  AUDIENCE_CHOICES, DELIVERY_CHOICES
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from zxcvbn import zxcvbn  # Import the zxcvbn library
 from django.core.validators import MinLengthValidator
 
+
 class ReportForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ReportForm, self).__init__(*args, **kwargs)
+        self.fields['linked_users'].label_from_instance = self.label_from_user_instance
+
+    def label_from_user_instance(self, user):
+        return f"{user.first_name} {user.last_name}"
+
     audience = forms.MultipleChoiceField(
         choices=AUDIENCE_CHOICES,
         widget=forms.CheckboxSelectMultiple
@@ -18,12 +27,22 @@ class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
         fields = '__all__'
-        exclude = ['author', 'created_at', 'last_modified']
+        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs' ]
 
 class ReportImagesForm(forms.ModelForm):
     class Meta:
         model = ReportImages
         fields = ['image']
+
+class ReportFilesForm(forms.ModelForm):
+    class Meta:
+        model = ReportFiles
+        fields = ['file']
+
+class OrganizationForm(forms.ModelForm):
+    class Meta:
+        model = Organization
+        fields = ['name', 'email', 'website']
 
 
 class InterestForm(forms.ModelForm):
@@ -76,8 +95,7 @@ class RegistrationForm(UserCreationForm):
                 )
         return password1
     
-class ExcelForm(forms.ModelForm):
-    class Meta:
-        model = ExcelUpload
-        fields = ('excel_file',)
-
+OrganizationInlineFormSet = forms.inlineformset_factory(
+    Report, Organization,
+    form=OrganizationForm, extra=1, can_delete=True
+)
