@@ -22,6 +22,18 @@
 <script src="{% static 'admin/js/actions.js' %}"></script>
 <script src="{% static 'admin/js/inlines.js' %}"></script>
 
+<style>
+    .has-error {
+    border: 1px solid red;
+    background-color: #ffe6e6;  /* light red background */
+}
+
+.help-block {
+    color: red;
+    font-size: 12px;
+}
+</style>
+
 </head>
 
 <body>
@@ -37,17 +49,50 @@
 
   {% if report_form.non_field_errors %}
     <div class="alert alert-danger">
-      {% for error in report_form.non_field_errors %}
-        {{ error }}
-      {% endfor %}
+        {% for error in report_form.field_name.errors %}
+        <span class="help-block">{{ error }}</span>
+    {% endfor %}
     </div>
   {% endif %}
 
   <div class="report-container">
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      
-      <div class="organization-formsets">
+
+
+      <!-- Basic Information -->
+
+<div class="form-group-section">
+    <h3>Basic Information</h3>
+
+    <!-- title_project -->
+    <div class="form-group {% if report_form.title_project.errors %}has-error{% endif %}">
+        <label for="{{ report_form.title_project.id_for_label }}">{{ report_form.title_project.label }}</label>
+        {{ report_form.title_project }}
+        {% for error in report_form.title_project.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- submitting_RCE -->
+    <div class="form-group {% if report_form.submitting_RCE.errors %}has-error{% endif %}">
+        <label for="{{ report_form.submitting_RCE.id_for_label }}">{{ report_form.submitting_RCE.label }}</label>
+        {{ report_form.submitting_RCE }}
+        {% for error in report_form.submitting_RCE.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Focal point(s) and affiliation(s) -->
+
+
+
+<div class="form-group-section">
+    <h3>Focal point(s) and affiliation(s)</h3>
+
+    <!-- This is formset for organization affiliation-->
+    <div class="organization-formsets">
         {{ organization_formset.management_form }}
         {% for form in organization_formset %}
         <div class="organization-formset">
@@ -65,25 +110,9 @@
         {% endfor %}
     </div>
     <button type="button" id="add-organization">Add Another Organization</button>
-    
-
-      <!-- Render report fields -->
-      {% for field in report_form %}
-        {% if not field.name == "linked_users" %}
-          <div class="form-group {% if field.errors %}has-error{% endif %}">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% for error in field.errors %}
-              <span class="help-block">{{ error }}</span>
-            {% endfor %}
-          </div>
-        {% endif %}
-      {% endfor %}
-
-      <div class="form-group">
-        <label>Linked Users</label>
-    
-
+<!--This is where users are linked  -->
+    <div class="form-group">
+   
         <div id="available-users-section">
             <h4>Available Users</h4>
             <input type="text" id="user-search" placeholder="Search by name..." onkeyup="filterUsers()">
@@ -95,7 +124,6 @@
                 {% endfor %}
             </div>
         </div>
-        
         <div id="linked-users-section">
             <h4>Linked Users</h4>
             <div id="selected-users"></div>
@@ -105,6 +133,255 @@
         </select>
     </div>
     
+
+    <!-- format_project -->
+    <div class="form-group {% if report_form.format_project.errors %}has-error{% endif %}">
+        <label for="{{ report_form.format_project.id_for_label }}">{{ report_form.format_project.label }}</label>
+        {{ report_form.format_project }}
+        {% for error in report_form.format_project.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- delivery -->
+    <div class="form-group {% if report_form.delivery.errors %}has-error{% endif %}">
+        <label for="{{ report_form.delivery.id_for_label }}">{{ report_form.delivery.label }}</label>
+        {{ report_form.delivery }}
+        {% for error in report_form.delivery.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- frequency -->
+    <div class="form-group {% if report_form.frequency.errors %}has-error{% endif %}">
+        <label for="{{ report_form.frequency.id_for_label }}">{{ report_form.frequency.label }}</label>
+        {{ report_form.frequency }}
+        {% for error in report_form.frequency.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- language_project -->
+    <div class="form-group {% if report_form.language_project.errors %}has-error{% endif %}">
+        <label for="{{ report_form.language_project.id_for_label }}">{{ report_form.language_project.label }}</label>
+        {{ report_form.language_project }}
+        {% for error in report_form.language_project.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- web_link -->
+    <div class="form-group {% if report_form.web_link.errors %}has-error{% endif %}">
+        <label for="{{ report_form.web_link.id_for_label }}">{{ report_form.web_link.label }}</label>
+        {{ report_form.web_link }}
+        {% for error in report_form.web_link.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- additional_resources -->
+    <div class="form-group {% if report_form.additional_resources.errors %}has-error{% endif %}">
+        <label for="{{ report_form.additional_resources.id_for_label }}">{{ report_form.additional_resources.label }}</label>
+        {{ report_form.additional_resources }}
+        {% for error in report_form.additional_resources.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Geographical & Education Information -->
+
+<div class="form-group-section">
+    <h3>Geographical & Education Information</h3>
+
+    <!-- region -->
+    <div class="form-group {% if report_form.region.errors %}has-error{% endif %}">
+        <label for="{{ report_form.region.id_for_label }}">{{ report_form.region.label }}</label>
+        {{ report_form.region }}
+        {% for error in report_form.region.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- country -->
+    <div class="form-group {% if report_form.country.errors %}has-error{% endif %}">
+        <label for="{{ report_form.country.id_for_label }}">{{ report_form.country.label }}</label>
+        {{ report_form.country }}
+        {% for error in report_form.country.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- locations -->
+    <div class="form-group {% if report_form.locations.errors %}has-error{% endif %}">
+        <label for="{{ report_form.locations.id_for_label }}">{{ report_form.locations.label }}</label>
+        {{ report_form.locations }}
+        {% for error in report_form.locations.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- address -->
+    <div class="form-group {% if report_form.address.errors %}has-error{% endif %}">
+        <label for="{{ report_form.address.id_for_label }}">{{ report_form.address.label }}</label>
+        {{ report_form.address }}
+        {% for error in report_form.address.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- ecosystem -->
+    <div class="form-group {% if report_form.ecosystem.errors %}has-error{% endif %}">
+        <label for="{{ report_form.ecosystem.id_for_label }}">{{ report_form.ecosystem.label }}</label>
+        {{ report_form.ecosystem }}
+        {% for error in report_form.ecosystem.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- audience -->
+    <div class="form-group {% if report_form.audience.errors %}has-error{% endif %}">
+        <label for="{{ report_form.audience.id_for_label }}">{{ report_form.audience.label }}</label>
+        {{ report_form.audience }}
+        {% for error in report_form.audience.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- socio_economic_characteristics -->
+    <div class="form-group {% if report_form.socio_economic_characteristics.errors %}has-error{% endif %}">
+        <label for="{{ report_form.socio_economic_characteristics.id_for_label }}">{{ report_form.socio_economic_characteristics.label }}</label>
+        {{ report_form.socio_economic_characteristics }}
+        {% for error in report_form.socio_economic_characteristics.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- development_challenges -->
+    <div class="form-group {% if report_form.development_challenges.errors %}has-error{% endif %}">
+        <label for="{{ report_form.development_challenges.id_for_label }}">{{ report_form.development_challenges.label }}</label>
+        {{ report_form.development_challenges }}
+        {% for error in report_form.development_challenges.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Contents -->
+
+<div class="form-group-section">
+    <h3>Contents</h3>
+
+    <!-- status -->
+    <div class="form-group {% if report_form.status.errors %}has-error{% endif %}">
+        <label for="{{ report_form.status.id_for_label }}">{{ report_form.status.label }}</label>
+        {{ report_form.status }}
+        {% for error in report_form.status.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- start_project -->
+    <div class="form-group {% if report_form.start_project.errors %}has-error{% endif %}">
+        <label for="{{ report_form.start_project.id_for_label }}">{{ report_form.start_project.label }}</label>
+        {{ report_form.start_project }}
+        {% for error in report_form.start_project.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- end_project -->
+    <div class="form-group {% if report_form.end_project.errors %}has-error{% endif %}">
+        <label for="{{ report_form.end_project.id_for_label }}">{{ report_form.end_project.label }}</label>
+        {{ report_form.end_project }}
+        {% for error in report_form.end_project.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- rationale -->
+    <div class="form-group {% if report_form.rationale.errors %}has-error{% endif %}">
+        <label for="{{ report_form.rationale.id_for_label }}">{{ report_form.rationale.label }}</label>
+        {{ report_form.rationale }}
+        {% for error in report_form.rationale.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- objectives -->
+    <div class="form-group {% if report_form.objectives.errors %}has-error{% endif %}">
+        <label for="{{ report_form.objectives.id_for_label }}">{{ report_form.objectives.label }}</label>
+        {{ report_form.objectives }}
+        {% for error in report_form.objectives.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- activities_practices -->
+    <div class="form-group {% if report_form.activities_practices.errors %}has-error{% endif %}">
+        <label for="{{ report_form.activities_practices.id_for_label }}">{{ report_form.activities_practices.label }}</label>
+        {{ report_form.activities_practices }}
+        {% for error in report_form.activities_practices.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- size_academic -->
+    <div class="form-group {% if report_form.size_academic.errors %}has-error{% endif %}">
+        <label for="{{ report_form.size_academic.id_for_label }}">{{ report_form.size_academic.label }}</label>
+        {{ report_form.size_academic }}
+        {% for error in report_form.size_academic.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- results -->
+    <div class="form-group {% if report_form.results.errors %}has-error{% endif %}">
+        <label for="{{ report_form.results.id_for_label }}">{{ report_form.results.label }}</label>
+        {{ report_form.results }}
+        {% for error in report_form.results.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- lessons_learned -->
+    <div class="form-group {% if report_form.lessons_learned.errors %}has-error{% endif %}">
+        <label for="{{ report_form.lessons_learned.id_for_label }}">{{ report_form.lessons_learned.label }}</label>
+        {{ report_form.lessons_learned }}
+        {% for error in report_form.lessons_learned.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- key_message -->
+    <div class="form-group {% if report_form.key_message.errors %}has-error{% endif %}">
+        <label for="{{ report_form.key_message.id_for_label }}">{{ report_form.key_message.label }}</label>
+        {{ report_form.key_message }}
+        {% for error in report_form.key_message.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- relationship_activities -->
+    <div class="form-group {% if report_form.relationship_activities.errors %}has-error{% endif %}">
+        <label for="{{ report_form.relationship_activities.id_for_label }}">{{ report_form.relationship_activities.label }}</label>
+        {{ report_form.relationship_activities }}
+        {% for error in report_form.relationship_activities.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <!-- funding -->
+    <div class="form-group {% if report_form.funding.errors %}has-error{% endif %}">
+        <label for="{{ report_form.funding.id_for_label }}">{{ report_form.funding.label }}</label>
+        {{ report_form.funding }}
+        {% for error in report_form.funding.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
+
+</div>
+<!-- SDG list -->
       <div id="sdg-container">
           {% for i in sdg_list %}
               <div class="sdg-item">
@@ -123,18 +400,18 @@
     
 
 
-      <!-- Render image upload -->
+      <!-- Image upload -->
       <div class="form-group">
         <label for="image">Upload Images</label>
         <input type="file" name="image" id="image" multiple>
     </div>
-    
+    <!--File upload-->
     <div class="form-group">
         <label for="files">Upload Files</label>
         <input type="file" name="file" id="files" multiple>
     </div>
     
-      
+      <!--Save form button-->
       <div class="save-options">
         <button type="submit">Save Report</button>
       </div>
@@ -172,7 +449,7 @@ function updateRemoveButtonVisibility() {
     }
 }
 
-// Vanilla JS functions for user operations
+// JS functions for user operations
 window.addUser = function(element) {
     var userId = element.getAttribute('data-user-id');
     var userName = element.textContent;

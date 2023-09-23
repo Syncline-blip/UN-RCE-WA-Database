@@ -14,6 +14,7 @@ import pandas as pd
 import logging
 from django.db.models import Q
 
+logger = logging.getLogger(__name__)
 # sample data, not to be used, just for testing
 project = [
     {
@@ -28,72 +29,88 @@ def home(request):
 
 @login_required
 def create_report(request): 
-    # Handle POST request
-    if request.method == 'POST':
-        report_form = ReportForm(request.POST)
-        images_form = ReportImagesForm(request.POST, request.FILES)
-        files_form = ReportFilesForm(request.POST, request.FILES)
-        images = request.FILES.getlist('image')
-        files = request.FILES.getlist('file')
+    try:
+        if request.method == 'POST':
+            report_form = ReportForm(request.POST)
+            images_form = ReportImagesForm(request.POST, request.FILES)
+            files_form = ReportFilesForm(request.POST, request.FILES)
+            organization_formset = OrganizationInlineFormSet(request.POST)
+            images = request.FILES.getlist('image')
+            files = request.FILES.getlist('file')
 
-        # Handling SDG direct/indirect options
-        direct_sdgs = []
-        indirect_sdgs = []
-        for i in range(1, 18):
-            option = request.POST.get(f'sdg_option_{i}')
-            if option == 'direct':
-                direct_sdgs.append(str(i))
-            elif option == 'indirect':
-                indirect_sdgs.append(str(i))
+            direct_sdgs = []
+            indirect_sdgs = []
+            for i in range(1, 18):
+                option = request.POST.get(f'sdg_option_{i}')
+                if option == 'direct':
+                    direct_sdgs.append(str(i))
+                elif option == 'indirect':
+                    indirect_sdgs.append(str(i))
 
-        # Check if form is valid
-        if report_form.is_valid():
-            report = report_form.save(commit=False)
-            report.author = request.user
-            report.direct_sdgs = direct_sdgs  
-            report.indirect_sdgs = indirect_sdgs 
-            report.save()  # Save the report first to get its pk
-            organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
-            if organization_formset.is_valid():
-                organization_formset.save()
-            report_form.save_m2m()  
+            if report_form.is_valid() and organization_formset.is_valid():
+                report = report_form.save(commit=False)
+                report.author = request.user
+                report.direct_sdgs = direct_sdgs  
+                report.indirect_sdgs = indirect_sdgs 
+                report.save()
 
-            # Handle image upload
-            if images:
-                for image in images:
-                    ReportImages.objects.create(
-                        report=report,
-                        image=image
-                    )
+                organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
+                if organization_formset.is_valid():
+                    organization_formset.save()
+                report_form.save_m2m()  
 
-            # Handle file upload
-            if files:
-                for file in files:
-                    # Assuming you have a ReportFiles model or similar for handling file uploads.
-                    ReportFiles.objects.create(
-                        report=report,
-                        file=file
-                    )
+                if images:
+                    for image in images:
+                        ReportImages.objects.create(
+                            report=report,
+                            image=image
+                        )
 
-            return redirect('report_list')
+                if files:
+                    for file in files:
+                        ReportFiles.objects.create(
+                            report=report,
+                            file=file
+                        )
 
-    # Handle GET request
-    else:
-        report_form = ReportForm()
-        images_form = ReportImagesForm()
-        report = Report()  # Create an empty report instance
-        organization_formset = OrganizationInlineFormSet(instance=report)
+                return redirect('report_list')
+            else:
+                if not report_form.is_valid():
+                    logger.error(f'ReportForm errors: {report_form.errors}')
+                    if not images_form.is_valid():
+                        logger.error(f'ReportImagesForm errors: {images_form.errors}')
+                        if not files_form.is_valid():
+                            logger.error(f'ReportFilesForm errors: {files_form.errors}')
+                            if not organization_formset.is_valid():
+                                logger.error(f'OrganizationInlineFormSet errors: {organization_formset.errors}')
 
-    sdg_list = [str(i) for i in range(1, 18)]
-    context = {
-        'report_form': report_form,
-        'organization_formset': organization_formset,
-        'images_form': images_form,
-        'sdg_list': sdg_list,
-        'all_users': User.objects.all(),
-    }
+                
+                
+        else:
+            report_form = ReportForm()
+            images_form = ReportImagesForm()
+            files_form= ReportFilesForm()
+            report = Report()
+            organization_formset = OrganizationInlineFormSet(instance=report)
 
-    return render(request, 'unrce/create_report.html', context)
+        sdg_list = [str(i) for i in range(1, 18)]
+        context = {
+            'report_form': report_form,
+            'organization_formset': organization_formset,
+            'images_form': images_form,
+            'files_form': files_form,
+            'sdg_list': sdg_list,
+            'all_users': User.objects.all(),
+        }
+
+        return render(request, 'unrce/create_report.html', context)
+
+    except Exception as e:
+        # Logging the error for debugging
+        logger.error(f'Error creating report: {str(e)}')
+        
+        
+        return redirect('report_list')
 
 def add_interest(request):
     """

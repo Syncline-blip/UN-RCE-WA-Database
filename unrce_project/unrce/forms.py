@@ -27,14 +27,16 @@ class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
         fields = '__all__'
-        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs' ]
+        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved' ]
 
 class ReportImagesForm(forms.ModelForm):
+    image = forms.ImageField(required=False)
     class Meta:
         model = ReportImages
         fields = ['image']
 
 class ReportFilesForm(forms.ModelForm):
+    file = forms.FileField(required=False)
     class Meta:
         model = ReportFiles
         fields = ['file']

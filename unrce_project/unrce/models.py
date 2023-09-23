@@ -133,7 +133,6 @@ class Report(models.Model):
 #Make another set of these for ESD and ESD 2030
 
     current_partners = ArrayField(models.CharField(max_length=200), blank=True, null=True)
-    contact = models.CharField(max_length=200, null=True)
     created_at = models.DateField(auto_now_add=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
