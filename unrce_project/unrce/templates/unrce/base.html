@@ -2,170 +2,166 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/base.css' %}">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="{% static 'js/base.js' %}"></script>
-    </head> 
-    <body>
-      <header id="nav-menu" aria-label="navigation bar">
-        <div class="container">
-          <div class="nav-start">
-            <a class="logo" href="/">
-              <img src="{% static 'icons/unrce_log.bmp' %}" width="35" height="35" alt="Inc Logo" />
-              <span class="logo-text">UNRCE</span>
-            </a>
-            <nav class="menu">
-              <ul class="menu-bar">
-                <li>
-                  <button class="nav-link dropdown-btn" data-dropdown="dropdown1" aria-haspopup="true" aria-expanded="false" aria-label="browse">
-                    Project
-                    <i class="bx bx-chevron-down" aria-hidden="true"></i>
-                  </button>
-                  <div id="dropdown1" class="dropdown">
-                    <ul role="menu">
-                      <li role="menuitem">
-                        <a class="dropdown-link" href="#best-of-the-day">
-                          <img src="{% static 'icons/project.png' %}" class="icon" />
-                          <div>
-                            <span class="dropdown-link-title">View Projects</span>
-                            <p>See projects you are involved in</p>
-                          </div>
-                        </a>
-                      </li>
-                      <li role="menuitem">
-                        <a class="dropdown-link" href="#featured-streams">
-                          <img src="{% static 'icons/view.png' %}" class="icon" />
-                          <div>
-                            <span class="dropdown-link-title">Browse Projects</span>
-                            <p>View ongoing UNRCE projects</p>
-                          </div>
-                        </a>
-                      </li>
-                      <li role="menuitem">
-                        <a class="dropdown-link" href="#subscriptions">
-                          <img src="{% static 'icons/inquiry.png' %}" class="icon" />
-                          <div>
-                            <span class="dropdown-link-title">Project Inquiry</span>
-                            <p>Express Interest in a new or ongoing project</p>
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li>
-                  <button class="nav-link dropdown-btn" data-dropdown="dropdown2" aria-haspopup="true" aria-expanded="false" aria-label="discover">
-                    Reports
-                    <i class="bx bx-chevron-down" aria-hidden="true"></i>
-                  </button>
-                  <div id="dropdown2" class="dropdown">
-                    <ul role="menu">
-                      <li role="menuitem">
-                        <a class="dropdown-link" href="#featured-streams">
-                          <img src="{% static 'icons/edit.png' %}" class="icon" />
-                          <div>
-                            <span class="dropdown-link-title">Edit Reports</span>
-                            <p>Edit your current project reports</p>
-                          </div>
-                        </a>
-                      </li>
-                      <li role="menuitem">
-                        <a class="dropdown-link" href="#featured-streams">
-                          <img src="{% static 'icons/create.png' %}" class="icon" />
-                          <div>
-                            <span class="dropdown-link-title">Create Report</span>
-                            <p>Create a new report for your projects</p>
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li>
-                  <button class="nav-link dropdown-btn" data-dropdown="dropdown3" aria-haspopup="true" aria-expanded="false" aria-label="discover">
-                    Membership and Organization
-                    <i class="bx bx-chevron-down" aria-hidden="true"></i>
-                  </button>
-                  <div id="dropdown3" class="dropdown">
-                    <ul role="menu">
-                      <li role="menuitem">
-                        <a class="dropdown-link" href="#featured-streams">
-                          <img src="{% static 'icons/proj.png' %}" class="icon" />
-                          <div>
-                            <span class="dropdown-link-title">Project Inquiry Status</span>
-                            <p>Edit your current project reports</p>
-                          </div>
-                        </a>
-                      </li>
-                      <li role="menuitem">
-                        <a class="dropdown-link" href="#featured-streams">
-                          <img src="{% static 'icons/membership.png' %}" class="icon" />
-                          <div>
-                            <span class="dropdown-link-title">Join UNRCE</span>
-                            <p>Become a UNRCE Member</p>
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li><a class="nav-link btn btn-primary" href="/">Login (Testing)</a></li>
-                <li><a class="nav-link btn btn-primary2" href="/">Register (Testing)</a></li>
-              </ul>
-            </nav>
-          </div>
-    
-          <div class="nav-end">
-            <div class="right-container">
-              <form class="search" role="search">
-                <input type="search" name="search" placeholder="Search" />
-                <i class="bx bx-search" aria-hidden="true"></i>
-              </form>
-              <div class="profile-container">
-                <div class="profile-dropdown-toggle">
-                  <img src="https://github.com/Evavic44/responsive-navbar-with-dropdown/blob/main/assets/images/user.jpg?raw=true" width="50" height="50" alt="user image" />
-                </div>
-                <div class="profile-dropdown-toggle">
-                  <div id="profile-dropdown" class="dropdown profile-dropdown">
-                    <ul role="menu">
-                      <li role="menuitem">
-                        <a class="dropdown-link" href="#profile-settings">
-                          <img src="{% static 'icons/settings.png' %}" class="icon" />
-                          <div>
-                            <span class="dropdown-link-title">Profile Settings</span>
-                            <p>Manage your profile settings</p>
-                          </div>
-                        </a>
-                      </li>
-                      <li role="menuitem">
-                        <a class="dropdown-link" href="#logout">
-                          <img src="{% static 'icons/logout.png' %}" class="icon" />
-                          <div>
-                            <span class="dropdown-link-title">Logout</span>
-                            <p>Sign out of your account</p>
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <button class="btn btn-primary">Create Report</button>
-              </div>
-              <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">
-                <i class="bx bx-menu" aria-hidden="true"></i>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block head %}
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% endblock %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'js/base.js' %}"></script>
+</head>
+<body>
+  <header id="nav-menu" aria-label="navigation bar">
+    <div class="container">
+      <div class="nav-start">
+        <a class="logo" href="/">
+          <img src="{% static 'icons/unrce_log.bmp' %}" width="35" height="35" alt="Inc Logo" />
+          <span class="logo-text">UNRCE</span>
+        </a>
+        <nav class="menu">
+          <ul class="menu-bar">
+            <li>
+              <button class="nav-link dropdown-btn" data-dropdown="dropdown1" aria-haspopup="true" aria-expanded="false" aria-label="browse">
+                Project <i class="bx bx-chevron-down" aria-hidden="true"></i>
               </button>
+              <div id="dropdown1" class="dropdown">
+                <ul role="menu">
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="#best-of-the-day">
+                      <img src="{% static 'icons/project.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">View Projects</span>
+                        <p>See projects you are involved in</p>
+                      </div>
+                    </a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="#featured-streams">
+                      <img src="{% static 'icons/view.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Browse Projects</span>
+                        <p>View ongoing UNRCE projects</p>
+                      </div>
+                    </a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="#subscriptions">
+                      <img src="{% static 'icons/inquiry.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Project Inquiry</span>
+                        <p>Express Interest in a new or ongoing project</p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <button class="nav-link dropdown-btn" data-dropdown="dropdown2" aria-haspopup="true" aria-expanded="false" aria-label="discover">
+                Reports <i class="bx bx-chevron-down" aria-hidden="true"></i>
+              </button>
+              <div id="dropdown2" class="dropdown">
+                <ul role="menu">
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="#featured-streams">
+                      <img src="{% static 'icons/edit.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Edit Reports</span>
+                        <p>Edit your current project reports</p>
+                      </div>
+                    </a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="#featured-streams">
+                      <img src="{% static 'icons/create.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Create Report</span>
+                        <p>Create a new report for your projects</p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <button class="nav-link dropdown-btn" data-dropdown="dropdown3" aria-haspopup="true" aria-expanded="false" aria-label="discover">
+                Membership and Organization <i class="bx bx-chevron-down" aria-hidden="true"></i>
+              </button>
+              <div id="dropdown3" class="dropdown">
+                <ul role="menu">
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="#featured-streams">
+                      <img src="{% static 'icons/proj.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Project Inquiry Status</span>
+                        <p>Edit your current project reports</p>
+                      </div>
+                    </a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="#featured-streams">
+                      <img src="{% static 'icons/membership.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Join UNRCE</span>
+                        <p>Become a UNRCE Member</p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li><a class="nav-link btn btn-primary" href="/">Login (Testing)</a></li>
+            <li><a class="nav-link btn btn-primary2" href="/">Register (Testing)</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="nav-end">
+        <div class="right-container">
+          <form class="search" role="search">
+            <input type="search" name="search" placeholder="Search" />
+            <i class="bx bx-search" aria-hidden="true"></i>
+          </form>
+          <div class="profile-container">
+            <div class="profile-dropdown-toggle">
+              <img src="https://github.com/Evavic44/responsive-navbar-with-dropdown/blob/main/assets/images/user.jpg?raw=true" width="50" height="50" alt="user image" />
             </div>
+            <div class="profile-dropdown-toggle">
+              <div id="profile-dropdown" class="dropdown profile-dropdown">
+                <ul role="menu">
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="#profile-settings">
+                      <img src="{% static 'icons/settings.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Profile Settings</span>
+                        <p>Manage your profile settings</p>
+                      </div>
+                    </a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="#logout">
+                      <img src="{% static 'icons/logout.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Logout</span>
+                        <p>Sign out of your account</p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <button class="btn btn-primary">Create Report</button>
           </div>
+          <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">
+            <i class="bx bx-menu" aria-hidden="true"></i>
+          </button>
         </div>
-      </header>
-    </body>
-    <!-- For debugging -->
-    <!-- <h1>Math Function Example</h1>
-
-    <p>Result: <span id="result"></span></p> -->
-
+      </div>
+    </div>
+  </header>
+</body>
+<div class="content flex-container">
+  {% block content %}{% endblock %}
+</div>
 </html>
