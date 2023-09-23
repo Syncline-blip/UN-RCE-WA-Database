@@ -123,12 +123,12 @@ class Report(models.Model):
     direct_sdgs = ArrayField(
         models.IntegerField(),
         blank=True,
-        null=True,
+        default=list,
     )
     indirect_sdgs = ArrayField(
         models.IntegerField(),
         blank=True,
-        null=True,
+        default=list,
     )
 #Make another set of these for ESD and ESD 2030
 

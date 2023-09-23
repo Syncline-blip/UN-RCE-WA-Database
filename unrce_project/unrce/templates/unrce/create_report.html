@@ -32,6 +32,9 @@
     color: red;
     font-size: 12px;
 }
+input[type="checkbox"][name$="-DELETE"] {
+    display: none;
+}
 </style>
 
 </head>
@@ -96,19 +99,32 @@
         {{ organization_formset.management_form }}
         {% for form in organization_formset %}
         <div class="organization-formset">
+            <!-- Render the ID and REPORT fields as hidden -->
+            {{ form.id.as_hidden }}
+            {{ form.report.as_hidden }} <!-- Add this line -->
             {% for field in form %}
-            <div class="form-group {% if field.errors %}has-error{% endif %}">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                {% for error in field.errors %}
-                    <span class="help-block">{{ error }}</span>
-                {% endfor %}
-            </div>
+                {% if field.name != "DELETE" and field.name != "id" and field.name != "report" %}
+                    <div class="form-group {% if field.errors %}has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             {% endfor %}
+            <!-- Render the DELETE checkbox as hidden -->
+            {{ form.DELETE.as_hidden }}
             <button type="button" class="remove-organization">Remove</button>
         </div>
         {% endfor %}
     </div>
+    
+    
+    
+    
+
+
     <button type="button" id="add-organization">Add Another Organization</button>
 <!--This is where users are linked  -->
     <div class="form-group">
@@ -116,13 +132,14 @@
         <div id="available-users-section">
             <h4>Available Users</h4>
             <input type="text" id="user-search" placeholder="Search by name..." onkeyup="filterUsers()">
-            <div id="all-users">
-                {% for user in all_users %}
-                    <div class="user-item" data-user-id="{{ user.id }}" data-user-name="{{ user.first_name }} {{ user.last_name }}" onclick="addUser(this)" style="display: none;">
+            <div id="selected-users">
+                {% for user in linked_users %}
+                    <div class="user-item" data-user-id="{{ user.id }}" data-user-name="{{ user.first_name }} {{ user.last_name }}" onclick="removeUser(this)">
                         {{ user.first_name }} {{ user.last_name }}
                     </div>
                 {% endfor %}
             </div>
+            
         </div>
         <div id="linked-users-section">
             <h4>Linked Users</h4>
@@ -382,17 +399,21 @@
 
 </div>
 <!-- SDG list -->
-      <div id="sdg-container">
-          {% for i in sdg_list %}
-              <div class="sdg-item">
-                  <img src="{% static 'css/images/SDG_'|add:i|add:'.jpg' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
-                  <div class="sdg-options">
-                      <input type="radio" name="sdg_option_{{ i }}" value="direct"> Direct
-                      <input type="radio" name="sdg_option_{{ i }}" value="indirect"> Indirect
-                  </div>
-              </div>
-          {% endfor %}
-      </div>
+<div id="sdg-container">
+    {% for i in sdg_list %}
+        <div class="sdg-item">
+            <img src="{% static 'css/images/SDG_'|add:i|add:'.jpg' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
+            <div class="sdg-options">
+                <input type="radio" name="sdg_option_{{ i }}" value="direct" 
+                       {% if i|add:0 in selected_direct_sdgs %}checked{% endif %}> Direct
+                <input type="radio" name="sdg_option_{{ i }}" value="indirect" 
+                       {% if i|add:0 in selected_indirect_sdgs %}checked{% endif %}> Indirect
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
       
       </div>
     </div>
@@ -422,6 +443,19 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+    let allOrganizationFormsets = document.querySelectorAll('.organization-formset');
+    let filledFormsets = Array.from(allOrganizationFormsets).filter(isFormsetFilled);
+
+    // If there's no filled formsets, we initialize with a blank formset
+    if (filledFormsets.length === 0) {
+        document.getElementById('add-organization').click();
+    }
+
+    // Initialize the state of remove buttons
+    updateRemoveButtonVisibility();
+});
+
+    document.addEventListener('DOMContentLoaded', function() {
 
 // Handle radio button behavior
 let radios = document.querySelectorAll('input[type="radio"]');
@@ -436,18 +470,6 @@ radios.forEach(function(radio) {
     });
 });
 
-function updateRemoveButtonVisibility() {
-    let allOrganizationFormsets = document.querySelectorAll('.organization-formset');
-    // If there's only one organization, hide its remove button
-    if (allOrganizationFormsets.length === 1) {
-        allOrganizationFormsets[0].querySelector('.remove-organization').style.display = 'none';
-    } else {
-        // If there are multiple organizations, show all remove buttons
-        allOrganizationFormsets.forEach(function(formset) {
-            formset.querySelector('.remove-organization').style.display = 'block';
-        });
-    }
-}
 
 // JS functions for user operations
 window.addUser = function(element) {
@@ -490,6 +512,28 @@ window.filterUsers = function() {
         }
     });
 };
+function isFormsetFilled(formset) {
+    let inputs = formset.querySelectorAll('input[type="text"], select, textarea');
+    for(let input of inputs) {
+        if(input.value.trim() !== "") {
+            return true;
+        }
+    }
+    return false;
+}
+
+function updateRemoveButtonVisibility() {
+    let allOrganizationFormsets = document.querySelectorAll('.organization-formset');
+    // If there's only one organization, hide its remove button
+    if (allOrganizationFormsets.length === 1) {
+        allOrganizationFormsets[0].querySelector('.remove-organization').style.display = 'none';
+    } else {
+        // If there are multiple organizations, show all remove buttons
+        allOrganizationFormsets.forEach(function(formset) {
+            formset.querySelector('.remove-organization').style.display = 'block';
+        });
+    }
+}
 
 // Add another formset
 document.getElementById('add-organization').addEventListener('click', function() {
@@ -498,9 +542,7 @@ document.getElementById('add-organization').addEventListener('click', function()
     let nextFormNum = parseInt(totalForms.value, 10);
     let formElem = document.querySelector('.organization-formset').cloneNode(true);
 
-    // Use multiple selectors combined to replace ':input' in vanilla JS
     let inputs = formElem.querySelectorAll('input, select, textarea, button');
-
     for(let input of inputs) {
         let nameAttr = input.getAttribute('name');
         let idAttr = input.getAttribute('id');
@@ -516,30 +558,29 @@ document.getElementById('add-organization').addEventListener('click', function()
     }
 
     let formsetsContainer = document.querySelector('.organization-formsets');
-    if(formsetsContainer) {  // Ensure the container exists before appending
-        formsetsContainer.appendChild(formElem);
-    }
+    formsetsContainer.appendChild(formElem);
     totalForms.value = nextFormNum + 1;
 
     updateRemoveButtonVisibility();
 });
 
-// Use event delegation for all the delete buttons
+// Use event delegation for the delete buttons
 document.querySelector('.organization-formsets').addEventListener('click', function(event) {
     if(event.target.classList.contains('remove-organization')) {
+        console.log("Remove button clicked via delegation!");
+        
         let formset = event.target.closest('.organization-formset');
-        if (formset) {
-            formset.remove();
-            let totalForms = document.getElementById('id_organization_set-TOTAL_FORMS');
-            totalForms.value = parseInt(totalForms.value, 10) - 1;
+        let deleteInput = formset.querySelector("input[name$='-DELETE']");
+        deleteInput.checked = true;
 
-            updateRemoveButtonVisibility();
-        }
+        formset.style.opacity = 0.5;
+        formset.classList.add('deleted');
+
+        updateRemoveButtonVisibility();
     }
 });
 
-// Set the initial state of the remove buttons on page load
-updateRemoveButtonVisibility();
+
 
 });
 </script>

@@ -99,5 +99,5 @@ class RegistrationForm(UserCreationForm):
     
 OrganizationInlineFormSet = forms.inlineformset_factory(
     Report, Organization,
-    form=OrganizationForm, extra=1, can_delete=True
+    form=OrganizationForm, extra=0, can_delete=True
 )

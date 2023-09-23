@@ -28,24 +28,42 @@ def home(request):
 
 
 @login_required
-def create_report(request): 
+def create_report(request, report_id=None): 
+    is_editing = True if report_id else False
+
+    if is_editing:
+        report = get_object_or_404(Report, id=report_id)
+        direct_sdgs = report.direct_sdgs
+        indirect_sdgs = report.indirect_sdgs
+        linked_users = report.linked_users.all()
+    else:
+        report = Report()
+        direct_sdgs = []
+        indirect_sdgs = []
+        linked_users = []
+
     try:
         if request.method == 'POST':
-            report_form = ReportForm(request.POST)
+            report_form = ReportForm(request.POST, instance=report)
             images_form = ReportImagesForm(request.POST, request.FILES)
             files_form = ReportFilesForm(request.POST, request.FILES)
-            organization_formset = OrganizationInlineFormSet(request.POST)
+            organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
             images = request.FILES.getlist('image')
             files = request.FILES.getlist('file')
-
-            direct_sdgs = []
-            indirect_sdgs = []
+            
+            new_direct_sdgs = []
+            new_indirect_sdgs = []
             for i in range(1, 18):
                 option = request.POST.get(f'sdg_option_{i}')
                 if option == 'direct':
-                    direct_sdgs.append(str(i))
+                    new_direct_sdgs.append(str(i))
                 elif option == 'indirect':
-                    indirect_sdgs.append(str(i))
+                    new_indirect_sdgs.append(str(i))
+
+            direct_sdgs = new_direct_sdgs
+            indirect_sdgs = new_indirect_sdgs
+
+
 
             if report_form.is_valid() and organization_formset.is_valid():
                 report = report_form.save(commit=False)
@@ -58,14 +76,12 @@ def create_report(request):
                 if organization_formset.is_valid():
                     organization_formset.save()
                 report_form.save_m2m()  
-
                 if images:
                     for image in images:
                         ReportImages.objects.create(
                             report=report,
                             image=image
                         )
-
                 if files:
                     for file in files:
                         ReportFiles.objects.create(
@@ -83,15 +99,12 @@ def create_report(request):
                             logger.error(f'ReportFilesForm errors: {files_form.errors}')
                             if not organization_formset.is_valid():
                                 logger.error(f'OrganizationInlineFormSet errors: {organization_formset.errors}')
-
-                
-                
         else:
-            report_form = ReportForm()
+            report_form = ReportForm(instance=report if is_editing else None)
             images_form = ReportImagesForm()
             files_form= ReportFilesForm()
-            report = Report()
-            organization_formset = OrganizationInlineFormSet(instance=report)
+            organization_formset = OrganizationInlineFormSet(instance=report, queryset=report.organization_set.all())
+
 
         sdg_list = [str(i) for i in range(1, 18)]
         context = {
@@ -100,18 +113,20 @@ def create_report(request):
             'images_form': images_form,
             'files_form': files_form,
             'sdg_list': sdg_list,
+            'selected_direct_sdgs': direct_sdgs,
+            'selected_indirect_sdgs': indirect_sdgs,
+            'linked_users': linked_users,
             'all_users': User.objects.all(),
+            'is_editing': is_editing
         }
 
         return render(request, 'unrce/create_report.html', context)
 
     except Exception as e:
         # Logging the error for debugging
-        logger.error(f'Error creating report: {str(e)}')
-        
-        
+        logger.error(f'Error creating report: {str(e)}')       
         return redirect('report_list')
-
+    
 def add_interest(request):
     """
     Handles the creation of a new Expression of Interest. This view initializes and validates
@@ -192,31 +207,6 @@ def eoi_review(request):
     return render(request, 'unrce/eoi_review.html', {'eois': eois})
 
 
-def report_edit(request, report_id):
-    report = get_object_or_404(Report, id=report_id)
-    if request.method == 'POST':
-        form = ReportForm(request.POST, instance=report)
-        if form.is_valid():
-            form.save()
-
-        # Handle new image uploads
-        images = request.FILES.getlist('image')
-        for image in images:
-            ReportImages.objects.create(
-                report=report,
-                image=image
-            )
-
-        return redirect('report_list')  # Redirect to the list of reports
-    else:
-        form = ReportForm(instance=report)
-
-    existing_images = ReportImages.objects.filter(report=report)
-    context = {
-        'form': form,
-        'existing_images': existing_images,
-    }
-    return render(request, 'unrce/report_edit.html', context)
 
 def register(request):
     try:
