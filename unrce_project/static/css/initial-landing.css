@@ -1,0 +1,29 @@
+body {
+    font-family: proxima-nova;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-item {
+    width: 50%;
+    padding: 10px; /* Optional: for some spacing */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    border:2px solid blue;
+    background-color: #e6f2ff;
+    margin: 10px;
+}
