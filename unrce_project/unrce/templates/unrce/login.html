@@ -1,47 +1,42 @@
-{% extends "base.html" %}
 {% load static %}
-
-
-{% block head %}
-    {{ block.super }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <!-- Add the imported Google Fonts link here -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <title>{% block title %}Login{% endblock %}</title>
-{% endblock %}
-{% block content %}
-    <div class="login-container">
-        <h2>Login</h2>
-        
+</head>
+<body>
+    <div class="image">
+        <!-- Background image goes here -->
+    </div>
+    <div class="sign-in">
+        <h1>Login</h1>
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Username" required>
-                {{ form.username.errors }}
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <div class="password-input-container">
                     <input type="password" id="password" name="password" placeholder="Password" required>
-                    <i class="fas fa-eye" id="show-password"></i>
+                    <input type="checkbox" id="show-password">
+                    <label for="show-password">Show Password</label>
                 </div>
-                {{ form.password.errors }}
             </div>
             <div class="form-group">
-                <button type="submit">Login</button>
+                <button type="submit" class="input[type='submit']">Login</button>
             </div>
             {% if form.errors %}
             <div class="error-message" id="error-message">
                 <p>Invalid Username or Password</p>
             </div>
             {% endif %}
-            
-            <hr class="line">
-            
             <div class="auth-options">
                 <a href="{% url 'register' %}">Create an account</a>
                 <a href="{% url 'initial-landing' %}">Home</a>
@@ -49,7 +44,7 @@
         </form>
     </div>
     <script>
-        // Delays the appearance of error message
+        // Delays the appearance of the error message
         setTimeout(function () {
             const errorMessage = document.getElementById('error-message');
             if (errorMessage) {
@@ -57,20 +52,17 @@
             }
         }, 3000);
 
+        // Toggle password visibility
         const passwordInput = document.getElementById('password');
-        const showPasswordIcon = document.getElementById('show-password');
+        const showPasswordCheckbox = document.getElementById('show-password');
 
-        showPasswordIcon.addEventListener('click', function () {
-            if (passwordInput.type === 'password') {
+        showPasswordCheckbox.addEventListener('change', function () {
+            if (showPasswordCheckbox.checked) {
                 passwordInput.type = 'text'; // Show the password
-                showPasswordIcon.classList.remove('fa-eye');
-                showPasswordIcon.classList.add('fa-eye-slash'); // Change the icon to a slash
             } else {
                 passwordInput.type = 'password'; // Hide the password
-                showPasswordIcon.classList.remove('fa-eye-slash');
-                showPasswordIcon.classList.add('fa-eye'); // Change the icon back to an eye
             }
         });
     </script>
-
-{% endblock %}
+</body>
+</html>
