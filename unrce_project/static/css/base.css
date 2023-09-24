@@ -346,6 +346,7 @@ button {
   margin-top: 0px; /* Additional vertical adjustment */
   margin-left: -40px; /* Additional horizontal adjustment */
   text-align: left;
+  transition: 0.1s ease-in-out;
 }
 .profile-dropdown.active {
   display: block;
@@ -357,6 +358,7 @@ button {
   gap: 0.5rem;
   padding: 1.2rem;
   font-size: 0.95rem;
+  transition: 0.1s ease-in-out;
 }
 
 .profile-dropdown li {
@@ -372,18 +374,20 @@ button {
 
 .nav-link.btn.btn-primary {
   display: block;
-  background-color: blue;
-  color: var(--white);
+  background-color: whitesmoke;
+  color: black;
   text-align: center;
   padding: 0.6rem 1.4rem;
   font-size: 1rem;
   font-weight: 500;
+  border: solid;
   border-radius: 5px;
+  border-color: black;
 }
 
 .nav-link.btn.btn-primary2
 {
-  background-color: blue;
+  background-color: #2b72fb;
 
   color: var(--white);
   text-align: center;
@@ -391,7 +395,9 @@ button {
   font-size: 1rem;
   font-weight: 500;
   border-radius: 5px;
-  border: 5px solid;
-  border-color: #daaa00
+  border: solid;
+  border-radius: 5px;
+  border-color: black;
+
 }
 
