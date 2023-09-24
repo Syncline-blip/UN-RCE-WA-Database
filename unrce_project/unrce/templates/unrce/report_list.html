@@ -87,6 +87,9 @@
   <a href="{% url 'initial-landing' %}">home</a>
   <a href="{% url 'create_report' %}">create report</a>
 </div>
+<!--
+  This Table contains all the reports that the current user is the author for, the headings are the fields in the report
+-->
 <div class="table-container">
   <table  border="1">
     <thead>
@@ -94,30 +97,25 @@
             <th>Report ID</th>
             <th>Lead Organisation</th>
             <th>Name of Project</th>
-            <th>Project Description</th>
-            <th>Delivery</th>
-            <th>Frequency</th>
-            <th>Audience</th>
-            <th>Current Partners</th>
-            <th>SDG Focus</th>
+            <th>Project Description Short</th>
             <th>Contact</th>
+            <th>Image Count</th>
             <th>Created At</th>
             <th>Last Modified</th>
         </tr>
     </thead>
+<!-- 
+  This is the where it prints all the reports out into the table, clicking on any row will allow you to edit that report
+-->
     <tbody>
         {% for report in reports %}
               <tr onclick="window.location='{% url 'report_edit' report.id %}'" style="cursor: pointer;">
                 <td>{{ report.id }}</td>
                 <td>{{ report.lead_organisation }}</td>
                 <td>{{ report.name_project }}</td>
-                <td>{{ report.project_description }}</td>
-                <td>{{ report.delivery }}</td>
-                <td>{{ report.frequency }}</td>
-                <td>{{ report.audience }}</td>
-                <td>{{ report.current_partners }}</td>
-                <td>{{ report.sdg_focus }}</td>
+                <td>{{ report.project_description_short }}</td>
                 <td>{{ report.contact }}</td>
+                <td>{{ report.images.count }}</td>
                 <td>{{ report.created_at }}</td>
                 <td>{{ report.last_modified }}</td>
             </tr>
@@ -125,62 +123,5 @@
     </tbody>
 </table>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const rows = document.querySelectorAll("tbody tr");
-    
-    rows.forEach((row) => {
-      row.addEventListener("click", () => {
-        const reportId = row.querySelector("td:first-child").textContent;
-        const lead_organization = row.querySelector("td:nth-child(2)").textContent;
-        const project_name = row.querySelector("td:nth-child(3)").textContent;
-        const projectDescription = row.querySelector("td:nth-child(4)").textContent;
-        const delivery= row.querySelector("td:nth-child(5)").textContent;
-        const frequency= row.querySelector("td:nth-child(6)").textContent;
-        const audience= row.querySelector("td:nth-child(7)").textContent;
-        const current_partner= row.querySelector("td:nth-child(8)").textContent;
-        const SDG1= row.querySelector("td:nth-child(9)").textContent;
-        const SDG2=row.querySelector("td:nth-child(10)").textContent;
-        const SDG3=row.querySelector("td:nth-child(11)").textContent;
-        const contact= row.querySelector("td:nth-child(12)").textContent;
-
-        const reportData = {
-          reportId: reportId,
-          lead_organization:lead_organization,
-          project_name:project_name ,
-          projectDescription: projectDescription,
-          delivery:delivery,
-          frequency:frequency,
-          audience:audience,
-          current_partner:current_partner,
-          SDG1:SDG1,
-          SDG2:SDG2,
-          SDG3:SDG3,
-          contact:contact
-        };
-        
-        localStorage.setItem("selectedReport", JSON.stringify(reportData));
-        
- //      window.location.href = `report_details.html?reportId=${reportId}`;
-
-        document.addEventListener("DOMContentLoaded", function () {
-          const updatedReportJSON = localStorage.getItem("updatedReport");
-          
-          if (updatedReportJSON) {
-            const updatedReportData = JSON.parse(updatedReportJSON);
-            const reportId = updatedReportData.reportId;
-            const rows = document.querySelectorAll("tbody tr");
-            const rowToUpdate = Array.from(rows).find(row => row.querySelector("td:first-child").textContent === reportId);
-            rowToUpdate.querySelector("td:nth-child(2)").textContent = updatedReportData.lead_organization;
-            rowToUpdate.querySelector("td:nth-child(3)").textContent = updatedReportData.project_name;
-            rowToUpdate.querySelector("td:nth-child(4)").textContent = updatedReportData.projectDescription;
-    
-            localStorage.removeItem("updatedReport");
-          }
-        });
-      });
-    });
-  });
-  </script>
 </body>
 </html>

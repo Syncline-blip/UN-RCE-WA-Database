@@ -1,16 +1,52 @@
-from .models import Report, Account, ExcelUpload, ReportImages, Expression_of_interest
+from .models import Report, Account, ReportImages, Expression_of_interest, Organization, ReportFiles,  AUDIENCE_CHOICES, DELIVERY_CHOICES
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from zxcvbn import zxcvbn  # Import the zxcvbn library
 from django.core.validators import MinLengthValidator
 
+
 class ReportForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ReportForm, self).__init__(*args, **kwargs)
+        self.fields['linked_users'].label_from_instance = self.label_from_user_instance
+
+    def label_from_user_instance(self, user):
+        return f"{user.first_name} {user.last_name}"
+
+    audience = forms.MultipleChoiceField(
+        choices=AUDIENCE_CHOICES,
+        widget=forms.CheckboxSelectMultiple
+    )
+    delivery = forms.MultipleChoiceField(
+        choices=DELIVERY_CHOICES,
+        widget=forms.CheckboxSelectMultiple
+    )
+    
     class Meta:
         model = Report
         fields = '__all__'
-        exclude = ['author']
-        
+        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved' ]
+
+class ReportImagesForm(forms.ModelForm):
+    image = forms.ImageField(required=False)
+    class Meta:
+        model = ReportImages
+        fields = ['image']
+
+class ReportFilesForm(forms.ModelForm):
+    file = forms.FileField(required=False)
+    class Meta:
+        model = ReportFiles
+        fields = ['file']
+
+class OrganizationForm(forms.ModelForm):
+    class Meta:
+        model = Organization
+        fields = ['name', 'email', 'website']
+
+
 class InterestForm(forms.ModelForm):
     class Meta:
         model = Expression_of_interest
@@ -61,13 +97,7 @@ class RegistrationForm(UserCreationForm):
                 )
         return password1
     
-class ExcelForm(forms.ModelForm):
-    class Meta:
-        model = ExcelUpload
-        fields = ('excel_file',)
-
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model = ReportImages
-        fields = ('image', )
-ReportImageFormSet = forms.modelformset_factory(ReportImages, form=ImageForm, extra=1)        
+OrganizationInlineFormSet = forms.inlineformset_factory(
+    Report, Organization,
+    form=OrganizationForm, extra=1, can_delete=True
+)

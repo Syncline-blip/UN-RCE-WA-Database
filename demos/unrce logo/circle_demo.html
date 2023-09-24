@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIRCLE DEMO</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .color1 { fill: #EB1C2D; }
+        .color2 { fill: #D3A029; }
+        .color3 { fill: #279B48; }
+        .color4 { fill: #C31F33; }
+        .color5 { fill: #EF402B; }
+        .color6 { fill: #00AED9; }
+        .color7 { fill: #FDB713; }
+        .color8 { fill: #8F1838; }
+        .color9 { fill: #F36D25; }
+        .color10 { fill: #E11484; }
+        .color11 { fill: #F99D26; }
+        .color12 { fill: #CF8D2A; }
+        .color13 { fill: #48773E; }
+        .color14 { fill: #007DBC; }
+        .color15 { fill: #5DBB46; }
+        .color16 { fill: #02558B; }
+        .color17 { fill: #183668; }
+
+        .label {
+            font-size: 12px;
+            text-anchor: middle;
+            dominant-baseline: middle; 
+            fill: white; 
+        }
+
+    </style>
+</head>
+<body>
+    <svg class="circle" width="300" height="300" viewBox="0 0 300 300">
+        <circle cx="150" cy="150" r="60" fill="transparent" stroke="transparent"></circle>
+        <g class="trapezoids">
+
+        </g>
+    </svg>
+    <script>
+        const svg = document.querySelector('.circle');
+        const trapezoidsGroup = document.querySelector('.trapezoids');
+        const totalTrapezoids = 17;
+        const heightIncrease = 50;
+        const widthIncrease = 30; 
+        const bottomIncrease = 8;  
+        const spacingFactor = 1.5; 
+
+        // Let milton fix the color ordering, i ceebs literally
+        const colors = [
+            'color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7',
+            'color8', 'color9', 'color10', 'color11', 'color12', 'color13',
+            'color14', 'color15', 'color16', 'color17'
+        ];
+
+        for (let i = 0; i < totalTrapezoids; i++) {
+            const angle = (i / totalTrapezoids) * 2 * Math.PI;
+            const rotation = angle - Math.PI / 2; 
+            const radius = 85;
+            const x = 150 + radius * Math.cos(angle);
+            const y = 150 + radius * Math.sin(angle);
+
+            // lol?
+    
+            const trapezoid = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            const points = [
+
+                // my math is better than chat gpt's
+                `${x - 5 - widthIncrease / 2},${y + heightIncrease / 2}`, 
+                `${x + 5 + widthIncrease / 2},${y + heightIncrease / 2}`, 
+                `${x + 3 + bottomIncrease},${y - heightIncrease / 2}`,  
+                `${x - 3 - bottomIncrease},${y - heightIncrease / 2}`,
+            ];
+
+            
+            trapezoid.setAttribute('class', colors[i % colors.length]);
+            trapezoid.setAttribute('points', points.join(' '));
+            trapezoid.setAttribute('transform', `rotate(${(rotation * 180) / Math.PI}, ${x}, ${y})`);
+            trapezoidsGroup.appendChild(trapezoid);
+
+
+
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('class', 'label');
+            label.setAttribute('x', x);
+            label.setAttribute('y', y);
+            label.textContent = i + 1; 
+            trapezoidsGroup.appendChild(label);
+        }
+    </script>
+</body>
+</html>

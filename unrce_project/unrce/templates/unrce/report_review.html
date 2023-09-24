@@ -86,15 +86,20 @@
   <h1>Report List</h1>
   <a href="{% url 'initial-landing' %}">home</a>
 </div>
+<!--
+    This page is to allow someone with elevated privelages, to see all reports and give them options, what options are 
+    to be figured out later.
+    It has only some of the headers for the report, not all info, button to bring up details.
+-->
 <div class="table-container">
   <table border="1">
     <thead>
         <tr>
             <th>Report ID</th>
-            <th>Lead Organisation</th>
-            <th>Name of Project</th>
-            <th>Project Description</th>
-            <th>Contact</th>
+            <th>Author</th>
+            <th>Title of Project</th>
+            <th>Image Count</th>
+            <th>File Count</th>
             <th>Created At</th>
             <th>Report Details</th>
             <th>Report Download</th>
@@ -103,18 +108,18 @@
     <tbody>
         {% for report in reports %}
                 <td>{{ report.id }}</td>
-                <td>{{ report.lead_organisation }}</td>
-                <td>{{ report.name_project }}</td>
-                <td>{{ report.project_description }}</td>
-                <td>{{ report.contact }}</td>
+                <td>{{ report.author }}</td>
+                <td>{{ report.title_project}}</td>
+                <td>{{ report.images.count }}</td>
+                <td>{{ report.file.count }}</td>
                 <td>{{ report.created_at }}</td>
                 <td>
                     <!-- For Report Details -->
-                    <a href="{% url 'report_edit' report.id %}" class="btn btn-info">Details</a>
+                    <a href="{% url 'report_details' report.id %}" >Details</a>
                 </td>
                 <td>
                     <!-- For Report Download -->
-                    <a href="{% url 'report_edit' report.id %}" class="btn btn-success">Download</a>
+                    <a href="{% url 'report_edit' report.id %}" >Download</a>
                 </td>
             </tr>
         {% endfor %}
