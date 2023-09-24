@@ -6,63 +6,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    <!-- Add the imported Google Fonts link here -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="image">
-        <!-- Background image goes here -->
-    </div>
-    <div class="sign-in">
-        <h1>Login</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div class="password-input-container">
-                    <input type="password" id="password" name="password" placeholder="Password" required>
-                    <input type="checkbox" id="show-password">
-                    <label for="show-password">Show Password</label>
-                </div>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="input[type='submit']">Login</button>
-            </div>
-            {% if form.errors %}
-            <div class="error-message" id="error-message">
-                <p>Invalid Username or Password</p>
-            </div>
-            {% endif %}
-            <div class="auth-options">
-                <a href="{% url 'register' %}">Create an account</a>
-                <a href="{% url 'initial-landing' %}">Home</a>
-            </div>
-        </form>
-    </div>
-    <script>
-        // Delays the appearance of the error message
-        setTimeout(function () {
-            const errorMessage = document.getElementById('error-message');
-            if (errorMessage) {
-                errorMessage.style.display = 'none';
-            }
-        }, 3000);
 
-        // Toggle password visibility
-        const passwordInput = document.getElementById('password');
-        const showPasswordCheckbox = document.getElementById('show-password');
+<div class="login-container">
+    <h2>Login</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            {{ form.username.errors }}
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-input-container">
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="checkbox" id="show-password">
+                <label for="show-password">Show Password</label>
+            </div>
+            {{ form.password.errors }}
+        </div>
+        <div class="form-group">
+            <button type="submit">Login</button>
+        </div>
+        {% if form.errors %}
+        <div class="error-message" id="error-message">
+            <p>Invalid Username or Password</p>
+        </div>
+        {% endif %}
 
-        showPasswordCheckbox.addEventListener('change', function () {
-            if (showPasswordCheckbox.checked) {
-                passwordInput.type = 'text'; // Show the password
-            } else {
-                passwordInput.type = 'password'; // Hide the password
-            }
-        });
-    </script>
+        <div class="auth-options">
+            <a href="{% url 'register' %}">Create an account</a>
+            <a href="{% url 'initial-landing' %}">Home</a>
+        </div>
+    </form>
+</div>
+<script>
+    // Delays the appearance of error message
+    setTimeout(function () {
+        const errorMessage = document.getElementById('error-message');
+        if (errorMessage) {
+            errorMessage.style.display = 'none';
+        }
+    }, 3000);
+
+    /// AHAHAHAHAH IM FUCKING CRACKED BOY
+    const passwordInput = document.getElementById('password');
+    const showPasswordCheckbox = document.getElementById('show-password');
+
+    showPasswordCheckbox.addEventListener('change', function () {
+        if (showPasswordCheckbox.checked) {
+            passwordInput.type = 'text'; // Show the password
+        } else {
+            passwordInput.type = 'password'; // Hide the password
+        }
+    });
+</script>
+
 </body>
 </html>
