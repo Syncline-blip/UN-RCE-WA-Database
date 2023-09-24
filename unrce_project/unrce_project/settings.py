@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -106,7 +105,7 @@ DATABASES = {
         "ENGINE": 'django.db.backends.postgresql',
         "NAME": 'unrce',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '5432',
     }

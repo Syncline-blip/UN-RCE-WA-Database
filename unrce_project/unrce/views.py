@@ -5,15 +5,16 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .forms import ReportForm, RegistrationForm, ExcelForm, InterestForm, ReportImagesForm
-from .models import Report, Account, ReportImages, Expression_of_interest
-from django.http import HttpResponseServerError  # Import HttpResponseServerError for error responses
-import os
+from django.http import HttpResponse, JsonResponse
+from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, OrganizationInlineFormSet
+from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
+from django.http import HttpResponseServerError, JsonResponse  
+import os, json
 import pandas as pd
-
 import logging
+from django.db.models import Q
 
+logger = logging.getLogger(__name__)
 # sample data, not to be used, just for testing
 project = [
     {
@@ -28,49 +29,88 @@ def home(request):
 
 @login_required
 def create_report(request): 
-    return render(request, 'unrce/create_report.html')
+    try:
+        if request.method == 'POST':
+            report_form = ReportForm(request.POST)
+            images_form = ReportImagesForm(request.POST, request.FILES)
+            files_form = ReportFilesForm(request.POST, request.FILES)
+            organization_formset = OrganizationInlineFormSet(request.POST)
+            images = request.FILES.getlist('image')
+            files = request.FILES.getlist('file')
 
-@login_required
-def projects(request):
-    context = {
-        'project': project
-    }
-    return render(request, 'unrce/project_upload.html', context)
-# Create your views here.
+            direct_sdgs = []
+            indirect_sdgs = []
+            for i in range(1, 18):
+                option = request.POST.get(f'sdg_option_{i}')
+                if option == 'direct':
+                    direct_sdgs.append(str(i))
+                elif option == 'indirect':
+                    indirect_sdgs.append(str(i))
 
-@login_required
-def add_report(request):
-    """
-    Handles the creation of a new report and its associated images.
-    """
-    if request.method == 'POST':
-        report_form = ReportForm(request.POST)
-        images_form = ReportImagesForm(request.POST, request.FILES)
-        images = request.FILES.getlist('image')
+            if report_form.is_valid() and organization_formset.is_valid():
+                report = report_form.save(commit=False)
+                report.author = request.user
+                report.direct_sdgs = direct_sdgs  
+                report.indirect_sdgs = indirect_sdgs 
+                report.save()
 
-        if report_form.is_valid():
-            report = report_form.save(commit=False)
-            report.author = request.user
-            report.save()
-    
-            if images:  # Check if any images are uploaded
-                for image in images:
-                    ReportImages.objects.create(
-                        report=report,
-                        image=image
-                    )
-            return redirect('report_list')
+                organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
+                if organization_formset.is_valid():
+                    organization_formset.save()
+                report_form.save_m2m()  
 
-    else:
-        report_form = ReportForm()
-        images_form = ReportImagesForm()
-    context = {
-        'report_form': report_form,
-        'images_form': images_form
-    }
+                if images:
+                    for image in images:
+                        ReportImages.objects.create(
+                            report=report,
+                            image=image
+                        )
 
-    return render(request, 'unrce/create_report.html', context)
+                if files:
+                    for file in files:
+                        ReportFiles.objects.create(
+                            report=report,
+                            file=file
+                        )
 
+                return redirect('report_list')
+            else:
+                if not report_form.is_valid():
+                    logger.error(f'ReportForm errors: {report_form.errors}')
+                    if not images_form.is_valid():
+                        logger.error(f'ReportImagesForm errors: {images_form.errors}')
+                        if not files_form.is_valid():
+                            logger.error(f'ReportFilesForm errors: {files_form.errors}')
+                            if not organization_formset.is_valid():
+                                logger.error(f'OrganizationInlineFormSet errors: {organization_formset.errors}')
+
+                
+                
+        else:
+            report_form = ReportForm()
+            images_form = ReportImagesForm()
+            files_form= ReportFilesForm()
+            report = Report()
+            organization_formset = OrganizationInlineFormSet(instance=report)
+
+        sdg_list = [str(i) for i in range(1, 18)]
+        context = {
+            'report_form': report_form,
+            'organization_formset': organization_formset,
+            'images_form': images_form,
+            'files_form': files_form,
+            'sdg_list': sdg_list,
+            'all_users': User.objects.all(),
+        }
+
+        return render(request, 'unrce/create_report.html', context)
+
+    except Exception as e:
+        # Logging the error for debugging
+        logger.error(f'Error creating report: {str(e)}')
+        
+        
+        return redirect('report_list')
 
 def add_interest(request):
     """
@@ -229,38 +269,4 @@ def edit_reporting(request):
 @login_required
 def reportDetails(request):
     return render(request, 'unrce/report_details.html')
-
-@login_required
-def upload_excel(request):
-    """
-    Handles the upload of an Excel file for mass creation of Report objects.
-    Validates the uploaded file through ExcelForm, reads the Excel file using Pandas,
-    iterates through its rows to create Report objects, and then redirects to the home page.
-    """
-    if request.method == 'POST':
-        form = ExcelForm(request.POST, request.FILES)
-        if form.is_valid():
-            excel_file_instance = form.save()
-            # Read Excel File
-            df = pd.read_excel(excel_file_instance.excel_file.path)
-            # Process and Save Data
-            for index, row in df.iterrows():
-                Report.objects.create(
-                    lead_organisation=row[0],
-                    name_project=row[1],
-                    project_description = row[2],
-                    delivery = row[3],
-                    frequency = row[4],
-                    audience = row[5],
-                    current_partners = row[6],
-                    sdg_focus = row[7],
-                    contact = row[7],
-                    author=request.user
-                )
-            os.remove(excel_file_instance.excel_file.path)
-            return redirect('/')
-    else:
-        form = ExcelForm()
-    return render(request, 'unrce/excel_upload.html', {'form': form})
-
 
