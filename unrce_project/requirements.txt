@@ -1,0 +1,8 @@
+psycopg2==2.9.7
+zxcvbn==4.4.28
+Django==4.2.4
+django-allauth==0.55.0
+django-crispy-forms==2.0
+django-countries==7.5.1
+pandas==2.1.1
+Pillow==10.0.1
