@@ -1,46 +1,44 @@
-/* Limit the scope of login.css to elements with the class "login-page" */
-  *{
+body {
     font-family: Arial, sans-serif;
-    background: url(https://images.alphacoders.com/128/1283924.jpg);
+    background-image: url("https://www.mdpi.com/sustainability/sustainability-13-02560/article_deploy/html/images/sustainability-13-02560-g001-550.jpg");
     background-color: #f2f2f2;
     display: flex;
     justify-content: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     align-items: center;
     height: 100vh;
 }
 
-  .form-group {
+.form-group {
     width: 100%;
     margin-bottom: 20px;
 }
 
-  .form-group label {
+.form-group label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
     color: #555;
     text-align: center;
+
 }
 
-  .auth-options {
+.auth-options {
     margin-top: 20px;
     font-size: 14px;
 }
 
-  .auth-options a {
+.auth-options a {
     color: #007bff;
     text-decoration: none;
     margin: 0 10px;
 }
 
-  .auth-options a:hover {
+.auth-options a:hover {
     text-decoration: underline;
 }
 
-  .login-container {
-    background-color: rgba(255, 255, 255, 0.8);
+.login-container {
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -48,20 +46,19 @@
     text-align: center;
 }
 
-  .login-container h2 {
+.login-container h2 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
 }
 
-  .login-container label {
+.login-container label {
     display: block;
     margin-bottom: 5px;
-    text-align: left;
 }
 
-  .login-container input[type="text"],
-  .login-container input[type="password"] {
+.login-container input[type="text"],
+.login-container input[type="password"] {
     width: 93%;
     padding: 10px;
     margin-bottom: 10px;
@@ -69,44 +66,16 @@
     border-radius: 4px;
 }
 
-  .login-container button {
+.login-container button {
     width: 100%;
     padding: 10px;
-    background-color: #2b72fb;
+    background-color: #003087;
     border: none;
     border-radius: 4px;
     color: #fff;
     cursor: pointer;
 }
 
-  .login-container button:hover {
-    background-color: #78a0cb;
-}
-
-  .line {
-    border: 1px solid #ccc;
-    margin-top: 20px;
-}
-
-  .auth-options {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-  .btn-home,
-  .btn-register {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    margin: 0 10px;
-}
-
-  .btn-home:hover,
-  .btn-register:hover {
+.login-container button:hover {
     background-color: #0056b3;
 }
