@@ -4,8 +4,60 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Report Showcase</title>
-<head>
   <style>
+    header {
+    background-color: rgba(2, 238, 234, 0.3);
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 10px;
+    z-index: 1999;
+    top: 2rem;
+    align-items: center;
+    border: 3px solid #003087;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: calc(100% - 10px); /* Adjust the space as needed */
+    max-width: 100%;
+  }
+  header h1{
+    color: #003087;
+    text-align: center;
+    margin-bottom: 0%;
+  }
+  .left-content {
+    display: flex; /* Use flex to align logo and title side by side */
+    align-items: center; /* Center vertically */
+}
+
+    .site-logo {
+        width: 50px; /* Adjust logo size as needed */
+        height: auto; /* Maintain aspect ratio */
+        margin-right: 10px; /* Adjust margin as needed */
+    }
+
+    .site-title {
+        font-size: 18px; 
+        font-weight: bold;
+    }
+
+      .nav-buttons {
+        display: inline-block;
+    }
+    .nav-buttons .nav-button {
+        background-color: transparent;
+        border: none;
+        color: black;
+        padding: 10px 20px;
+        margin: 0;
+        cursor: pointer;
+        border-radius: 30px;
+        display: inline-block;
+        transition: background-color 0.3s, border-radius 0.3s;
+        margin-left: 5px; 
+        margin-right: 10px;
+        font-size: 15px ;
+        font-weight: bold;
+    }
     .gallery-row {
       display: flex;
       flex-wrap: wrap;
@@ -17,6 +69,7 @@
       margin: 5px;
       padding: 5px;
       border: 1px solid #ccc;
+      background-color: rgba(225,225,225,0.3);
       position: relative;
       width: 20%; /* Adjust the width and margin to your desired size */
       max-width: 100%; /* Set a maximum width for each item */
@@ -28,7 +81,10 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
-  
+    .gallery-item:hover {
+    transform: scale(1.05); 
+    transition: transform 0.2s; 
+   }
     .description-container {
       display: none;
       position: fixed;
@@ -63,14 +119,35 @@
       padding: 15px;
       text-align: center;
     }
+    .video{
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -1;
+    }
   </style>
-    
 </head>
 <body>
   <header>
     <h1>Reports</h1>
+    <div class="left-content">
+      <img src="logo.png" alt="UNRCE Logo" class="site-logo">
+      <p class="site-title">UNRCE</p>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-button">Expression of Interest</button>
+      <button class="nav-button">Home</button>
+      <button class="nav-button">Login</button>
+      <button class="nav-button">Register</button>
+      
+  </div>
+    
   </header>
-
+  <video autoplay muted loop class="video">
+     <source src="D:\CITS 3200\UN-RCE-WA-Database\unrce_project\unrce\assets\video\pexels-mikhail-nilov-6981411 (1080p).mp4" type="video/mp4">
+  </video>
 <div class="gallery-row">
   <div class="gallery-item">
     <img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=500&h=500&fit=crop"  alt="person writing in a notebook beside by an iPad, laptop, printed photos, spectacles, and a cup of coffee on a saucer" width="600" height="400" onclick="showDescription('Cinque Terre', 'Add a description of the image here')">

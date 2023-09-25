@@ -1,138 +1,119 @@
-{% load static %}
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<title>{% block title %}Landing Page{% endblock %}</title>
+<!DOCTYPE html>
+<html>
+<head>
+   <style>
+    
+.site-navbar {
+    margin-bottom: 0px;
+    position: absolute;
+    top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid #daaa00;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    width: calc(100% - 40px); /* Adjust the space as needed */
+    max-width: 100%;
+}
+
+.left-content {
+    display: flex; /* Use flex to align logo and title side by side */
+    align-items: center; /* Center vertically */
+}
+
+.site-logo {
+    width: 50px; /* Adjust logo size as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Adjust margin as needed */
+}
+
+.site-title {
+    font-size: 18px; 
+    font-weight: bold;
+}
+
+
+.nav-buttons {
+    display: inline-block;
+}
+.nav-buttons .nav-button {
+    background-color: transparent;
+    border: none;
+    color: #333;
+    padding: 10px 20px;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 30px;
+     display: inline-block;
+    transition: background-color 0.3s, border-radius 0.3s;
+    margin-left: 5px; 
+    margin-right: 10px;
+}
+
+.nav-buttons .nav-button:hover {
+    border: 2px solid #daaa00;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 20px;
+}
+
+/* Dropdown Styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content button {
+    width: 100%;
+    padding: 10px 20px;
+    text-align: left;
+    border: none;
+    background-color: transparent;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+.dropdown-content button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+   </style>
+</head>
 <body>
-    <div class="header">
-        <h1>United Nation Regional Centre of Expertise (WA)</h1>
-    </div>
-
-    <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        <a href="#">About</a>
-        {% if user.is_authenticated %}
-        <a href="{% url 'profile' %}">Profile</a> <!-- Display "Profile" when logged in -->
-        <a href="{% url 'report_list' %}">Clients</a> <!-- Display "Clients" when logged in -->
-        {% endif %}
-        <a href="#">Contact Us</a>
-    </div>
-
-    <div class="navbar">
-        <a href="{% url 'initial-landing' %}"><i class="fa fa-home"></i></a>
-        
-        
-        
-        {% if user.is_authenticated %}
-        <div class="dropdown">
-            <button onclick="window.location.href='{% url 'eoi' %}';" class="dropbtn">Expression of Interest</button>
-            <div class="dropdown-content">
-                <div>Expression of Interest allows users to express their interest in a specific project.</div>
-            </div>
+    <div class="site-navbar">
+        <div class="left-content">
+            <img src="logo.png" alt="UNRCE Logo" class="site-logo">
+            <p class="site-title">UNRCE</p>
         </div>
-
-        <div class="dropdown">
-            <button onclick="window.location.href='{% url 'report_list' %}';" class="dropbtn">Edit</button>
-            <div class="dropdown-content">
-                <div>Expression of Interest allows users to express their interest in a specific project.</div>
-            </div>
-        </div>
-        
-        <div class="dropdown">
-            <button onclick="window.location.href='{% url 'create_report' %}';" class="dropbtn">Create</button>
-            <div class="dropdown-content">
-                <div>Expression of Interest allows users to express their interest in a specific project.</div>
-            </div>
-        </div>
-        
-        {% endif %}
-        
-        {% if not user.is_authenticated %}
-        <div class="dropdown">
-            <button onclick="window.location.href='{% url 'login' %}';" class="dropbtn">Login</button>
-            <div class="dropdown-content">
-                <div>Expression of Interest allows users to express their interest in a specific project.</div>
-            </div>
-        </div>
-        
-        <div class="dropdown">
-            <button onclick="window.location.href='{% url 'register' %}';" class="dropbtn">Register (testing)</button>
-            <div class="dropdown-content">
-                <div>Expression of Interest allows users to express their interest in a specific project.</div>
-            </div>
-        </div>
-        {% else %}
-        <div class="container"> 
-            <div class="dropdown"> 
-                <div class="profile"> 
-                    <i class='far fa-user-circle'></i>
-                    <div class="icon-content"> 
-                        <ul> 
-                            <li><i class='bx bx-user' ></i><span>Profile</span></li> 
-                            <li><a onclick="window.location.href='{% url 'profile' %}';"><i class='bx bx-log-in-circle'></i><span>Profile</span></a></li>
-                            <li><a onclick="window.location.href='{% url 'logout' %}';"><i class='bx bx-log-in-circle'></i><span>Logout</span></a></li>
-                        </ul> 
-                    </div> 
+        <div class="nav-buttons">
+            <button class="nav-button">Expression of Interest</button>
+            <div class="dropdown">
+                <button class="nav-button">Reports</button>
+                <div class="dropdown-content">
+                    <button>Edit Report</button>
+                    <button>Create Report</button>
+                    <button>Show Reports</button>
                 </div>
             </div>
-        </div>
-        {% endif %}
-
-        <div class="dropdown">
-            <button onclick="window.location.href='{% url 'report_review' %}';" class="dropbtn">Review</button>
-            <div class="dropdown-content">
-                <div>Review things.</div>
-            </div>
-        </div>
-
-        <div class="dropdown">
-            <button onclick="window.location.href='{% url 'users_list' %}';" class="dropbtn">Users</button>
-            <div class="dropdown-content">
-                <div>User things.</div>
-            </div>
-        </div>
-
-        <div class="dropdown">
-            <button onclick="window.location.href='{% url 'eoi_review' %}';" class="dropbtn">EOI Review</button>
-            <div class="dropdown-content">
-                <div>EOI things.</div>
-            </div>
-        </div>
-        
-        <button class="openbtn" onclick="openNav()">☰</button>
-    </div>
-
-    <div class="content flex-container">
-        {% block content %}{% endblock %}
-    </div>
-    <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-        }
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginLeft= "0";
-        }
-
-        document.querySelector('.profile').addEventListener('click', function() {
-            var content = this.querySelector('.icon-content');
-            if(content.style.display === 'block') {
-                content.style.display = 'none';
-            } else {
-                content.style.display = 'block';
-            }
-        });
-        
-        document.addEventListener('click', function(event) {
-            var dropdown = document.querySelector('.icon-content');
-            var profile = document.querySelector('.profile');
+            <button class="nav-button">Login</button>
+            <button class="nav-button">Register</button>
             
-            if (!profile.contains(event.target)) {
-                dropdown.style.display = 'none';
-            }
-        });
-        
-    </script>
+        </div>
+    </div>
 </body>
+</html>
