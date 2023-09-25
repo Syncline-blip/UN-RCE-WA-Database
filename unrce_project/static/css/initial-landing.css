@@ -18,13 +18,19 @@ body {
   
   h1 {
     font-weight: 900;
+    font-size: 3em; /* Adjusted font size */
+    margin-bottom: .15em;
+    text-align: center; /* Centered heading */
   }
   
   p {
     line-height: 1.5;
   }
   
-
+  a, a:hover, a:focus, a:active, a:visited {
+    color: #E74C3C;
+    text-decoration: underline;
+  }
   
   /* ========================
   Containers
@@ -37,155 +43,86 @@ body {
   .my-container {
     margin: 0 auto;
     max-width: 996px;
+    padding: 5em 0; /* Added padding */
   }
-  
   
   /* ========================
   Sections
   ======================== */
   
   .my-splash {
-      background: linear-gradient(rgba(44, 62, 80, 0.65), rgba(52, 109, 147, 0.65)),
+    background: linear-gradient(rgba(44, 62, 80, 0.65), rgba(52, 109, 147, 0.65)),
             url("unrce_project/static_root/images/hero.jpg") no-repeat fixed center;
-      background-size: cover;
-      color: #fff;
-    }
-    
-  
-  .my-splash .my-container {
-    padding-top: 25vh;
-    padding-bottom: 25vh;
+    background-size: cover;
+    color: #fff;
+    text-align: center; /* Centered content */
+    padding: 25vh 0; /* Adjusted padding */
   }
   
-  .my-profile-image {
-    border-radius: 50%;
-    display: block;
-    max-width: 200px;
-    margin: 0 auto 1em;
-    width: 100%;
-  }
-  
-  .my-splash h1 {
-    font-size: 3em;
-    margin-bottom: .15em;
-    text-align: center;
-  }
-  
-  .my-splash .lead, .my-splash .continue {
-    display: block;
-    text-align: center;
-  }
-  
-  .my-splash .lead {
-    font-size: 1.5em;
+  .my-lead {
+    font-size: 1.5em; /* Adjusted font size */
     font-weight: 100;
     margin-bottom: 1em;
   }
   
-  .my-splash .continue {
+  .my-continue {
     font-size: 4em;
   }
   
-  .my-splash .continue a {
+  .my-continue a {
     border: 4px solid #fff;
     border-radius: 100%;
     color: #fff;
     display: inline-block;
     text-decoration: none;
     width: 80px;
+    height: 80px; /* Added height */
+    line-height: 80px; /* Centered vertically */
+    text-align: center; /* Centered horizontally */
   }
-  .my-splash .continue a:hover {
+  
+  .my-continue a:hover {
     background-color: rgba(255, 255, 255, .25);
-  }
-  
-  .my-intro .my-container, .my-features .my-container, .my-portfolio .my-container, .my-contact .my-container {
-    padding: 5em 0;
-  }
-  
-  .my-intro, .my-features, .my-portfolio, .my-contact {
-    text-align: center;
   }
   
   .my-intro {
     background-color: #daaa00;
     color: #fff;
+    text-align: center;
+    padding: 5em 0; /* Added padding */
   }
   
-  .my-intro a, .my-intro a:hover, .my-intro a:focus, .my-intro a:active, .my-intro a:visited {
-    color: #fff;
+  .my-features {
+    background-color: #f0f0f0; /* Adjusted background color */
+    color: #444; /* Adjusted text color */
+    text-align: center;
+    padding: 5em 0; /* Added padding */
   }
   
-  .my-features img {
-    display: block;
-    margin: 0 auto 1em;
-    max-width: 200px;
+  .my-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
   
-  .my-features .col-3 {
-    margin: 3em auto;
-    width: 100%;
-  }
-  
-  .my-portfolio {
-    background-color: #003087;
-    color: #fff;
-  }
-  
-  .my-gallery .my-gallery-image {
-    margin: 1em auto;
-    width: 100%;
-  }
-  
-  .my-gallery .my-gallery-image img {
+  .my-gallery-image {
+    flex: 0 0 calc(31.6666666667% - 20px); /* Adjusted image width */
+    margin: 1em 0;
     background-color: #23648F;
     border-radius: 4px;
-    display: block;
+    overflow: hidden; /* Prevent images from overflowing */
+  }
+  
+  .my-gallery-image img {
+    width: 100%;
     height: auto;
-    padding: 6px;
-    width: 100%;
   }
-  
-  .my-contact form {
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    border-top: 8px solid #E74C3C;
-    box-shadow: 0 1px 2px rgba(0,0,0,.15);
-    padding: 1em;
-  }
-  
-  .my-contact form input, .my-contact form textarea {
-    border: none;
-    border-radius: 4px;
-    display: block;
-    margin-bottom: 1em;
-    padding: 1em;
-    width: 100%;
-  }
-  
-  .my-contact form textarea {
-    height: 6em;
-  }
-  
-  .my-contact form input[type="submit"] {
-    background-color: #E74C3C;
-    border-radius: 0;
-    color: #fff;
-    padding: 1em;
-    text-transform: uppercase;
-  }
-  
-  /* ========================
-  Footer
-  ======================== */
   
   .my-footer {
     background-color: #2C3E50;
     color:  #fff;
     font-size: 1.5em;
     text-align: center;
-  }
-  
-  .my-footer .my-container {
     padding: 1em 0;
   }
   
@@ -197,4 +134,61 @@ body {
   .my-footer a:last-of-type {
     margin-right: 0;
   }
+  
+  /* ========================
+  Media Queries
+  ======================== */
+  
+  @media (min-width: 768px) {
+  
+    .my-nav ul {
+      border: none;
+      clear: none;
+      display: inline-block !important;
+      float: right;
+      margin: 0;
+      padding: 25px 0;
+    }
+  
+    .my-nav ul li {
+      border: none;
+      display: inline-block;
+      float: left;
+      margin-right: 1.5em;
+    }
+  
+    .my-nav ul li:last-of-type {
+      margin-right: 0;
+    }
+  
+    .my-nav ul li a {
+      padding: 0;
+    }
+  
+    .my-splash h1 {
+      font-size: 6em;
+    }
+  
+    .my-features .my-col-3 {
+      float: left;
+      margin: 2em 5% 0 0;
+      padding: 0 1em;
+      width: 30%;
+    }
+  
+    .my-features .my-col-3:last-of-type {
+      margin-right: 0;
+    }
+  
+    .my-gallery .my-gallery-image {
+      flex: 0 0 calc(31.6666666667% - 20px);
+      margin-right: 2.5%;
+    }
+  
+    .my-gallery .my-gallery-image:nth-of-type(3n) {
+      margin-right: 0;
+    }
+  }
+  
+  /* Your existing media queries can remain unchanged */
   
