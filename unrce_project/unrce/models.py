@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
+from django.db.models import JSONField
 from django_countries.fields import CountryField
 
 #This model is for the reports 
@@ -132,11 +133,10 @@ class Report(models.Model):
     )
 #Make another set of these for ESD and ESD 2030
 
-    current_partners = ArrayField(models.CharField(max_length=200), blank=True, null=True)
     created_at = models.DateField(auto_now_add=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    approved = models.BooleanField(default=False, null=True)
+    approved = models.BooleanField(default=False, null=True, blank=True)
 
     def __str__(self):
         return f"{self.title_project}   {self.created_at}"
@@ -146,16 +146,16 @@ class Report(models.Model):
 #Model for images to link to reports 
 class ReportImages(models.Model):
     report = models.ForeignKey(Report, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
 
 class ReportFiles(models.Model):
     report = models.ForeignKey(Report, related_name='files', on_delete=models.CASCADE)
-    file = models.FileField(upload_to='files/')
+    file = models.FileField(upload_to='files/', null=True, blank=True)
 
 class Organization(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
-    email = models.EmailField(max_length=200)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    email = models.EmailField(max_length=200, null=True, blank=True)
     website = models.URLField(max_length=200, null=True, blank=True)
 
 

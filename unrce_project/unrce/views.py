@@ -6,13 +6,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, OrganizationInlineFormSet
-from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
+from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, OrganizationForm
+from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles, Organization, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
 from django.http import HttpResponseServerError, JsonResponse  
 import os, json
 import pandas as pd
 import logging
 from django.db.models import Q
+from django.forms import modelformset_factory
 
 logger = logging.getLogger(__name__)
 # sample data, not to be used, just for testing
@@ -27,105 +28,104 @@ def home(request):
     return render(request, 'unrce/initial-landing.html')
 
 
+from django.forms import modelformset_factory
+
 @login_required
-def create_report(request, report_id=None): 
-    is_editing = True if report_id else False
+def create_report(request):
+    OrganizationFormSet = modelformset_factory(Organization, form=OrganizationForm, extra=1, can_delete=True)
 
-    if is_editing:
-        report = get_object_or_404(Report, id=report_id)
-        direct_sdgs = report.direct_sdgs
-        indirect_sdgs = report.indirect_sdgs
-        linked_users = report.linked_users.all()
+    if request.method == 'POST':
+        report_form = ReportForm(request.POST)
+        images_form = ReportImagesForm(request.POST, request.FILES)
+        files_form = ReportFilesForm(request.POST, request.FILES)
+        organization_forms = OrganizationFormSet(queryset=Organization.objects.none(), prefix='org')
+
+        direct_sdgs, indirect_sdgs = handle_sdgs(request)
+
+        if report_form.is_valid() and organization_forms.is_valid():
+            report = report_form.save(commit=False)
+            report.author = request.user
+            report.direct_sdgs = direct_sdgs  
+            report.indirect_sdgs = indirect_sdgs 
+            report.save()
+            user_ids = request.POST.getlist('linked_users')
+            selected_users = User.objects.filter(id__in=user_ids)
+            report.linked_users.set(selected_users)
+            report_form.save_m2m()
+
+            for org_form in organization_forms:
+                org = org_form.save(commit=False)
+                org.report = report
+                org.save()
+
+            handle_uploaded_files(report, request.FILES.getlist('image'), request.FILES.getlist('file'))
+
+            return redirect('report_list')
+
     else:
-        report = Report()
-        direct_sdgs = []
-        indirect_sdgs = []
-        linked_users = []
+        report_form = ReportForm()
+        images_form = ReportImagesForm()
+        files_form = ReportFilesForm()
+        organization_forms = OrganizationFormSet(queryset=Organization.objects.none(), prefix='org')
 
-    try:
-        if request.method == 'POST':
-            report_form = ReportForm(request.POST, instance=report)
-            images_form = ReportImagesForm(request.POST, request.FILES)
-            files_form = ReportFilesForm(request.POST, request.FILES)
-            organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
-            images = request.FILES.getlist('image')
-            files = request.FILES.getlist('file')
-            
-            new_direct_sdgs = []
-            new_indirect_sdgs = []
-            for i in range(1, 18):
-                option = request.POST.get(f'sdg_option_{i}')
-                if option == 'direct':
-                    new_direct_sdgs.append(str(i))
-                elif option == 'indirect':
-                    new_indirect_sdgs.append(str(i))
-
-            direct_sdgs = new_direct_sdgs
-            indirect_sdgs = new_indirect_sdgs
+    context = {
+        'report_form': report_form,
+        'images_form': images_form,
+        'files_form': files_form,
+        'organization_forms': organization_forms,  # Added this to the context
+        'sdg_list': [str(i) for i in range(1, 18)],
+        'all_users': User.objects.all()
+    }
+    return render(request, 'unrce/create_report.html', context)
 
 
 
-            if report_form.is_valid() and organization_formset.is_valid():
-                report = report_form.save(commit=False)
-                report.author = request.user
-                report.direct_sdgs = direct_sdgs  
-                report.indirect_sdgs = indirect_sdgs 
-                report.save()
 
-                organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
-                if organization_formset.is_valid():
-                    organization_formset.save()
-                report_form.save_m2m()  
-                if images:
-                    for image in images:
-                        ReportImages.objects.create(
-                            report=report,
-                            image=image
-                        )
-                if files:
-                    for file in files:
-                        ReportFiles.objects.create(
-                            report=report,
-                            file=file
-                        )
+@login_required
+def report_edit(request, report_id):
+    report = get_object_or_404(Report, id=report_id)
+    if request.method == 'POST':
+        report_form = ReportForm(request.POST, instance=report)
+        images_form = ReportImagesForm(request.POST, request.FILES)
+        files_form = ReportFilesForm(request.POST, request.FILES) 
+        organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
 
-                return redirect('report_list')
-            else:
-                if not report_form.is_valid():
-                    logger.error(f'ReportForm errors: {report_form.errors}')
-                    if not images_form.is_valid():
-                        logger.error(f'ReportImagesForm errors: {images_form.errors}')
-                        if not files_form.is_valid():
-                            logger.error(f'ReportFilesForm errors: {files_form.errors}')
-                            if not organization_formset.is_valid():
-                                logger.error(f'OrganizationInlineFormSet errors: {organization_formset.errors}')
+        direct_sdgs, indirect_sdgs = handle_sdgs(request)
+
+        if report_form.is_valid():
+            report = report_form.save()
+            report.direct_sdgs = direct_sdgs  
+            report.indirect_sdgs = indirect_sdgs 
+            report.save()
+            handle_uploaded_files(report, request.FILES.getlist('image'), request.FILES.getlist('file'))
+            organization_formset.save()
+                
+            return redirect('report_list')
+
         else:
-            report_form = ReportForm(instance=report if is_editing else None)
+            report_form = ReportForm(instance=report)
             images_form = ReportImagesForm()
-            files_form= ReportFilesForm()
-            organization_formset = OrganizationInlineFormSet(instance=report, queryset=report.organization_set.all())
+            files_form = ReportFilesForm()
+            organization_formset = OrganizationInlineFormSet(instance=report)
 
 
-        sdg_list = [str(i) for i in range(1, 18)]
-        context = {
-            'report_form': report_form,
-            'organization_formset': organization_formset,
-            'images_form': images_form,
-            'files_form': files_form,
-            'sdg_list': sdg_list,
-            'selected_direct_sdgs': direct_sdgs,
-            'selected_indirect_sdgs': indirect_sdgs,
-            'linked_users': linked_users,
-            'all_users': User.objects.all(),
-            'is_editing': is_editing
-        }
+    context = {
+        'report_form': report_form,
+        'organization_formset': organization_formset,
+        'images_form': images_form,
+        'files_form': files_form,
+        'sdg_list': [str(i) for i in range(1, 18)],
+        'selected_direct_sdgs': report.direct_sdgs,
+        'selected_indirect_sdgs': report.indirect_sdgs,
+        'linked_users': report.linked_users.all(),
+        'all_users': User.objects.all(),
+        'is_editing': True
+    }
+    return render(request, 'unrce/report_edit.html', context)
 
-        return render(request, 'unrce/create_report.html', context)
 
-    except Exception as e:
-        # Logging the error for debugging
-        logger.error(f'Error creating report: {str(e)}')       
-        return redirect('report_list')
+
+
     
 def add_interest(request):
     """
@@ -260,3 +260,21 @@ def edit_reporting(request):
 def reportDetails(request):
     return render(request, 'unrce/report_details.html')
 
+def handle_uploaded_files(report, images, files):
+    for image in images:
+        ReportImages.objects.create(report=report, image=image)
+        
+    for file in files:
+        ReportFiles.objects.create(report=report, file=file)
+
+
+def handle_sdgs(request):
+    direct_sdgs = []
+    indirect_sdgs = []
+    for i in range(1, 18):
+        option = request.POST.get(f'sdg_option_{i}')
+        if option == 'direct':
+            direct_sdgs.append(str(i))
+        elif option == 'indirect':
+            indirect_sdgs.append(str(i))
+    return direct_sdgs, indirect_sdgs

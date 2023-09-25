@@ -97,7 +97,3 @@ class RegistrationForm(UserCreationForm):
                 )
         return password1
     
-OrganizationInlineFormSet = forms.inlineformset_factory(
-    Report, Organization,
-    form=OrganizationForm, extra=0, can_delete=True
-)

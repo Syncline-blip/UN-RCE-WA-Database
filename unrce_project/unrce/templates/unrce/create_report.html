@@ -93,52 +93,38 @@ input[type="checkbox"][name$="-DELETE"] {
 
 <div class="form-group-section">
     <h3>Focal point(s) and affiliation(s)</h3>
-
-    <!-- This is formset for organization affiliation-->
-    <div class="organization-formsets">
-        {{ organization_formset.management_form }}
-        {% for form in organization_formset %}
-        <div class="organization-formset">
-            <!-- Render the ID and REPORT fields as hidden -->
-            {{ form.id.as_hidden }}
-            {{ form.report.as_hidden }} <!-- Add this line -->
-            {% for field in form %}
-                {% if field.name != "DELETE" and field.name != "id" and field.name != "report" %}
-                    <div class="form-group {% if field.errors %}has-error{% endif %}">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {{ field }}
-                        {% for error in field.errors %}
-                            <span class="help-block">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-            <!-- Render the DELETE checkbox as hidden -->
-            {{ form.DELETE.as_hidden }}
-            <button type="button" class="remove-organization">Remove</button>
-        </div>
-        {% endfor %}
+    <div class="organization-forms-container">
+    <!-- This is formset for organization affiliation
+    {{ organization_forms.management_form }}
+    {% for form in organization_forms %}
+    <div class="organization-form">
+        {{ form.name.label }}: {{ form.name }}<br>
+        {{ form.email.label }}: {{ form.email }}<br>
+        {{ form.website.label }}: {{ form.website }}<br>
+        <button type="button" class="remove-org-form">Remove</button>
     </div>
-    
-    
+{% endfor %}
+    <button id="add-org-form" type="button">Add Another Organization</button>
+
+</div>-->
+
     
     
 
-
-    <button type="button" id="add-organization">Add Another Organization</button>
-<!--This is where users are linked  -->
+<!--This is where users are linked  
     <div class="form-group">
    
         <div id="available-users-section">
             <h4>Available Users</h4>
             <input type="text" id="user-search" placeholder="Search by name..." onkeyup="filterUsers()">
-            <div id="selected-users">
-                {% for user in linked_users %}
-                    <div class="user-item" data-user-id="{{ user.id }}" data-user-name="{{ user.first_name }} {{ user.last_name }}" onclick="removeUser(this)">
+            <div id="all-users">
+                {% for user in all_users %}
+                    <div class="user-item" data-user-id="{{ user.id }}" data-user-name="{{ user.first_name }} {{ user.last_name }}" onclick="addUser(this)">
                         {{ user.first_name }} {{ user.last_name }}
                     </div>
                 {% endfor %}
             </div>
+            
             
         </div>
         <div id="linked-users-section">
@@ -148,7 +134,7 @@ input[type="checkbox"][name$="-DELETE"] {
 
         <select multiple name="linked_users" id="linked-users-select" style="display:none;">
         </select>
-    </div>
+    </div>-->
     
 
     <!-- format_project -->
@@ -442,146 +428,126 @@ input[type="checkbox"][name$="-DELETE"] {
   {% endblock %}
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    let allOrganizationFormsets = document.querySelectorAll('.organization-formset');
-    let filledFormsets = Array.from(allOrganizationFormsets).filter(isFormsetFilled);
-
-    // If there's no filled formsets, we initialize with a blank formset
-    if (filledFormsets.length === 0) {
-        document.getElementById('add-organization').click();
+    document.addEventListener('DOMContentLoaded', (event) => {
+    // Hide the remove button for the first organization form on page load
+    let firstRemoveButton = document.querySelector(".organization-form:first-child .remove-org-form");
+    if (firstRemoveButton) {
+        firstRemoveButton.style.display = 'none';
     }
-
-    // Initialize the state of remove buttons
-    updateRemoveButtonVisibility();
 });
 
-    document.addEventListener('DOMContentLoaded', function() {
+let orgForm = document.querySelectorAll(".organization-form");
+let container = document.querySelector(".organization-forms-container");
+let addButton = document.querySelector("#add-org-form");
+let totalForms = document.querySelector("#id_org-TOTAL_FORMS");
+let formNum = orgForm.length - 1;
 
-// Handle radio button behavior
-let radios = document.querySelectorAll('input[type="radio"]');
-radios.forEach(function(radio) {
-    radio.addEventListener('click', function() {
-        if (radio.getAttribute('data-checked') == 'true') {
-            radio.checked = false;
-            radio.removeAttribute('data-checked');
-        } else {
-            radio.setAttribute('data-checked', 'true');
+addButton.addEventListener('click', addForm);
+
+function addForm(e) {
+    e.preventDefault();
+
+    let newForm = orgForm[0].cloneNode(true);
+    let formRegex = RegExp(`org-(\\d){1}-`, 'g');
+
+    formNum++;
+    newForm.innerHTML = newForm.innerHTML.replace(formRegex, `org-${formNum}-`);
+    container.insertBefore(newForm, addButton);
+
+    let newRemoveButton = newForm.querySelector(".remove-org-form");
+    if (newRemoveButton) {
+        newRemoveButton.style.display = 'block';  // Ensure new forms always have the "Remove" button visible
+    }
+
+    totalForms.setAttribute('value', `${formNum+1}`);
+}
+
+// Add event listener for removing forms
+document.body.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-org-form')) {
+        let orgForm = e.target.closest('.organization-form');
+        if (orgForm) {
+            orgForm.remove();
+            formNum--;
+            totalForms.setAttribute('value', `${formNum+1}`);
+        }
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    let lastChecked = null;
+
+    document.getElementById("sdg-container").addEventListener("click", function(e) {
+        if(e.target.tagName.toLowerCase() === 'input' && e.target.type === 'radio') {
+            if(e.target === lastChecked) {
+                e.target.checked = false;
+                lastChecked = null;
+            } else {
+                lastChecked = e.target;
+            }
         }
     });
 });
 
-
-// JS functions for user operations
+// Add selected user to the list
 window.addUser = function(element) {
-    var userId = element.getAttribute('data-user-id');
-    var userName = element.textContent;
-    var userElement = document.createElement('div');
-    userElement.className = 'user-item';
-    userElement.setAttribute('data-user-id', userId);
-    userElement.textContent = userName;
-    userElement.onclick = function() { removeUser(userElement); };
-    document.getElementById('selected-users').appendChild(userElement);
+        var userId = element.getAttribute('data-user-id');
+        var userName = element.textContent;
 
-    var optionElement = document.createElement('option');
-    optionElement.value = userId;
-    optionElement.textContent = userName;
-    optionElement.selected = true;
-    document.getElementById('linked-users-select').appendChild(optionElement);
-    element.style.display = 'none';
-};
+        // Create a new div to display the selected user
+        var userElement = document.createElement('div');
+        userElement.className = 'user-item';
+        userElement.setAttribute('data-user-id', userId);
+        userElement.textContent = userName;
 
-window.removeUser = function(element) {
-    var userId = element.getAttribute('data-user-id');
-    document.querySelector('#all-users [data-user-id="' + userId + '"]').style.display = 'block';
-    element.remove();
-    var optionElement = document.querySelector('#linked-users-select option[value="' + userId + '"]');
-    optionElement.remove();
-};
+        // Attach a click event to the userElement for removing the user
+        userElement.onclick = function() { removeUser(userElement); };
 
-window.filterUsers = function() {
-    var searchQuery = document.getElementById('user-search').value.toLowerCase();
-    var allUserElements = document.querySelectorAll('#all-users .user-item');
-    var displayedCount = 0;
-    allUserElements.forEach(function(userElement) {
-        var userName = userElement.getAttribute('data-user-name').toLowerCase();
-        if (userName.includes(searchQuery) && displayedCount < 10) {
-            userElement.style.display = 'block';
-            displayedCount++;
-        } else {
-            userElement.style.display = 'none';
-        }
-    });
-};
-function isFormsetFilled(formset) {
-    let inputs = formset.querySelectorAll('input[type="text"], select, textarea');
-    for(let input of inputs) {
-        if(input.value.trim() !== "") {
-            return true;
-        }
-    }
-    return false;
-}
+        // Append the userElement to 'selected-users' div
+        document.getElementById('selected-users').appendChild(userElement);
 
-function updateRemoveButtonVisibility() {
-    let allOrganizationFormsets = document.querySelectorAll('.organization-formset');
-    // If there's only one organization, hide its remove button
-    if (allOrganizationFormsets.length === 1) {
-        allOrganizationFormsets[0].querySelector('.remove-organization').style.display = 'none';
-    } else {
-        // If there are multiple organizations, show all remove buttons
-        allOrganizationFormsets.forEach(function(formset) {
-            formset.querySelector('.remove-organization').style.display = 'block';
+        // Create an option element to track the selected users
+        var optionElement = document.createElement('option');
+        optionElement.value = userId;
+        optionElement.textContent = userName;
+        optionElement.selected = true;
+
+        // Append the optionElement to 'linked-users-select' select element
+        document.getElementById('linked-users-select').appendChild(optionElement);
+
+        // Hide the clicked element from the list
+        element.style.display = 'none';
+    };
+
+    // Remove user from the selected list
+    window.removeUser = function(element) {
+        var userId = element.getAttribute('data-user-id');
+
+        // Show the user back in the available users list
+        document.querySelector('#all-users [data-user-id="' + userId + '"]').style.display = 'block';
+
+        // Remove the selected user from the list and the associated option from the select element
+        element.remove();
+        var optionElement = document.querySelector('#linked-users-select option[value="' + userId + '"]');
+        optionElement.remove();
+    };
+
+    // Filter available users based on the search input
+    window.filterUsers = function() {
+        var searchQuery = document.getElementById('user-search').value.toLowerCase();
+        var allUserElements = document.querySelectorAll('#all-users .user-item');
+        var displayedCount = 0;
+
+        // Loop through the users and show/hide based on the match with the search query
+        allUserElements.forEach(function(userElement) {
+            var userName = userElement.getAttribute('data-user-name').toLowerCase();
+            if (userName.includes(searchQuery) && displayedCount < 10) {
+                userElement.style.display = 'block';
+                displayedCount++;
+            } else {
+                userElement.style.display = 'none';
+            }
         });
-    }
-}
+    };
 
-// Add another formset
-document.getElementById('add-organization').addEventListener('click', function() {
-    let prefix = 'organization_set';
-    let totalForms = document.getElementById('id_' + prefix + '-TOTAL_FORMS');
-    let nextFormNum = parseInt(totalForms.value, 10);
-    let formElem = document.querySelector('.organization-formset').cloneNode(true);
-
-    let inputs = formElem.querySelectorAll('input, select, textarea, button');
-    for(let input of inputs) {
-        let nameAttr = input.getAttribute('name');
-        let idAttr = input.getAttribute('id');
-        if(nameAttr) {
-            input.setAttribute('name', nameAttr.replace(/-\d+-/, '-' + nextFormNum + '-'));
-        }
-        if(idAttr) {
-            input.setAttribute('id', idAttr.replace(/-\d+-/, '-' + nextFormNum + '-'));
-        }
-        if(input.type === 'text' || input.type === 'textarea' || input.type === 'number') {
-            input.value = '';
-        }
-    }
-
-    let formsetsContainer = document.querySelector('.organization-formsets');
-    formsetsContainer.appendChild(formElem);
-    totalForms.value = nextFormNum + 1;
-
-    updateRemoveButtonVisibility();
-});
-
-// Use event delegation for the delete buttons
-document.querySelector('.organization-formsets').addEventListener('click', function(event) {
-    if(event.target.classList.contains('remove-organization')) {
-        console.log("Remove button clicked via delegation!");
-        
-        let formset = event.target.closest('.organization-formset');
-        let deleteInput = formset.querySelector("input[name$='-DELETE']");
-        deleteInput.checked = true;
-
-        formset.style.opacity = 0.5;
-        formset.classList.add('deleted');
-
-        updateRemoveButtonVisibility();
-    }
-});
-
-
-
-});
 </script>
     
