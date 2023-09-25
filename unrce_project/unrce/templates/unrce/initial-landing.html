@@ -1,446 +1,145 @@
-{% extends "base.html" %} {% load static %}
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-/>
-<!--<link rel="stylesheet" href="{% static 'css/initial-landing.css' %}" />-->
+{% extends "base.html" %}
+{% load static %}
 {% block head %}
-
     {{ block.super }}
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
- 
-
-    <!--<link rel="stylesheet" href="{% static 'css/initial-landing.css' %}">-->
-
- 
-
+    <link rel="stylesheet" href="{% static 'css/initial-landing.css' %}">
     <title>{% block title %}Landing Page{% endblock %}</title>
-
 {% endblock %}
 
-{%block content %}
-<style>
-* {
-  box-sizing: border-box;
-}
-
-.cf::before,
-.cf::after {
-    content: "";
-    display: table; 
-}
-
-.cf::after {
-    clear: both;
-}
-
-html {
-  position: relative;
-}
-
-img {
-  max-width: 100%;
-}
-
-/* ========================
-Global
-======================== */
-
-body {
-  color: #444;
-  font-family: "Inter", sans-serif;
-  font-size: 18px;
-  font-weight: 300;
-  line-height: 1;
-  margin: 0;
-  padding: 0;
-}
-
-h1, h2, h3, h4, h5, h6, ul, ol, p {
-  margin-top: 0;
-}
-
-h1 {
-  font-weight: 900;
-}
-
-p {
-  line-height: 1.5;
-}
-
-a, a:hover, a:focus, a:active, a:visited {
-  color: #E74C3C;
-  text-decoration: underline;
-}
-
-/* ========================
-Containers
-======================== */
-
-.container-fluid {
-  padding: 0 1em;
-}
-
-.container {
-  margin: 0 auto;
-  max-width: 996px;
-}
+{% block content %}
 
 
-/* ========================
-Sections
-======================== */
-
-.splash {
-    background: linear-gradient(rgba(44, 62, 80, 0.65), rgba(52, 109, 147, 0.65)),
-          url("unrce_project/static_root/images/hero.jpg") no-repeat fixed center;
-    background-size: cover;
-    color: #fff;
-  }
-  
-
-.splash .container {
-  padding-top: 25vh; /* No JS fallback*/
-  padding-bottom: 25vh; /* No JS fallback*/
-}
-
-.profile-image {
-  border-radius: 50%;
-  display: block;
-  max-width: 200px;
-  margin: 0 auto 1em;
-  width: 100%;
-}
-
-.splash h1 {
-  font-size: 3em;
-  margin-bottom: .15em;
-  text-align: center;
-}
-
-.splash .lead, .splash .continue {
-  display: block;
-  text-align: center;
-}
-
-.splash .lead {
-  font-size: 1.5em;
-  font-weight: 100;
-  margin-bottom: 1em;
-}
-
-.splash .continue {
-  font-size: 4em;
-}
-
-.splash .continue a {
-  border: 4px solid #fff;
-  border-radius: 100%;
-  color: #fff;
-  display: inline-block;
-  text-decoration: none;
-  width: 80px;
-}
-.splash .continue a:hover {
-  background-color: rgba(255, 255, 255, .25);
-}
-
-.intro .container, .features .container, .portfolio .container, .contact .container {
-  padding: 5em 0;
-}
-
-.intro, .features, .portfolio, .contact {
-  text-align: center;
-}
-
-.intro {
-  background-color: #daaa00;
-  color: #fff;
-}
-
-.intro a, .intro a:hover, .intro a:focus, .intro a:active, .intro a:visited {
-  color: #fff;
-}
-
-.features img {
-  display: block;
-  margin: 0 auto 1em;
-  max-width: 200px;
-}
-
-.features .col-3 {
-  margin: 3em auto;
-  width: 100%;
-}
-
-.portfolio {
-  background-color: #003087;
-  color: #fff;
-}
-
-.gallery .gallery-image {
-  margin: 1em auto;
-  width: 100%;
-}
-
-.gallery .gallery-image img {
-  background-color: #23648F;
-  border-radius: 4px;
-  display: block;
-  height: auto;
-  padding: 6px;
-  width: 100%;
-}
-
-.contact form {
-  background-color: #f0f0f0;
-  border-radius: 4px;
-  border-top: 8px solid #E74C3C;
-  box-shadow: 0 1px 2px rgba(0,0,0,.15);
-  padding: 1em;
-}
-
-.contact form input, .contact form textarea {
-  border: none;
-  border-radius: 4px;
-  display: block;
-  margin-bottom: 1em;
-  padding: 1em;
-  width: 100%;
-}
-
-.contact form textarea {
-  height: 6em;
-}
-
-.contact form input[type="submit"] {
-  background-color: #E74C3C;
-  border-radius: 0;
-  color: #fff;
-  padding: 1em;
-  text-transform: uppercase;
-}
-
-/* ========================
-Footer
-======================== */
-
-.footer {
-  background-color: #2C3E50;
-  color:  #fff;
-  font-size: 1.5em;
-  text-align: center;
-}
-
-.footer .container {
-  padding: 1em 0;
-}
-
-.footer a {
-  color: #fff;
-  margin-right: 1em;
-}
-
-.footer a:last-of-type {
-  margin-right: 0;
-}
-
-/* ========================
-Media Queries
-======================== */
-
-@media (min-width: 768px) {
-  
-  nav .nav-toggle {
-    display: none;
-  }
-  
-  nav ul {
-    border: none;
-    clear: none;
-    display: inline-block !important;
-    float: right;
-    margin: 0;
-    padding: 25px 0;
-  }
-  
-  nav ul li {
-    border: none;
-    display: inline-block;
-    float: left;
-    margin-right: 1.5em;
-  }
-  
-  nav ul li:last-of-type {
-    margin-right: 0;
-  }
-  
-  nav ul li a {
-    padding: 0;
-  }
-  
-  .splash h1 {
-    font-size: 6em;
-  }
-  
-  .splash .lead {
-    font-size: 1.5em;
-  }
-  
-  .features .col-3 {
-    float: left;
-    margin: 2em 5% 0 0;
-    padding: 0 1em;
-    width: 30%;
-  }
-  
-  .features .col-3:last-of-type {
-    margin-right: 0;
-  }
-  
-  .gallery .gallery-image {
-    float: left;
-    margin-right: 2.5%;
-    width: 31.6666666667%;
-  }
-  
-  .gallery .gallery-image:nth-of-type(3n) {
-    margin-right: 0;
-  }
-  
-}
-</style>
-<body>
-
-<div class="container-fluid splash" id="splash">
-  <div class="container">
+<div class="my-container-fluid my-splash" id="splash">
+  <div class="my-container">
     <h1>UNRCE</h1>
-    <span class="lead">RCEs aspire to translate global objectives into the context of the local communities in which they operate</span>
-    <span class="continue"><a href="#about"><i class="fa fa-angle-down" ></i></a></span>
+    <span class="my-lead">RCEs aspire to translate global objectives into the context of the local communities in which they operate</span>
+    <span class="my-continue"><a href="#about"><i class="fa fa-angle-down"></i></a></span>
   </div>
 </div>
 
-<div class="container-fluid intro" id="about">
-  <div class="container">
+<div class="my-container-fluid my-intro" id="about">
+  <div class="my-container">
     <h2>About Us</h2>
-    <p>RCE Western Australia brings together the passion and expertise of researches, educators, students and partners of the University of Western Australia to make change in their regions, nationally and globally. </p>
+    <p>RCE Western Australia brings together the passion and expertise of researchers, educators, students, and partners of the University of Western Australia to make change in their regions, nationally and globally.</p>
   </div>
 </div>
 
-<div class="container-fluid features" id="skills">
-  <div class="container cf">
+<div class="my-container-fluid my-features" id="skills">
+  <div class="my-container cf">
     <h2>Goals &amp; Objectives</h2>
-    <div class="col-3">
+    <div class="my-col-3">
       <h3>Broad Goal</h3>
       <p>Contributing to a more sustainable planet.</p>
     </div>
-    <div class="col-3">
+    <div class="my-col-3">
       <h3>How are we doing it</h3>
-      <p>To build the capacity of UWA and partner organisations to support a process of change and embed education for sustainability.</p>
+      <p>To build the capacity of UWA and partner organizations to support a process of change and embed education for sustainability.</p>
     </div>
-    <div class="col-3">
+    <div class="my-col-3">
       <h3>Actions</h3>
-      <p>To support the translation of established research expertise appropriate to the context of Western Australia for application in diverse community setting to support education for sustainability and broader climate action initiatives (e.g. oceans;biodiversity).</p>
+      <p>To support the translation of established research expertise appropriate to the context of Western Australia for application in diverse community settings to support education for sustainability and broader climate action initiatives (e.g., oceans; biodiversity).</p>
     </div>
   </div>
 </div>
 
-<div class="container-fluid portfolio" id="portfolio">
-  <div class="container cf">
+<div class="my-container-fluid my-portfolio" id="portfolio">
+  <div class="my-container cf">
     <h2>Sustainability Development Goals</h2>
-    <div class="gallery">
-      <div class="gallery-image"><img src="https://unsplash.it/800/450?image=250" alt=""></div>
-      <div class="gallery-image"><img src="https://unsplash.it/800/450?image=249" alt=""></div>
-      <div class="gallery-image"><img src="https://unsplash.it/800/450?image=248" alt=""></div>
-      <div class="gallery-image"><img src="https://unsplash.it/800/450?image=247" alt=""></div>
-      <div class="gallery-image"><img src="https://unsplash.it/800/450?image=239" alt=""></div>
-      <div class="gallery-image"><img src="https://unsplash.it/800/450?image=238" alt=""></div>
+    <div class="my-gallery">
+      <div class="my-gallery-image"><img src="https://unsplash.it/800/450?image=250" alt=""></div>
+      <div class="my-gallery-image"><img src="https://unsplash.it/800/450?image=249" alt=""></div>
+      <div class="my-gallery-image"><img src="https://unsplash.it/800/450?image=248" alt=""></div>
+      <div class="my-gallery-image"><img src="https://unsplash.it/800/450?image=247" alt=""></div>
+      <div class="my-gallery-image"><img src="https://unsplash.it/800/450?image=239" alt=""></div>
+      <div class="my-gallery-image"><img src="https://unsplash.it/800/450?image=238" alt=""></div>
     </div>
   </div>
 </div>
 
-<footer class="container-fluid footer">
-  <div class="container">
+<footer class="my-container-fluid my-footer">
+  <div class="my-container">
     <a href="#" target="_blank"><i class="fa fa-facebook"></i></a>
     <a href="#" target="_blank"><i class="fa fa-twitter"></i></a>
     <a href="#" target="_blank"><i class="fa fa-github"></i></a>
     <a href="#" target="_blank"><i class="fa fa-dribbble"></i></a>
     <a href="#" target="_blank"><i class="fa fa-codepen"></i></a>
   </div>
-</footer>
-</body>
-
+<footer>
 <script>
-    ////////////////////////////////////
-// NAVIGATION SHOW/HIDE
+  ////////////////////////////////////
+  // NAVIGATION SHOW/HIDE
 
-$("nav ul").hide();
+  $(".my-nav ul").hide();
 
-$(".nav-toggle").click( function() {
-  $("nav ul").slideToggle("medium");
-});
+  $(".my-nav-toggle").click(function () {
+    $(".my-nav ul").slideToggle("medium");
+  });
 
-$("nav ul li a, .brand a").click( function() {
-  $("nav ul").hide();
-});
+  $(".my-nav ul li a, .my-brand a").click(function () {
+    $(".my-nav ul").hide();
+  });
 
-////////////////////////////////////
-// SMOOTH SCROLLING WITH NAV HEIGHT OFFSET
+  ////////////////////////////////////
+  // SMOOTH SCROLLING WITH NAV HEIGHT OFFSET
 
-$(function() {
-  var navHeight = $("nav").outerHeight();
-  $('a[href*="#"]:not([href="#"])').click(function() {
-    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-      var target = $(this.hash);
-      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-      if (target.length) {
-        $('html, body').animate({
-          scrollTop: target.offset().top - navHeight
-        }, 1000);
-        return false;
+  $(function () {
+    var navHeight = $(".my-nav").outerHeight();
+    $('a[href*="#"]:not([href="#"])').click(function () {
+      if (
+        location.pathname.replace(/^\//, '') ==
+          this.pathname.replace(/^\//, '') &&
+        location.hostname == this.hostname
+      ) {
+        var target = $(this.hash);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+        if (target.length) {
+          $('html, body').animate({
+            scrollTop: target.offset().top - navHeight
+          }, 1000);
+          return false;
+        }
       }
+    });
+  });
+
+  ////////////////////////////////////
+  // NAVIGATION STICKY
+
+  var viewHeight = $(window).height();
+  var navigation = $('.my-nav');
+
+  $(window).scroll(function () {
+    if ($(window).scrollTop() > viewHeight - 175) {
+      // Edit for nav height if necessary
+      navigation.addClass('my-sticky');
+    } else {
+      navigation.removeClass('my-sticky');
     }
   });
-});
 
-////////////////////////////////////
-// NAVIGATION STICKY
+  ////////////////////////////////////////////////
+  // MAKE THE SPLASH CONTAINER VERTICALLY CENTERED
 
-var viewHeight = $(window).height();
-var navigation = $('nav');
-
-$(window).scroll( function() {
-  if ( $(window).scrollTop() > (viewHeight - 175) ) { //edit for nav height
-    navigation.addClass('sticky');
-  } else {
-    navigation.removeClass('sticky');
+  function centerSplash() {
+    var navHeight = $('.my-nav').outerHeight();
+    var splashHeight = $('.my-splash .my-container').height();
+    var remainingHeight = $(window).height() - splashHeight - navHeight;
+    $('.my-splash .my-container').css({
+      'padding-top': remainingHeight / 2,
+      'padding-bottom': remainingHeight / 2
+    });
   }
-});
 
-////////////////////////////////////////////////
-// MAKE THE SPLASH CONTAINER VERTICALLY CENTERED
+  $(document).ready(function () {
+    centerSplash();
+  });
 
-function centerSplash() {
-  var navHeight = $("nav").outerHeight();
-  var splashHeight = $(".splash .container").height();
-  var remainingHeight = $(window).height() - splashHeight - navHeight;
-  $(".splash .container").css({"padding-top" : remainingHeight/2, "padding-bottom" : remainingHeight/2});
-}
+  $(window).resize(function () {
+    centerSplash();
+  });
 
-$( document ).ready( function() {
-  centerSplash();
-});
-
-$( window ).resize( function() {
-  centerSplash();
-});
 </script>
 {% endblock %}
