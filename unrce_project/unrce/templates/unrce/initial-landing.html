@@ -12,7 +12,7 @@
 {% block content %}
 
 
-<div class="my-container-fluid my-splash" id="splash">
+<div class="my-container-fluid my-splash" id="splash" style="background: linear-gradient(rgba(44, 62, 80, 0.65), rgba(52, 109, 147, 0.65)), url('{% static "images/hero.jpg" %}') no-repeat fixed center;">
   <div class="my-container">
     <h1>UNRCE</h1>
     <span class="my-lead">RCEs aspire to translate global objectives into the context of the local communities in which they operate</span>
@@ -151,6 +151,13 @@
   $(window).resize(function () {
     centerSplash();
   });
+
+  document.querySelector('.my-continue a').addEventListener('click', function(e) {
+    e.preventDefault();
+    var targetID = this.getAttribute('href'); // use 'this' to refer to the anchor element
+    var target = document.querySelector(targetID);
+    target.scrollIntoView({ behavior: 'smooth' });
+});
 
 </script>
 {% endblock %}
