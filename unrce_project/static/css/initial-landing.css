@@ -122,7 +122,7 @@ Sections
   .my-gallery-image {
     flex: 0 0 calc(20% - 16px); /* Adjusted image width */
     margin: 1em 0.8%;
-    background-color: #23648F;
+    background-color: #ffffff;
     border-radius: 4px;
     overflow: hidden; /* Prevent images from overflowing */
     height:183px;
@@ -131,17 +131,30 @@ Sections
   .my-gallery-last-image{
     flex: 0 0 calc(20% - 16px); /* Adjusted image width */
     margin: 1em auto;
-    background-color: #23648F;
     border-radius: 4px;
     overflow: hidden; /* Prevent images from overflowing */
     height:183px;
   }
   
-  .my-gallery-image img {
+  .my-gallery-image img{
     width: 100%;
     height: auto;
     object-fit: cover;
+    border-radius:4px;
   }
+
+  .my-gallery-last-image img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius:4px;
+  }
+
+.sdg-title {
+    text-align: center;
+    margin: 0;  /* This will remove any default margin */
+    padding: 1em 0;  
+}
 
   .my-footer {
     background-color: #2C3E50;
