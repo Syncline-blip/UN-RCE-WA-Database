@@ -389,7 +389,29 @@
           {% endfor %}
       </div>
       
-      </div>
+      <div id="esd-themes-container">
+        {% for theme in themes_esd %}
+            <div class="esd-theme-item">
+                {{ theme }} 
+                <div class="esd-theme-options">
+                    <input type="radio" name="esd_theme_option_{{ forloop.counter }}" value="direct"> Direct
+                    <input type="radio" name="esd_theme_option_{{ forloop.counter }}" value="indirect"> Indirect
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- ESD for 2030-Priority Action Areas -->
+    <div id="esd-priority-container">
+        {% for area in priority_action_areas %}
+            <div class="esd-priority-item">
+                {{ area }}
+                <div class="esd-priority-options">
+                    <input type="radio" name="esd_priority_option_{{ forloop.counter }}" value="direct"> Direct
+                    <input type="radio" name="esd_priority_option_{{ forloop.counter }}" value="indirect"> Indirect
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
     

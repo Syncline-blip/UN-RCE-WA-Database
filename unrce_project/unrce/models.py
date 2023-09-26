@@ -69,6 +69,25 @@ REGION_CHOICES = [
     ('test', 'Test'),
     ('demo', 'DEmo'),
 ]
+themes_esd = [
+    'Disaster Risk Reduction',
+    'Traditional Knowledge',
+    'Agriculture',
+    'Arts',
+    'Curriculum Development',
+    'Ecotourism',
+    'Forests/Trees',
+    'Plants & Animals',
+    'Waste'
+]
+
+priority_action_areas = [
+    'Priority Action Area 1 - Advancing policy',
+    'Priority Action Area 2 - Transforming learning and training environments',
+    'Priority Action Area 3 - Developing capacities of educators and trainers',
+    'Priority Action Area 4 - Mobilizing youth',
+    'Priority Action Area 5 - Accelerating sustainable solutions at local level'
+]
 
 
 class Report(models.Model):
@@ -127,6 +146,28 @@ class Report(models.Model):
     )
     indirect_sdgs = ArrayField(
         models.IntegerField(),
+        blank=True,
+        null=True,
+    )
+
+    direct_esd_themes = ArrayField(
+        models.CharField(max_length=255),  # since themes are strings, we store them as CharFields
+        blank=True,
+        null=True,
+    )
+    indirect_esd_themes = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        null=True,
+    )
+
+    direct_priority_areas = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        null=True,
+    )
+    indirect_priority_areas = ArrayField(
+        models.CharField(max_length=255),
         blank=True,
         null=True,
     )

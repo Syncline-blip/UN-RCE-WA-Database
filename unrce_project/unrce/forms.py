@@ -23,11 +23,11 @@ class ReportForm(forms.ModelForm):
         choices=DELIVERY_CHOICES,
         widget=forms.CheckboxSelectMultiple
     )
-    
+   
     class Meta:
         model = Report
         fields = '__all__'
-        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved' ]
+        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved','direct_esd_themes','indirect_esd_themes','direct_priority_areas', 'indirect_priority_areas'   ]
 
 class ReportImagesForm(forms.ModelForm):
     image = forms.ImageField(required=False)
