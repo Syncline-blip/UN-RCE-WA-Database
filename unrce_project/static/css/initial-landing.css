@@ -116,6 +116,35 @@ Sections
     padding: 5em 0; /* Added padding */
   }
 
+  .my-features h2{
+    padding-bottom: 15px;
+  }
+
+  /* ========================
+Goals & Objectives Boxes
+======================== */
+.my-features .my-col-3 {
+    background-color: #003087; /* This is a shade of blue, you can adjust to the exact blue you want */
+    padding: 20px; /* Add some padding for content inside */
+    border-radius: 10px; /* Rounded corners for the boxes */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: Add a subtle shadow to make the boxes stand out */
+    margin-bottom: 20px; /* Space between the boxes when they stack on smaller screens */
+    
+}
+
+.my-features h3 {
+    color: #ffffff; /* Make the title text white for better contrast on blue background */
+    margin-bottom: 15px;
+    margin-top: 15px; /* Add some space below the title */
+}
+
+.my-features p {
+    color: #ffffff;
+    margin-top: 15px;
+    margin-bottom: 15px; /* Make the paragraph text white for better contrast on blue background */
+}
+
+
   .my-gallery {
     display: flex;
     flex-wrap: wrap;
