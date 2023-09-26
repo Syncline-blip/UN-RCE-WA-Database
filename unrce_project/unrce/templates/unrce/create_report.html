@@ -23,14 +23,9 @@
 <script src="{% static 'admin/js/inlines.js' %}"></script>
 
 <style>
-    .has-error {
-    border: 1px solid red;
-    background-color: #ffe6e6;  /* light red background */
-}
-
-.help-block {
-    color: red;
-    font-size: 12px;
+    .sdg-img {
+    width: 100px; /* Adjust as needed */
+    height: 100px; /* Adjust as needed */
 }
 </style>
 
@@ -90,26 +85,26 @@
 
 <div class="form-group-section">
     <h3>Focal point(s) and affiliation(s)</h3>
-
-    <!-- This is formset for organization affiliation-->
     <div class="organization-formsets">
         {{ organization_formset.management_form }}
         {% for form in organization_formset %}
-        <div class="organization-formset">
-            {% for field in form %}
-            <div class="form-group {% if field.errors %}has-error{% endif %}">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                {% for error in field.errors %}
-                    <span class="help-block">{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% endfor %}
-            <button type="button" class="remove-organization">Remove</button>
-        </div>
-        {% endfor %}
+    <div class="organization-form" data-prefix="{{ form.prefix }}">
+        {{ form.name.label }}: {{ form.name }}<br>
+        {{ form.email.label }}: {{ form.email }}<br>
+        {{ form.website.label }}: {{ form.website }}<br>
+        <button type="button" class="remove-org-form">Remove</button>
     </div>
-    <button type="button" id="add-organization">Add Another Organization</button>
+{% endfor %}
+        <button type="button" id="add-organization">Add Another Organization</button>
+    </div>
+</div>
+
+    
+
+
+
+
+
 <!--This is where users are linked  -->
     <div class="form-group">
    
@@ -385,7 +380,7 @@
       <div id="sdg-container">
           {% for i in sdg_list %}
               <div class="sdg-item">
-                  <img src="{% static 'css/images/SDG_'|add:i|add:'.jpg' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
+                  <img src="{% static 'css/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
                   <div class="sdg-options">
                       <input type="radio" name="sdg_option_{{ i }}" value="direct"> Direct
                       <input type="radio" name="sdg_option_{{ i }}" value="indirect"> Indirect
@@ -421,7 +416,9 @@
   {% endblock %}
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+
+    
+document.addEventListener('DOMContentLoaded', function() {
 
 // Handle radio button behavior
 let radios = document.querySelectorAll('input[type="radio"]');
@@ -435,19 +432,6 @@ radios.forEach(function(radio) {
         }
     });
 });
-
-function updateRemoveButtonVisibility() {
-    let allOrganizationFormsets = document.querySelectorAll('.organization-formset');
-    // If there's only one organization, hide its remove button
-    if (allOrganizationFormsets.length === 1) {
-        allOrganizationFormsets[0].querySelector('.remove-organization').style.display = 'none';
-    } else {
-        // If there are multiple organizations, show all remove buttons
-        allOrganizationFormsets.forEach(function(formset) {
-            formset.querySelector('.remove-organization').style.display = 'block';
-        });
-    }
-}
 
 // JS functions for user operations
 window.addUser = function(element) {
@@ -491,56 +475,24 @@ window.filterUsers = function() {
     });
 };
 
-// Add another formset
+// Simplified Add button function for organizations
+const orgFormSetsContainer = document.querySelector('.organization-formsets');
+const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
+
 document.getElementById('add-organization').addEventListener('click', function() {
-    let prefix = 'organization_set';
-    let totalForms = document.getElementById('id_' + prefix + '-TOTAL_FORMS');
-    let nextFormNum = parseInt(totalForms.value, 10);
-    let formElem = document.querySelector('.organization-formset').cloneNode(true);
+    const newForm = orgFormTemplate.cloneNode(true);
 
-    // Use multiple selectors combined to replace ':input' in vanilla JS
-    let inputs = formElem.querySelectorAll('input, select, textarea, button');
+    // Clear any input values in the cloned form
+    newForm.querySelectorAll('input').forEach(input => input.value = '');
 
-    for(let input of inputs) {
-        let nameAttr = input.getAttribute('name');
-        let idAttr = input.getAttribute('id');
-        if(nameAttr) {
-            input.setAttribute('name', nameAttr.replace(/-\d+-/, '-' + nextFormNum + '-'));
-        }
-        if(idAttr) {
-            input.setAttribute('id', idAttr.replace(/-\d+-/, '-' + nextFormNum + '-'));
-        }
-        if(input.type === 'text' || input.type === 'textarea' || input.type === 'number') {
-            input.value = '';
-        }
-    }
+    const removeBtn = newForm.querySelector('.remove-org-form');
+    removeBtn.addEventListener('click', function() {
+        newForm.remove();
+        // Potential re-indexing of formsets can be handled here if needed
+    });
 
-    let formsetsContainer = document.querySelector('.organization-formsets');
-    if(formsetsContainer) {  // Ensure the container exists before appending
-        formsetsContainer.appendChild(formElem);
-    }
-    totalForms.value = nextFormNum + 1;
-
-    updateRemoveButtonVisibility();
+    orgFormSetsContainer.appendChild(newForm);
 });
-
-// Use event delegation for all the delete buttons
-document.querySelector('.organization-formsets').addEventListener('click', function(event) {
-    if(event.target.classList.contains('remove-organization')) {
-        let formset = event.target.closest('.organization-formset');
-        if (formset) {
-            formset.remove();
-            let totalForms = document.getElementById('id_organization_set-TOTAL_FORMS');
-            totalForms.value = parseInt(totalForms.value, 10) - 1;
-
-            updateRemoveButtonVisibility();
-        }
-    }
-});
-
-// Set the initial state of the remove buttons on page load
-updateRemoveButtonVisibility();
-
 });
 </script>
     
