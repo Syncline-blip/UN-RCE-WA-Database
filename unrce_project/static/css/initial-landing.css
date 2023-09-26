@@ -2,7 +2,7 @@
     box-sizing: border-box;
   }
 
-  .cf::before,
+.cf::before,
 .cf::after {
     content: "";
     display: table; 
@@ -68,7 +68,7 @@ Sections
   
   .my-splash {
     background: linear-gradient(rgba(44, 62, 80, 0.65), rgba(52, 109, 147, 0.65)),
-            url("unrce_project/static_root/images/hero.jpg") no-repeat fixed center;
+            url("unrce_project/static/images/hero.jpg") no-repeat fixed center;
     background-size: cover;
     color: #fff;
     text-align: center; /* Centered content */
@@ -92,9 +92,7 @@ Sections
     display: inline-block;
     text-decoration: none;
     width: 80px;
-    height: 80px; /* Added height */
-    line-height: 80px; /* Centered vertically */
-    text-align: center; /* Centered horizontally */
+
   }
 
   .my-continue a:hover {
@@ -122,16 +120,27 @@ Sections
   }
 
   .my-gallery-image {
-    flex: 0 0 calc(31.6666666667% - 20px); /* Adjusted image width */
-    margin: 1em 0;
+    flex: 0 0 calc(20% - 16px); /* Adjusted image width */
+    margin: 1em 0.8%;
     background-color: #23648F;
     border-radius: 4px;
     overflow: hidden; /* Prevent images from overflowing */
+    height:183px;
+  }
+  
+  .my-gallery-last-image{
+    flex: 0 0 calc(20% - 16px); /* Adjusted image width */
+    margin: 1em auto;
+    background-color: #23648F;
+    border-radius: 4px;
+    overflow: hidden; /* Prevent images from overflowing */
+    height:183px;
   }
   
   .my-gallery-image img {
     width: 100%;
     height: auto;
+    object-fit: cover;
   }
 
   .my-footer {
@@ -193,12 +202,12 @@ Sections
     }
   
     .my-gallery .my-gallery-image {
-      flex: 0 0 calc(31.6666666667% - 20px);
-      margin-right: 2.5%;
-    }
+        flex: 0 0 calc(20% - 16px); /* adjusted for 5 images in a row */
+        margin-right: 0.8%; /* consistent spacing between images */
+      }
   
-    .my-gallery .my-gallery-image:nth-of-type(3n) {
-      margin-right: 0;
-    }
+    .my-gallery .my-gallery-image:nth-of-type(5n) {
+        margin-right: 0.8%; /* reset margin for every 5th image */
+      }
   }
   
