@@ -58,8 +58,8 @@ Containers
 
   .my-container {
     margin: 0 auto;
-    max-width: 996px;
-    padding: 5em 0; /* Added padding */
+    max-width: 800px;
+    padding: 2em 0; /* Added padding */
   }
 
 /* ========================
@@ -193,7 +193,7 @@ Goals & Objectives Boxes
     color:  #fff;
     font-size: 1.5em;
     text-align: center;
-    padding: 1em 0;
+    padding: 0.5em 0;
   }
   
   .my-footer a {
@@ -204,6 +204,7 @@ Goals & Objectives Boxes
   .my-footer a:last-of-type {
     margin-right: 0;
   }
+  
 
   @media (min-width: 768px) {
   
