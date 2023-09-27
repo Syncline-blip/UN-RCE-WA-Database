@@ -5,8 +5,8 @@ body {
     padding: 0;
   }
   
-  .header {
-    background-color:#003087;
+ /* .heaer {
+    background-color:rgba(0, 0, 0, 0.2);
     text-align: center;
     padding: 20px 0;
     margin-bottom: 10px;
@@ -16,20 +16,21 @@ body {
     border: 2px solid #DAAA00;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    width: calc(100% - 10px); /* Adjust the space as needed */
+    width: calc(100% - 10px); 
     max-width: 100%;
-  }
+  }  */
   
   .header h1 {
+    text-align: center;
     margin: 0;
     color:#DAAA00;
   }
-  
-  .header a {
+
+.heaer a {
     color: white;
     text-decoration: none;
     margin-left: 20px;
-  }
+} 
   
   .report-container {
     max-width: 800px;

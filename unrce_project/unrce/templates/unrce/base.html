@@ -1,119 +1,188 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-   <style>
-    
-.site-navbar {
-    margin-bottom: 0px;
-    position: absolute;
-    top: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid #daaa00;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    padding: 10px;
-    width: calc(100% - 40px); /* Adjust the space as needed */
-    max-width: 100%;
-}
-
-.left-content {
-    display: flex; /* Use flex to align logo and title side by side */
-    align-items: center; /* Center vertically */
-}
-
-.site-logo {
-    width: 50px; /* Adjust logo size as needed */
-    height: auto; /* Maintain aspect ratio */
-    margin-right: 10px; /* Adjust margin as needed */
-}
-
-.site-title {
-    font-size: 18px; 
-    font-weight: bold;
-}
-
-
-.nav-buttons {
-    display: inline-block;
-}
-.nav-buttons .nav-button {
-    background-color: transparent;
-    border: none;
-    color: #333;
-    padding: 10px 20px;
-    margin: 0;
-    cursor: pointer;
-    border-radius: 30px;
-     display: inline-block;
-    transition: background-color 0.3s, border-radius 0.3s;
-    margin-left: 5px; 
-    margin-right: 10px;
-}
-
-.nav-buttons .nav-button:hover {
-    border: 2px solid #daaa00;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 20px;
-}
-
-/* Dropdown Styles */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    z-index: 1;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.dropdown-content button {
-    width: 100%;
-    padding: 10px 20px;
-    text-align: left;
-    border: none;
-    background-color: transparent;
-    color: #333;
-    transition: background-color 0.3s;
-}
-
-.dropdown-content button:hover {
-    background-color: #007bff;
-    color: #fff;
-}
-
-   </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  {% block head %}
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% endblock %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+  <script src="{% static 'js/base.js' %}"></script>
 </head>
 <body>
-    <div class="site-navbar">
-        <div class="left-content">
-            <img src="logo.png" alt="UNRCE Logo" class="site-logo">
-            <p class="site-title">UNRCE</p>
-        </div>
-        <div class="nav-buttons">
-            <button class="nav-button">Expression of Interest</button>
-            <div class="dropdown">
-                <button class="nav-button">Reports</button>
-                <div class="dropdown-content">
-                    <button>Edit Report</button>
-                    <button>Create Report</button>
-                    <button>Show Reports</button>
-                </div>
+  <header id="nav-menu" aria-label="navigation bar">
+    <div class="container">
+      <div class="nav-start">
+        <a class="logo" href="{% url 'initial-landing' %}">
+          <img src="{% static 'icons/unrce_log.png' %}" width="35" height="35" alt="Inc Logo" />
+          <span class="logo-text">UNRCE</span>
+        </a>
+        <nav class="menu">
+          <ul class="menu-bar">
+            {% if not user.is_authenticated %}
+            <li>
+              <li><a class="nav-link" href="/">About UNRCE</a></li>
+            </li>
+            <li>
+            {% endif %}
+              <button class="nav-link dropdown-btn" data-dropdown="dropdown1" aria-haspopup="true" aria-expanded="false" aria-label="browse">
+                Project <i class="bx bx-chevron-down" aria-hidden="true"></i>
+              </button>
+              <div id="dropdown1" class="dropdown">
+                <ul role="menu">
+                  {% if user.is_authenticated %}
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="{% url 'report_list' %}">
+                      <img src="{% static 'icons/project.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">View Projects</span>
+                        <p>See projects you are involved in</p>
+                      </div>
+                    </a>
+                  </li>
+                  {% endif %}
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="/">
+                      <img src="{% static 'icons/view.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Browse Projects</span>
+                        <p>View ongoing UNRCE projects</p>
+                      </div>
+                    </a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="{% url 'eoi' %}">
+                      <img src="{% static 'icons/inquiry.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Project Inquiry</span>
+                        <p>Express Interest in a new or ongoing project</p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            {% if user.is_authenticated %}
+            <li>
+              <button class="nav-link dropdown-btn" data-dropdown="dropdown2" aria-haspopup="true" aria-expanded="false" aria-label="discover">
+                Reports <i class="bx bx-chevron-down" aria-hidden="true"></i>
+              </button>
+              <div id="dropdown2" class="dropdown">
+                <ul role="menu">
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="{% url 'report_list' %}">
+                      <img src="{% static 'icons/edit.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Edit Reports</span>
+                        <p>Edit your current project reports</p>
+                      </div>
+                    </a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="{% url 'create_report' %}">
+                      <img src="{% static 'icons/create.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Create Report</span>
+                        <p>Create a new report for your projects</p>
+                      </div>
+                    </a>
+                  </li>
+                 </ul>
+              </div>
+            </li>
+            <li>
+              <button class="nav-link dropdown-btn" data-dropdown="dropdown3" aria-haspopup="true" aria-expanded="false" aria-label="discover">
+                Membership and Organization <i class="bx bx-chevron-down" aria-hidden="true"></i>
+              </button>
+              <div id="dropdown3" class="dropdown">
+                <ul role="menu">
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="{% url 'eoi' %}">
+                      <img src="{% static 'icons/proj.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Project Inquiry Status</span>
+                        <p>Edit your current project reports</p>
+                      </div>
+                    </a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="/">
+                      <img src="{% static 'icons/membership.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Join UNRCE</span>
+                        <p>Become a UNRCE Member</p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            {% endif %}
+            <li><a class="nav-link" href="/">Contact Us</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="nav-end">
+        <div class="right-container">
+          {% if user.is_authenticated %}
+          <form class="search" role="search">
+            <input type="search" name="search" placeholder="Search" />
+            <i class="bx bx-search" aria-hidden="true"></i>
+          </form>
+          {% endif %}
+          <div class="profile-container">
+            {% if user.is_authenticated %}
+            <div class="profile-dropdown-toggle">
+              <img src="https://github.com/Evavic44/responsive-navbar-with-dropdown/blob/main/assets/images/user.jpg?raw=true" width="50" height="50" alt="user image" />
             </div>
-            <button class="nav-button">Login</button>
-            <button class="nav-button">Register</button>
-            
+            <div class="profile-dropdown-toggle">
+              <div id="profile-dropdown" class="dropdown profile-dropdown">
+                <ul role="menu">
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="{% url 'profile' %}">
+                      <img src="{% static 'icons/settings.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Profile Settings</span>
+                        <p>View and manage your profile</p>
+                      </div>
+                    </a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-link" href="{% url 'logout' %}">
+                      <img src="{% static 'icons/logout.png' %}" class="icon" />
+                      <div>
+                        <span class="dropdown-link-title">Logout</span>
+                        <p>Sign out of your account</p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <button class="btn btn-primary">Create Report</button>
+            <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">
+              <i class="bx bx-menu" aria-hidden="true"></i>
+            </button>
+            {% endif %}
+            {% if not user.is_authenticated %}
+            <ul><a class="nav-link btn btn-primary" href="{% url 'login' %}">Login</a></ul>
+            <ul><a class="nav-link btn btn-primary2" href="{% url 'register' %}">Register</a></ul>
+            {% endif %}
+          </div>
+         
+          
+          
         </div>
+      </div>
     </div>
+  </header>
 </body>
+<div class="content flex-container">
+  {% block content %}{% endblock %}
+</div>
 </html>
