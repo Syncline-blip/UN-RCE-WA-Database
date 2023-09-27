@@ -153,12 +153,13 @@
     centerSplash();
   });
 
-  document.querySelector('.my-continue a').addEventListener('click', function(e) {
+  $('a[href*="#"]').on('click', function(e) {
     e.preventDefault();
-    var targetID = this.getAttribute('href'); // use 'this' to refer to the anchor element
-    var target = document.querySelector(targetID);
-    target.scrollIntoView({ behavior: 'smooth' });
-});
+    $('html, body').animate({
+      scrollTop: $($(this).attr('href')).offset().top
+    }, 500, 'linear');
+  });
+  
 
 </script>
 {% endblock %}
