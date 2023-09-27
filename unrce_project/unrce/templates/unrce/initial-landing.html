@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/initial-landing.css' %}">
     <title>{% block title %}Landing Page{% endblock %}</title>
 {% endblock %}
@@ -153,12 +154,17 @@
     centerSplash();
   });
 
-  $('a[href*="#"]').on('click', function(e) {
-    e.preventDefault();
-    $('html, body').animate({
-      scrollTop: $($(this).attr('href')).offset().top
-    }, 500, 'linear');
-  });
+  $(document).ready(function() {
+    $('a[href^="#"]').on('click', function(event) {
+        var target = $(this.getAttribute('href'));
+        if (target.length) {
+            event.preventDefault();
+            $('html, body').stop().animate({
+                scrollTop: target.offset().top
+            }, 1000);
+        }
+    });
+});
   
 
 </script>
