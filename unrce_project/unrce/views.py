@@ -132,7 +132,8 @@ def add_interest(request):
     return render(request, 'unrce/eoi.html', {'form': InterestForm})
 
 
-
+def contact(request):
+    return render(request, 'unrce/contact.html')
 
 @login_required
 def report_list(request):
@@ -153,6 +154,8 @@ def delete_image(request, image_id):
     if image.report.author == request.user:
         image.delete()
     return redirect('report_edit', report_id=report.id)
+
+
 
 def users_list(request):
     users = User.objects.all().prefetch_related('groups', 'account')  
