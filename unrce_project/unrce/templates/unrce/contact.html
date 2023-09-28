@@ -4,19 +4,16 @@
     {{ block.super }}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/contact.css' %}">
     <title>{% block title %}Landing Page{% endblock %}</title>
 {% endblock %}
 
 {% block contact %}
-
-<div>
-    <p>Hello</p>
+<div class="contact-container">
+    <div class="contact-box">
+        <h1>Feel free to reach out to us if you have any queries!</h1>
+        <p>Email: miltonyong@gmail.com</p>
+        <p>Phone number: </p>
+    </div>
 </div>
-
-
-
-
-
-
-
 {% endblock %}
