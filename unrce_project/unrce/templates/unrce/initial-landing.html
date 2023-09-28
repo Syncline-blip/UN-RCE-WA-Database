@@ -1,36 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-<<<<<<< HEAD
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="{% static 'css/initial-landing.css' %}">
-<title>{% block title %}Landing Page{% endblock %}</title>
-{% block content %}
-    <div class="content flex-container">
-        <div class="flex-item">
-            <h1 id="express-interest">Express Your Interest</h1>
-            <p>This is where you can express your interest in our projects and initiatives.</p>
-        </div>
-        <div class="flex-item">
-            <h1 id="un-rce-project">Project Reporting</h1>
-            <p>Learn about the United Nations Regional Centres of Expertise (RCE) project that we are involved in.</p>
-        </div>
-    </div>
-
-    <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-        }
-        
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginLeft= "0";
-        }
-    </script>
-{% endblock %}
-=======
 {% block head %}
     {{ block.super }}
     <meta charset="UTF-8">
@@ -200,4 +169,3 @@
 
 </script>
 {% endblock %}
->>>>>>> 2a4b8bb543eb6c57e2d0f970955ed4c844fe2a3c

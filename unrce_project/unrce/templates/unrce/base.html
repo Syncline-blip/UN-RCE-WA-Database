@@ -1,11 +1,4 @@
 {% load static %}
-<<<<<<< HEAD
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<title>{% block title %}Landing Page{% endblock %}</title>
-=======
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +14,6 @@
    
   <script src="{% static 'js/base.js' %}"></script>
 </head>
->>>>>>> 2a4b8bb543eb6c57e2d0f970955ed4c844fe2a3c
 <body>
   <header id="nav-menu" aria-label="navigation bar">
     <div class="container">
@@ -188,42 +180,6 @@
         </div>
       </div>
     </div>
-<<<<<<< HEAD
-
-    <div class="content flex-container">
-        {% block content %}{% endblock %}
-    </div>
-    <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-        }
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginLeft= "0";
-        }
-
-        document.querySelector('.profile').addEventListener('click', function() {
-            var content = this.querySelector('.icon-content');
-            if(content.style.display === 'block') {
-                content.style.display = 'none';
-            } else {
-                content.style.display = 'block';
-            }
-        });
-        
-        document.addEventListener('click', function(event) {
-            var dropdown = document.querySelector('.icon-content');
-            var profile = document.querySelector('.profile');
-            
-            if (!profile.contains(event.target)) {
-                dropdown.style.display = 'none';
-            }
-        });
-        
-    </script>
-</body>
-=======
   </header>
 </body>
 <div class="content flex-container">
@@ -234,4 +190,3 @@
   {% block contact %}{% endblock %}
 </div>
 </html>
->>>>>>> 2a4b8bb543eb6c57e2d0f970955ed4c844fe2a3c
