@@ -1,24 +1,39 @@
+body {
+    font-family: "Inter", sans-serif; /* Making sure we have a nice readable font */
+}
+
 .contact-container {
-    background-color: #3498db; /* blue background */
-    min-height: 100vh; /* covers the entire viewport height */
+    background-color: #3498db;
+    min-height: 100vh;
     display: flex;
-    align-items: center; /* centers vertically */
-    justify-content: center; /* centers horizontally */
+    align-items: center;
+    justify-content: center;
 }
 
 .contact-box {
-    background-color: #ffffff; /* white background for the box */
-    padding: 40px 60px; /* space inside the box */
-    border-radius: 15px; /* rounded corners */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* subtle shadow for a lifted effect */
-    width: 70%; /* width of the box, you can adjust this as needed */
-    max-width: 600px; /* maximum width for larger screens */
+    background-color: #ffffff;
+    padding: 60px 80px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 70%;
+    max-width: 600px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
 }
 
 .contact-box h1 {
-    margin-bottom: 20px; /* space below the heading */
+    margin-bottom: 30px;
+    text-align: center; /* Centering the title */
+    font-size: 2em;
 }
 
 .contact-box p {
-    margin-bottom: 10px; /* space between paragraphs */
+    margin-bottom: 20px;
+    text-align: center; /* Centering the text */
+}
+
+.show-contact{
+    opacity: 1;
+    transform: scale(1);
 }
