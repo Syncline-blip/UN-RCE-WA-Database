@@ -1,9 +1,27 @@
 {% load static %}
+<<<<<<< HEAD
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
 <title>{% block title %}Landing Page{% endblock %}</title>
+=======
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  {% block head %}
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% endblock %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+  <script src="{% static 'js/base.js' %}"></script>
+</head>
+>>>>>>> 2a4b8bb543eb6c57e2d0f970955ed4c844fe2a3c
 <body>
   <header id="nav-menu" aria-label="navigation bar">
     <div class="container">
@@ -82,7 +100,7 @@
                       </div>
                     </a>
                   </li>
-                </ul>
+                 </ul>
               </div>
             </li>
             <li>
@@ -113,7 +131,7 @@
               </div>
             </li>
             {% endif %}
-            <li><a class="nav-link" href="/">Contact Us</a></li>
+            <li><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
           </ul>
         </nav>
       </div>
@@ -170,6 +188,7 @@
         </div>
       </div>
     </div>
+<<<<<<< HEAD
 
     <div class="content flex-container">
         {% block content %}{% endblock %}
@@ -204,3 +223,15 @@
         
     </script>
 </body>
+=======
+  </header>
+</body>
+<div class="content flex-container">
+  {% block content %}{% endblock %}
+</div>
+
+<div class="content flex-container">
+  {% block contact %}{% endblock %}
+</div>
+</html>
+>>>>>>> 2a4b8bb543eb6c57e2d0f970955ed4c844fe2a3c

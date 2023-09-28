@@ -1,32 +1,208 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-</head>
-<body>
-    <h1>Edit Report</h1>
-    
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save changes</button>
-    </form>
-    
-    {% if existing_images %}
-    <h2>Existing Images</h2>
-    {% for img in existing_images %}
-        <img src="{{ img.image.url }}" alt="Image" width="100"><br>
-        <a href="{% url 'delete_image' img.id %}">Delete</a><br>
-    {% endfor %}
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<h2>Edit Report</h2>
+<style>
+    .sdg-img {
+    width: 100px; /* Adjust as needed */
+    height: 100px; /* Adjust as needed */
+}
+</style>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% for field in report_form %}
+    {% if not field.name == "linked_users" %}
+        <p>
+            {{ field.label_tag }}<br>
+            {{ field }}
+            {% if field.errors %}
+                <div class="error">{{ field.errors|join:", " }}</div>
+            {% endif %}
+        </p>
     {% endif %}
-    <h2>Upload New Images</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="image" multiple>
-        <button type="submit">Upload</button>
-    </form>
+{% endfor %}
+
+    <h3>Organization Details</h3>
+    {{ organization_formset.management_form }}
+    {% for form in organization_formset %}
+        {{ form.as_p }}
+    {% endfor %}
+
+    <div class="form-group">
+   
+        <div id="available-users-section">
+            <h4>Available Users</h4>
+            <input type="text" id="user-search" placeholder="Search by name..." onkeyup="filterUsers()">
+            <div id="all-users">
+                {% for user in all_users %}
+                    <div class="user-item" data-user-id="{{ user.id }}" data-user-name="{{ user.first_name }} {{ user.last_name }}" onclick="addUser(this)" style="{% if user in linked_users %}display: none;{% else %}display: block;{% endif %}">
+                        {{ user.first_name }} {{ user.last_name }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="selected-users">
+            {% for user in linked_users %}
+                <div class="user-item" data-user-id="{{ user.id }}" onclick="removeUser(this)">
+                    {{ user.first_name }} {{ user.last_name }}
+                </div>
+            {% endfor %}
+        </div>
+        
+            
+            <select multiple name="linked_users" id="linked-users-select" style="display:none;">
+                {% for user in linked_users %}
+                    <option value="{{ user.id }}" selected>{{ user.first_name }} {{ user.last_name }}</option>
+                {% endfor %}
+            </select>
+    </div>
+
+
+
+
+    <h3>SDGs</h3>
+    <div id="sdg-container">
+        {% for i in sdg_list %}
+            <div class="sdg-item">
+                <img src="{% static 'css/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
+                <div class="sdg-options">
+                    <input type="radio" name="sdg_option_{{ i }}" value="direct" {% if i|add:0 in report.direct_sdgs %}checked{% endif %}> Direct
+                    <input type="radio" name="sdg_option_{{ i }}" value="indirect" {% if i|add:0 in report.indirect_sdgs %}checked{% endif %}> Indirect
+                </div>
+            </div>
+        {% endfor %}
+    </div>
     
-    <a href="{% url 'report_list' %}">Return</a>
-    </body>
+
     
-</html>
+<div id="esd-themes-container">
+    {% for theme in themes_esd %}
+        <div class="esd-theme-item">
+            {{ theme }} 
+            <div class="esd-theme-options">
+                <input type="radio" name="esd_theme_option_{{ theme }}" value="direct" {% if theme in report.direct_esd_themes %}checked{% endif %}> Direct
+                <input type="radio" name="esd_theme_option_{{ theme }}" value="indirect" {% if theme in report.indirect_esd_themes %}checked{% endif %}> Indirect
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+  
+  <!-- ESD for 2030-Priority Action Areas -->
+  <div id="esd-priority-container">
+    {% for area in priority_action_areas %}
+        <div class="esd-priority-item">
+            {{ area }}
+            <div class="esd-priority-options">
+                <input type="radio" name="esd_priority_option_{{ area }}" value="direct" {% if area in report.direct_priority_areas %}checked{% endif %}> Direct
+                <input type="radio" name="esd_priority_option_{{ area }}" value="indirect" {% if area in report.indirect_priority_areas %}checked{% endif %}> Indirect
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+  <h3>Upload Images</h3>
+    {{ images_form.as_p }}
+    <h4>Existing Images</h4>
+    {% for img in existing_images %}
+        <img src="{{ img.image.url }}" width="100" alt="Image">
+    {% endfor %}
+
+    <h3>Upload Files</h3>
+    {{ files_form.as_p }}
+    <h4>Existing Files</h4>
+    {% for file in existing_files %}
+        <a href="{{ file.file.url }}" target="_blank">Download</a>
+    {% endfor %}
+
+
+    <br>
+    <input type="submit" value="Update Report">
+</form>
+
+{% endblock %}
+<script>
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    
+    // Handle radio button behavior
+    let radios = document.querySelectorAll('input[type="radio"]');
+    radios.forEach(function(radio) {
+        radio.addEventListener('click', function() {
+            if (radio.getAttribute('data-checked') == 'true') {
+                radio.checked = false;
+                radio.removeAttribute('data-checked');
+            } else {
+                radio.setAttribute('data-checked', 'true');
+            }
+        });
+    });
+    
+    // JS functions for user operations
+    window.addUser = function(element) {
+        var userId = element.getAttribute('data-user-id');
+        var userName = element.textContent;
+        var userElement = document.createElement('div');
+        userElement.className = 'user-item';
+        userElement.setAttribute('data-user-id', userId);
+        userElement.textContent = userName;
+        userElement.onclick = function() { removeUser(userElement); };
+        document.getElementById('selected-users').appendChild(userElement);
+    
+        var optionElement = document.createElement('option');
+        optionElement.value = userId;
+        optionElement.textContent = userName;
+        optionElement.selected = true;
+        document.getElementById('linked-users-select').appendChild(optionElement);
+        element.style.display = 'none';
+    };
+    
+    window.removeUser = function(element) {
+        var userId = element.getAttribute('data-user-id');
+        document.querySelector('#all-users [data-user-id="' + userId + '"]').style.display = 'block';
+        element.remove();
+        var optionElement = document.querySelector('#linked-users-select option[value="' + userId + '"]');
+        optionElement.remove();
+    };
+    
+    window.filterUsers = function() {
+        var searchQuery = document.getElementById('user-search').value.toLowerCase();
+        var allUserElements = document.querySelectorAll('#all-users .user-item');
+        var displayedCount = 0;
+        allUserElements.forEach(function(userElement) {
+            var userName = userElement.getAttribute('data-user-name').toLowerCase();
+            if (userName.includes(searchQuery) && displayedCount < 10) {
+                userElement.style.display = 'block';
+                displayedCount++;
+            } else {
+                userElement.style.display = 'none';
+            }
+        });
+    };
+    
+    // Simplified Add button function for organizations
+    const orgFormSetsContainer = document.querySelector('.organization-formsets');
+    const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
+    
+    document.getElementById('add-organization').addEventListener('click', function() {
+        const newForm = orgFormTemplate.cloneNode(true);
+    
+        // Clear any input values in the cloned form
+        newForm.querySelectorAll('input').forEach(input => input.value = '');
+    
+        const removeBtn = newForm.querySelector('.remove-org-form');
+        removeBtn.addEventListener('click', function() {
+            newForm.remove();
+            // Potential re-indexing of formsets can be handled here if needed
+        });
+    
+        orgFormSetsContainer.appendChild(newForm);
+    });
+    });
+    </script>
