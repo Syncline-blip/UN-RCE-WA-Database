@@ -1,48 +1,78 @@
 {% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <meta charset="UTF-8">
+  <title> Login </title>
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Syahrizaldev"><link rel='stylesheet' href='https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css'>
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
 </head>
 <body>
 
-<div class="login-container">
-    <h2>Login</h2>
-    
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Username" required>
-            {{ form.username.errors }}
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <div class="password-input-container">
-                <input type="password" id="password" name="password" placeholder="Password" required>
-                <input type="checkbox" id="show-password">
-                <label for="show-password">Show Password</label>
+<main class="main">
+	<div class="container">
+		<section class="wrapper">
+            <div class="back-button">
+                <a href="/">
+                    <i class="ion ion-arrow-left-circled"></i> Back to UNRCE Home
+                </a>
             </div>
-            {{ form.password.errors }}
-        </div>
-        <div class="form-group">
-            <button type="submit">Login</button>
-        </div>
-        {% if form.errors %}
-        <div class="error-message" id="error-message">
-            <p>Invalid Username or Password</p>
-        </div>
-        {% endif %}
+			<div class="heading">
+                <div class="logo">
+                    <img src="{% static 'icons/unrce_log.bmp' %}" alt="UNRCE Logo"> 
+                </div>
+				<h1 class="text text-large">UNRCE Sign In</h1>
+				<p class="text text-normal">or <span><a href="{% url 'register' %}" class="text text-links">Register with UNRCE</a></span>
+				</p>
+			</div>
+			<form method="post" name="signin" class="form">
+				{% csrf_token %}
+				<div class="input-control">
+					<label for="username" class="input-label" hidden></label>
+					<input type="text" name="username" id="username" class="input-field" placeholder="Username" required>
+					{{ form.username.errors }}
+				</div>
+				<div class="input-control">
+					<label for="password" class="input-label" hidden>Password</label>
+					<input type="password" name="password" id="password" class="input-field" placeholder="Password" required>
+					{{ form.password.errors }}
+				</div>
+			
+				<div class="input-control">
+					{% if form.errors %}
+					<div class="error-message" id="error-message">
+						<p>Invalid Username or Password</p>
+					</div>
+					{% endif %}
+					<a href="#" class="text text-links">Forgot Password</a>
+					<input type="submit" name="submit" class="input-submit" value="Sign In">
+				</div>
+			</form>
+			
+			<div class="striped">
+				<span class="striped-line"></span>
+				<span class="striped-text">Or</span>
+				<span class="striped-line"></span>
+			</div>
+			<div class="method">
+				<div class="method-control">
+					<a href="#" class="method-action">
+						<i class="ion ion-logo-google"></i>
+						<span>Sign in with Google (Testing)</span>
+					</a>
+				</div>
+				
+			</div>
+		</section>
+	</div>
+</main>
 
-        <div class="auth-options">
-            <a href="{% url 'register' %}">Create an account</a>
-            <a href="{% url 'initial-landing' %}">Home</a>
-        </div>
-    </form>
-</div>
+</body>
 <script>
     // Delays the appearance of error message
     setTimeout(function () {
@@ -65,5 +95,4 @@
     });
 </script>
 
-</body>
 </html>
