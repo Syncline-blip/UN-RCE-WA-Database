@@ -92,7 +92,7 @@
                       </div>
                     </a>
                   </li>
-                </ul>
+                 </ul>
               </div>
             </li>
             <li>
@@ -123,7 +123,7 @@
               </div>
             </li>
             {% endif %}
-            <li><a class="nav-link" href="/">Contact Us</a></li>
+            <li><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
           </ul>
         </nav>
       </div>
@@ -184,5 +184,9 @@
 </body>
 <div class="content flex-container">
   {% block content %}{% endblock %}
+</div>
+
+<div class="content flex-container">
+  {% block contact %}{% endblock %}
 </div>
 </html>

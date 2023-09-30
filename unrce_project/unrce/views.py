@@ -7,7 +7,7 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, OrganizationInlineFormSet
-from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
+from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles,themes_esd, priority_action_areas, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
 from django.http import HttpResponseServerError, JsonResponse  
 import os, json
 import pandas as pd
@@ -30,6 +30,7 @@ def home(request):
 @login_required
 def create_report(request): 
     try:
+    
         if request.method == 'POST':
             report_form = ReportForm(request.POST)
             images_form = ReportImagesForm(request.POST, request.FILES)
@@ -47,11 +48,33 @@ def create_report(request):
                 elif option == 'indirect':
                     indirect_sdgs.append(str(i))
 
+            direct_esd = []
+            indirect_esd = []
+            for theme in themes_esd:
+                option = request.POST.get(f'esd_theme_option_{theme}')
+                if option == 'direct':
+                    direct_esd.append(theme)
+                elif option == 'indirect':
+                    indirect_esd.append(theme)
+
+            direct_priority = []
+            indirect_priority = []
+            for area in priority_action_areas:
+                option = request.POST.get(f'esd_priority_option_{area}')
+                if option == 'direct':
+                    direct_priority.append(area)
+                elif option == 'indirect':
+                    indirect_priority.append(area)
+
             if report_form.is_valid() and organization_formset.is_valid():
                 report = report_form.save(commit=False)
                 report.author = request.user
                 report.direct_sdgs = direct_sdgs  
                 report.indirect_sdgs = indirect_sdgs 
+                report.direct_esd_themes = direct_esd  
+                report.indirect_esd_themes = indirect_esd
+                report.direct_priority_areas = direct_priority
+                report.indirect_priority_areas = indirect_priority
                 report.save()
 
                 organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
@@ -75,17 +98,10 @@ def create_report(request):
 
                 return redirect('report_list')
             else:
-                if not report_form.is_valid():
-                    logger.error(f'ReportForm errors: {report_form.errors}')
-                    if not images_form.is_valid():
-                        logger.error(f'ReportImagesForm errors: {images_form.errors}')
-                        if not files_form.is_valid():
-                            logger.error(f'ReportFilesForm errors: {files_form.errors}')
-                            if not organization_formset.is_valid():
-                                logger.error(f'OrganizationInlineFormSet errors: {organization_formset.errors}')
+                for form in [report_form, images_form, files_form, organization_formset]:
+                    if not form.is_valid():
+                        logger.error(f'{form.__class__.__name__} errors: {form.errors}')
 
-                
-                
         else:
             report_form = ReportForm()
             images_form = ReportImagesForm()
@@ -100,6 +116,8 @@ def create_report(request):
             'images_form': images_form,
             'files_form': files_form,
             'sdg_list': sdg_list,
+            'themes_esd': themes_esd,
+            'priority_action_areas': priority_action_areas,
             'all_users': User.objects.all(),
         }
 
@@ -108,9 +126,8 @@ def create_report(request):
     except Exception as e:
         # Logging the error for debugging
         logger.error(f'Error creating report: {str(e)}')
-        
-        
         return redirect('report_list')
+
 
 def add_interest(request):
     """
@@ -132,7 +149,8 @@ def add_interest(request):
     return render(request, 'unrce/eoi.html', {'form': InterestForm})
 
 
-
+def contact(request):
+    return render(request, 'unrce/contact.html')
 
 @login_required
 def report_list(request):
@@ -153,6 +171,8 @@ def delete_image(request, image_id):
     if image.report.author == request.user:
         image.delete()
     return redirect('report_edit', report_id=report.id)
+
+
 
 def users_list(request):
     users = User.objects.all().prefetch_related('groups', 'account')  
@@ -192,31 +212,111 @@ def eoi_review(request):
     return render(request, 'unrce/eoi_review.html', {'eois': eois})
 
 
+@login_required
 def report_edit(request, report_id):
     report = get_object_or_404(Report, id=report_id)
-    if request.method == 'POST':
-        form = ReportForm(request.POST, instance=report)
-        if form.is_valid():
-            form.save()
 
-        # Handle new image uploads
-        images = request.FILES.getlist('image')
-        for image in images:
-            ReportImages.objects.create(
-                report=report,
-                image=image
-            )
+    # Ensure the request.user is the author of the report or has permission
+    if report.author != request.user:
+        return redirect('report_list')
 
-        return redirect('report_list')  # Redirect to the list of reports
-    else:
-        form = ReportForm(instance=report)
+    try:
+        if request.method == 'POST':
+            report_form = ReportForm(request.POST, instance=report)
+            images_form = ReportImagesForm(request.POST, request.FILES)
+            files_form = ReportFilesForm(request.POST, request.FILES)
+            organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
+            images = request.FILES.getlist('image')
+            files = request.FILES.getlist('file')
 
-    existing_images = ReportImages.objects.filter(report=report)
-    context = {
-        'form': form,
-        'existing_images': existing_images,
-    }
-    return render(request, 'unrce/report_edit.html', context)
+            if report_form.is_valid() and organization_formset.is_valid():
+                report = report_form.save(commit=False)  # Do not save immediately
+
+                # Capture the radio button selections for SDGs, ESD Themes, and Priority Areas
+                direct_sdgs = []
+                indirect_sdgs = []
+                for i in range(1, 18):
+                    option = request.POST.get(f'sdg_option_{i}')
+                    if option == 'direct':
+                        direct_sdgs.append(str(i))
+                    elif option == 'indirect':
+                        indirect_sdgs.append(str(i))
+
+                direct_esd = []
+                indirect_esd = []
+                for theme in themes_esd:
+                    option = request.POST.get(f'esd_theme_option_{theme}')
+                    if option == 'direct':
+                        direct_esd.append(theme)
+                    elif option == 'indirect':
+                        indirect_esd.append(theme)
+
+                direct_priority = []
+                indirect_priority = []
+                for area in priority_action_areas:
+                    option = request.POST.get(f'esd_priority_option_{area}')
+                    if option == 'direct':
+                        direct_priority.append(area)
+                    elif option == 'indirect':
+                        indirect_priority.append(area)
+
+                report.direct_sdgs = direct_sdgs
+                report.indirect_sdgs = indirect_sdgs
+                report.direct_esd_themes = direct_esd
+                report.indirect_esd_themes = indirect_esd
+                report.direct_priority_areas = direct_priority
+                report.indirect_priority_areas = indirect_priority
+                linked_user_ids = request.POST.getlist('linked_users')
+                report.linked_users.set(linked_user_ids)
+                
+                report.save()  # Now save after updating the above fields
+
+                organization_formset.save()
+
+                # Removing existing images/files and add new ones
+                report.reportimages_set.all().delete()
+                for image in images:
+                    ReportImages.objects.create(report=report, image=image)
+
+                report.reportfiles_set.all().delete()
+                for file in files:
+                    ReportFiles.objects.create(report=report, file=file)
+
+                return redirect('report_list')
+            else:
+                for form in [report_form, images_form, files_form, organization_formset]:
+                    if not form.is_valid():
+                        logger.error(f'{form.__class__.__name__} errors: {form.errors}')
+
+        else:
+            report_form = ReportForm(instance=report)
+            images_form = ReportImagesForm()
+            files_form = ReportFilesForm()
+            organization_formset = OrganizationInlineFormSet(instance=report)
+
+        sdg_list = [str(i) for i in range(1, 18)]
+        context = {
+            'report': report,
+            'report_form': report_form,
+            'organization_formset': organization_formset,
+            'images_form': images_form,
+            'files_form': files_form,
+            'sdg_list': sdg_list,
+            'themes_esd': themes_esd,
+            'priority_action_areas': priority_action_areas,
+            'all_users': User.objects.all(),
+            'linked_users': report.linked_users.all(),
+            'existing_images': ReportImages.objects.filter(report=report),
+            'existing_files': ReportFiles.objects.filter(report=report)
+        }
+
+        return render(request, 'unrce/report_edit.html', context)
+
+    except Exception as e:
+        # Logging the error for debugging
+        logger.error(f'Error editing report: {str(e)}')
+        return redirect('report_list')
+
 
 def register(request):
     try:
