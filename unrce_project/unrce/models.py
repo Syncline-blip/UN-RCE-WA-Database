@@ -98,11 +98,7 @@ class Report(models.Model):
 #Focal point(s) and affiliation(s)
     linked_users = models.ManyToManyField(User, related_name='linked_reports', blank=True)
     format_project = models.CharField(max_length=200, null=True)
-    delivery = ArrayField(
-        models.CharField(max_length=200, choices=DELIVERY_CHOICES),
-        blank=True,
-        null=True,
-    )
+    delivery = models.CharField(max_length=200, choices=DELIVERY_CHOICES, blank=True, null=True) 
     frequency = models.CharField(max_length=200, choices=FREQUENCY_CHOICES, null=True)
     language_project = models.CharField(max_length=200, null=True)
     web_link = models.URLField(max_length=200, null=True)

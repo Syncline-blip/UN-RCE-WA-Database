@@ -5,29 +5,32 @@ from django.contrib.auth.models import User
 from zxcvbn import zxcvbn  # Import the zxcvbn library
 from django.core.validators import MinLengthValidator
 
-
-class ReportForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(ReportForm, self).__init__(*args, **kwargs)
-        self.fields['linked_users'].label_from_instance = self.label_from_user_instance
-
-    def label_from_user_instance(self, user):
-        return f"{user.first_name} {user.last_name}"
-
-    audience = forms.MultipleChoiceField(
-        choices=AUDIENCE_CHOICES,
-        widget=forms.CheckboxSelectMultiple
-    )
-    delivery = forms.MultipleChoiceField(
-        choices=DELIVERY_CHOICES,
-        widget=forms.CheckboxSelectMultiple
-    )
-   
+class BasicInfoForm(forms.ModelForm):
     class Meta:
         model = Report
-        fields = '__all__'
-        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved','direct_esd_themes','indirect_esd_themes','direct_priority_areas', 'indirect_priority_areas'   ]
+        fields = ['title_project', 'submitting_RCE']
+class FocalPointsAffiliationsForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ['linked_users', 'format_project', 'delivery', 'frequency', 
+                  'language_project', 'web_link', 'additional_resources']
+class GeographicalEducationInfoForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ['region', 'country', 'locations', 'address', 'ecosystem', 
+                  'audience', 'socio_economic_characteristics', 'development_challenges']
+class ContentInfoForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ['status', 'start_project', 'end_project', 'rationale', 
+                  'objectives', 'activities_practices', 'size_academic', 'results', 
+                  'lessons_learned', 'key_message', 'relationship_activities', 'funding']
+class SustainableDevelopmentGoalsForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ['direct_sdgs', 'indirect_sdgs', 'direct_esd_themes', 
+                  'indirect_esd_themes', 'direct_priority_areas', 'indirect_priority_areas']
+
 
 class ReportImagesForm(forms.ModelForm):
     image = forms.ImageField(required=False)

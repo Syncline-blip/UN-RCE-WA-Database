@@ -1,20 +1,29 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from formtools.wizard.views import SessionWizardView
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, OrganizationInlineFormSet
+from .forms import RegistrationForm, InterestForm
 from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles,themes_esd, priority_action_areas, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
 from django.http import HttpResponseServerError, JsonResponse  
+from django.core.files.storage import FileSystemStorage
 import os, json
 import pandas as pd
+from django.contrib import messages
 import logging
 from django.db.models import Q
+from .forms import (BasicInfoForm, FocalPointsAffiliationsForm, 
+                    GeographicalEducationInfoForm, ContentInfoForm, 
+                    SustainableDevelopmentGoalsForm, ReportImagesForm, 
+                    ReportFilesForm, OrganizationForm, OrganizationInlineFormSet)
 
 logger = logging.getLogger(__name__)
+from django.shortcuts import render
 # sample data, not to be used, just for testing
 project = [
     {
@@ -28,105 +37,127 @@ def home(request):
 
 
 @login_required
-def create_report(request): 
+def create_report(request, step):
+    steps = ['basic', 'focal', 'geoedu', 'content', 'sdg', 'images', 'files', 'org', 'finish']
     try:
-    
-        if request.method == 'POST':
-            report_form = ReportForm(request.POST)
-            images_form = ReportImagesForm(request.POST, request.FILES)
-            files_form = ReportFilesForm(request.POST, request.FILES)
-            organization_formset = OrganizationInlineFormSet(request.POST)
-            images = request.FILES.getlist('image')
-            files = request.FILES.getlist('file')
+        current_index = steps.index(step)
+    except ValueError:
+        messages.error(request, "Invalid step.")
+        return redirect('home')  # Change to actual view
 
-            direct_sdgs = []
-            indirect_sdgs = []
-            for i in range(1, 18):
-                option = request.POST.get(f'sdg_option_{i}')
-                if option == 'direct':
-                    direct_sdgs.append(str(i))
-                elif option == 'indirect':
-                    indirect_sdgs.append(str(i))
+    previous_step = steps[current_index - 1] if current_index > 0 else None
 
-            direct_esd = []
-            indirect_esd = []
-            for theme in themes_esd:
-                option = request.POST.get(f'esd_theme_option_{theme}')
-                if option == 'direct':
-                    direct_esd.append(theme)
-                elif option == 'indirect':
-                    indirect_esd.append(theme)
+    session_data = request.session.get('form_data', {})
 
-            direct_priority = []
-            indirect_priority = []
-            for area in priority_action_areas:
-                option = request.POST.get(f'esd_priority_option_{area}')
-                if option == 'direct':
-                    direct_priority.append(area)
-                elif option == 'indirect':
-                    indirect_priority.append(area)
+    form_class = get_step_form(step)
+    if form_class is None:
+        messages.error(request, "Invalid step.")
+        return redirect('home')  # Change to actual view
 
-            if report_form.is_valid() and organization_formset.is_valid():
-                report = report_form.save(commit=False)
-                report.author = request.user
-                report.direct_sdgs = direct_sdgs  
-                report.indirect_sdgs = indirect_sdgs 
-                report.direct_esd_themes = direct_esd  
-                report.indirect_esd_themes = indirect_esd
-                report.direct_priority_areas = direct_priority
-                report.indirect_priority_areas = indirect_priority
-                report.save()
+    form = form_class(request.POST or None, initial=session_data.get(step, {}), prefix=step)
 
-                organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
-                if organization_formset.is_valid():
-                    organization_formset.save()
-                report_form.save_m2m()  
+    if step == 'focal':
+        organizations_formset = OrganizationInlineFormSet(request.POST or None, prefix='organizations')
+    else:
+        organizations_formset = None
 
-                if images:
-                    for image in images:
-                        ReportImages.objects.create(
-                            report=report,
-                            image=image
-                        )
+    if request.method == 'POST':
+        if form.is_valid() and (organizations_formset is None or organizations_formset.is_valid()):
+            cleaned_data = form.cleaned_data
+            if 'linked_users' in cleaned_data:
+                cleaned_data['linked_users'] = [model_to_dict(user) for user in cleaned_data['linked_users']]
+            session_data[step] = cleaned_data
+            if organizations_formset is not None:
+                orgs_data = [form.cleaned_data for form in organizations_formset if form.is_valid()]
+                session_data['organizations'] = orgs_data
+                    
+            print("Cleaned data:")
+            print(cleaned_data)
+        
+            try:
+                request.session['form_data'] = session_data
+            except TypeError as e:
+                print("Error:", e)
+                print("Data causing the error:")
+                print(session_data)
+                return HttpResponse("An error occurred. Check the console for details.")
 
-                if files:
-                    for file in files:
-                        ReportFiles.objects.create(
-                            report=report,
-                            file=file
-                        )
-
-                return redirect('report_list')
+            next_step = get_next_step(step)
+            if next_step:
+                return redirect('create_report_step', step=next_step)
             else:
-                for form in [report_form, images_form, files_form, organization_formset]:
-                    if not form.is_valid():
-                        logger.error(f'{form.__class__.__name__} errors: {form.errors}')
-
+                messages.error(request, "You have reached the final step.")
         else:
-            report_form = ReportForm()
-            images_form = ReportImagesForm()
-            files_form= ReportFilesForm()
-            report = Report()
-            organization_formset = OrganizationInlineFormSet(instance=report)
+            messages.error(request, "There are errors in the form.")
 
-        sdg_list = [str(i) for i in range(1, 18)]
-        context = {
-            'report_form': report_form,
-            'organization_formset': organization_formset,
-            'images_form': images_form,
-            'files_form': files_form,
-            'sdg_list': sdg_list,
-            'themes_esd': themes_esd,
-            'priority_action_areas': priority_action_areas,
-            'all_users': User.objects.all(),
-        }
 
-        return render(request, 'unrce/create_report.html', context)
+    context = {
+        'form': form,
+        'organizations_formset': organizations_formset if step == 'focal' else None,
+        'previous_step': previous_step,
+        'step': step
+    }
 
-    except Exception as e:
-        # Logging the error for debugging
-        logger.error(f'Error creating report: {str(e)}')
+    return render(request, 'create_report.html', context)
+
+
+
+
+def get_step_form(step, *args, **kwargs):
+    """Return the appropriate form for the given step"""
+    forms = {
+        'basic': BasicInfoForm,
+        'focal': FocalPointsAffiliationsForm,
+        'geoedu': GeographicalEducationInfoForm,
+        'content': ContentInfoForm,
+        'sdg': SustainableDevelopmentGoalsForm,
+        'images': ReportImagesForm,
+        'files': ReportFilesForm,
+        'org': OrganizationForm,
+        'finish': None  # We'll handle the 'finish' step differently
+    }
+    return forms.get(step, None)
+
+def get_next_step(current_step):
+    """Return the next step after the given step"""
+    steps = ['basic', 'focal', 'geoedu', 'content', 'sdg', 'images', 'files', 'org', 'finish']
+    try:
+        current_index = steps.index(current_step)
+        return steps[current_index + 1] if current_index + 1 < len(steps) else None
+    except ValueError:
+        messages.error(request, "Invalid step.")
+        return None 
+
+
+@login_required
+def finish_report(request):
+    session_data = request.session.get('form_data', {})
+    if session_data:
+        combined_data = {}
+        for data in session_data.values():
+            combined_data.update(data)
+
+        report = Report.objects.create(**combined_data)
+        
+        # If organization data is in session, create organization objects
+        if 'organizations' in session_data:
+            organizations_data = session_data['organizations']
+            for org_data in organizations_data:
+                Organization.objects.create(report=report, **org_data)
+
+        images = request.FILES.getlist('image')
+        for image in images:
+            ReportImages.objects.create(report=report, image=image)
+
+        files = request.FILES.getlist('file')
+        for file in files:
+            ReportFiles.objects.create(report=report, file=file)
+
+        del request.session['form_data']
         return redirect('report_list')
+
+    else:
+        return redirect('create_report_step', step='basic')
 
 
 def add_interest(request):
@@ -369,4 +400,14 @@ def edit_reporting(request):
 @login_required
 def reportDetails(request):
     return render(request, 'unrce/report_details.html')
+from django.shortcuts import render
+
+class ReportWizard(SessionWizardView):
+    template_name = "report_wizard_form.html"
+    file_storage = FileSystemStorage(location='/tmp/uploads')
+
+    def done(self, form_list, **kwargs):
+        # Here, add what you want to do with the data of all steps
+        # For now, let's just render a 'done' template
+        return render(self.request, 'done.html')
 
