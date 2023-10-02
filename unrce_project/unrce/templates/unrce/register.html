@@ -29,9 +29,17 @@
 <main class="main">
     <div class="container">
         <section class="wrapper">
+          <div class="back-button">
+
+            <a href="/">
+                <i class="ion ion-arrow-left-circled"></i> Back to UNRCE Home
+            </a>
+          </div>
             <div class="heading">
+              <div class="logo">
+                <img src="{% static 'icons/unrce_log.bmp' %}" alt="UNRCE Logo"> 
+            </div>
                 <h1 class="text text-large">UNRCE Sign Up</h1>
-                <p class="text text-normal">or <span><a href="{% url 'login' %}" class="text text-links">Log in to UNRCE</a></span></p>
             </div>
             <form class="form" action="{% url 'register' %}" method="post" id="signup-form">
                 {% csrf_token %}
@@ -69,7 +77,6 @@
                 </div>
                 <div class="auth-options">
                     <span>Already have an account? <a href="{% url 'login' %}" class="text text-links">Log In</a></span>
-                    <span><a href="{% url 'initial-landing' %}" class="text text-links">Home</a></span>
                 </div>
             </form>
         </section>
