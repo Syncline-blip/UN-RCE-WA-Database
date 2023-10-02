@@ -45,12 +45,14 @@
             <form class="form" action="{% url 'register' %}" method="post" id="signup-form">
                 {% csrf_token %}
                 <div class="input-control">
-                    <label for="username" class="input-label" hidden>Username</label>
-                    <input type="text" id="username" name="username" class="input-field" placeholder="Username" required>
+                  <label for="username" class="input-label" hidden>Username</label>
+                  <input type="text" id="username" name="username" class="input-field" placeholder="Username" required>
+                  <p class="error-message" id="username-error"></p>
                 </div>
                 <div class="input-control">
-                    <label for="email" class="input-label" hidden>Email</label>
-                    <input type="email" id="email" name="email" class="input-field" placeholder="Email" required>
+                  <label for="email" class="input-label" hidden>Email</label>
+                  <input type="email" id="email" name="email" class="input-field" placeholder="Email" required>
+                  <p class="error-message" id="email-error"></p>
                 </div>
                 <div class="input-control">
                     <label for="first_name" class="input-label" hidden>First Name</label>
@@ -65,13 +67,17 @@
                     <input type="text" id="org" name="org" class="input-field" placeholder="Organization" required>
                 </div>
                 <div class="input-control">
-                    <label for="password1" class="input-label" hidden>Password</label>
-                    <input type="password" id="password1" name="password1" class="input-field" placeholder="Password" required>
-                    <p id="password-strength-text"></p>
+                  <label for="password1" class="input-label" hidden>Password</label>
+                  <input type="password" id="password1" name="password1" class="input-field" placeholder="Password" required>
+                  <meter max="4" id="password-strength-meter"></meter>
+                  <p id="password-strength-text"></p>
+                  <p class="error-message" id="password-error"></p>
                 </div>
+              
                 <div class="input-control">
-                    <label for="password2" class="input-label" hidden>Confirm Password</label>
-                    <input type="password" id="password2" name="password2" class="input-field" placeholder="Confirm Password" required>
+                  <label for="password2" class="input-label" hidden>Confirm Password</label>
+                  <input type="password" id="password2" name="password2" class="input-field" placeholder="Confirm Password" required>
+                  <p class="error-message" id="password-confirm-error"></p>
                 </div>
                 <div class="input-control">
                     <button type="submit" id="signup-button" class="input-submit" disabled>Sign Up</button>
@@ -85,6 +91,14 @@
 </main>
 
 <script>
+  // If username is invalid
+  document.getElementById('username-error').textContent = "Username must be at least 5 characters.";
+
+// If email is invalid
+  document.getElementById('email-error').textContent = "Please enter a valid email.";
+
+// ... and so on for other fields.
+
   document.addEventListener("DOMContentLoaded", function () {
     const usernameField = document.getElementById("username");
     const emailField = document.getElementById("email");
