@@ -36,17 +36,6 @@
     text-rendering: optimizeLegibility;
   }
   
-  body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 1rem;
-    font-weight: normal;
-    line-height: 1.5;
-    color: var(--color-black);
-    background: url(https://images.alphacoders.com/128/1283924.jpg);
-    background-size: cover; /* Adjust the background size as needed */
-    background-repeat: no-repeat; /* Prevent the background image from repeating */
-  }
-  
   a,
   button {
     font-family: inherit;
@@ -125,7 +114,7 @@
   .main .wrapper {
     max-width: 28rem;
     width: 100%;
-    margin: 2rem auto;
+    margin: 5rem auto;
     padding: 2rem 2.5rem;
     border: none;
     outline: none;
