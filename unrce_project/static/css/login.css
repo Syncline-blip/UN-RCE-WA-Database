@@ -259,7 +259,7 @@
 .back-button i {
     font-size: 1.65rem;
     line-height: inherit;
-    margin-right: 0.5rem;
+    margin-right: auto;
 }
 
 .error-message {

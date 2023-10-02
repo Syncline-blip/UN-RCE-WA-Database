@@ -40,6 +40,7 @@
                 <img src="{% static 'icons/unrce_log.bmp' %}" alt="UNRCE Logo"> 
             </div>
                 <h1 class="text text-large">UNRCE Sign Up</h1>
+                <p class="text text-normal">or <span><a href="{% url 'login' %}" class="text text-links">Log in to UNRCE</a></span></p>
             </div>
             <form class="form" action="{% url 'register' %}" method="post" id="signup-form">
                 {% csrf_token %}
@@ -86,50 +87,56 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const usernameField = document.getElementById("username");
+    const emailField = document.getElementById("email");
     const passwordField = document.getElementById("password1");
     const passwordConfirmField = document.getElementById("password2");
     const signupButton = document.getElementById("signup-button");
-    const strengthMeter = document.getElementById(
-      "password-strength-meter"
-    );
+    const strengthMeter = document.getElementById("password-strength-meter");
     const strengthText = document.getElementById("password-strength-text");
 
-    function updateSignupButton() {
-      // Check if the username length is correct and if the password is valid
-      const isUsernameValid = usernameField.value.length >= 5; // Adjust the minimum username length
-      const password = passwordField.value;
-      const isPasswordValid = zxcvbn(password).score >= 3; // Adjust the password strength score
-
-      // Enable or disable the signup button based on validation
-      signupButton.disabled = !(isUsernameValid && isPasswordValid);
+    function isEmailValid(email) {
+        // Simple pattern to check if email is valid
+        const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return pattern.test(email);
     }
 
-    // Listen for input in username and password fields
+    function updateSignupButton() {
+        const isUsernameValid = usernameField.value.trim().length >= 5;
+        const isEmailValidValue = isEmailValid(emailField.value.trim());
+        const password = passwordField.value;
+        const isPasswordValid = zxcvbn(password).score >= 3;
+        const isPasswordConfirmValid = password === passwordConfirmField.value;
+
+        signupButton.disabled = !(isUsernameValid && isEmailValidValue && isPasswordValid && isPasswordConfirmValid);
+    }
+
     usernameField.addEventListener("input", updateSignupButton);
+    emailField.addEventListener("input", updateSignupButton);
     passwordField.addEventListener("input", updateSignupButton);
+    passwordConfirmField.addEventListener("input", updateSignupButton);
 
-    // Password strength meter code (same as before)
     passwordField.addEventListener("input", function () {
-      const password = passwordField.value;
-      const result = zxcvbn(password);
+        const password = passwordField.value;
+        const result = zxcvbn(password);
 
-      strengthMeter.style.backgroundColor = "#FF0000"; // Default to red
+        strengthMeter.style.backgroundColor = "#FF0000"; // Default to red
 
-      strengthMeter.value = result.score;
-      strengthText.textContent = result.feedback.suggestions.join(" ");
+        strengthMeter.value = result.score;
+        strengthText.textContent = result.feedback.suggestions.join(" ");
 
-      const colors = [
-        "#FF0000",
-        "#FF5E00",
-        "#FFD700",
-        "#7FFF00",
-        "#00FF00",
-      ];
-      strengthMeter.style.backgroundColor = colors[result.score];
+        const colors = [
+            "#FF0000",
+            "#FF5E00",
+            "#FFD700",
+            "#7FFF00",
+            "#00FF00",
+        ];
+        strengthMeter.style.backgroundColor = colors[result.score];
 
-      updateSignupButton(); // Call the update function to check password validity
+        updateSignupButton();
     });
-  });
+});
+
 </script>
 
 </body>
