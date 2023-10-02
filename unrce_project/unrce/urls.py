@@ -24,6 +24,7 @@ urlpatterns = [
     path('delete_image/<int:image_id>/', views.delete_image, name='delete_image'),
     path('users_list/', views.users_list, name='users_list'),
     path('eoi_review/', views.eoi_review, name='eoi_review'),
+    path('org_eoi/', views.org_eoi, name='org_eoi')
 
 
 ]

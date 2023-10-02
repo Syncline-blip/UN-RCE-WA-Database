@@ -13,6 +13,9 @@ import os, json
 import pandas as pd
 import logging
 from django.db.models import Q
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 # sample data, not to be used, just for testing
@@ -370,3 +373,24 @@ def edit_reporting(request):
 def reportDetails(request):
     return render(request, 'unrce/report_details.html')
 
+@login_required
+def org_eoi(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        organization = request.POST.get('organization')
+        message = request.POST.get('message')
+
+
+        subject = 'Expression of Interest'
+        email_message = f'Username: {username}\nOrganization: {organization}\nMessage: {message}'
+
+
+        send_mail(
+            subject,
+            email_message,
+            settings.EMAIL_HOST_USER,
+            ['miltonyong@gmail.com'],  # OWNER EMAIL
+            fail_silently=False,
+        )
+        return redirect('success_page.html')
+    return render(request, 'unrce/organization_eoi.html')
