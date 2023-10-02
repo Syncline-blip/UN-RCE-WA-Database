@@ -1,178 +1,90 @@
+{% extends "base.html" %} {% load static %}
 
-{% extends "base.html" %}
-{% load static %}
-
-
-
+<!DOCTYPE html>
+<html lang="en">
+  <head>
     {{ block.super }}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Landing Page{% endblock %}</title>
-
-{% block content %}
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+  </head>
+  {% block content %}
   <body>
-    <button onclick="window.location.href='{% url 'initial-landing' %}';" class="dropbtn">Home</button>
-    <div class="profile-container">
-      <center>
-        <img
-          src="2544.webp"
-          alt="Profile Picture"
-          class="profile-picture"
-          id="displayProfilePic"
-        />
-        <input
-          type="file"
-          id="profilePic"
-          name="profilePic"
-          style="display: none"
-        />
-      </center>
-      <label for="name">Name:</label>
-      <span id="displayName">{{ user.first_name }} {{ user.last_name }}</span>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        placeholder="Enter your name"
-        style="display: none"
-      />
+    <div class="container mt-5">
+      <div class="row profile">
+        <div class="col-md-3">
+          <div class="profile-sidebar">
+            <div class="profile-userpic">
+              <img
+                src="https://d33wubrfki0l68.cloudfront.net/1484aa80faa12a0025d69af681b6428147f1104f/5a9c3/assets/logos/uwa.png"
+                class="img-fluid rounded-circle"
+                alt="User"
+              />
+            </div>
+            <div class="profile-usertitle mt-3">
+              <h5 class="text-center">
+                {{ user.first_name }} {{ user.last_name }}
+              </h5>
+              <p class="text-muted text-center">{{ account.organization }}</p>
+            </div>
 
-      <label for="username">Username:</label>
-      <span id="displayUsername">{{ user.username }}</span>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        placeholder="Enter your username"
-        style="display: none"
-      />
-
-      <label for="email">Email:</label>
-      <span id="displayEmail">{{ user.email }}</span>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        placeholder="Enter your email"
-        style="display: none"
-      />
-
-      <label for="org">Organisation:</label>
-      <span id="displayOrg">{{ account.organization }}</span>
-      <input
-        type="text"
-        id="org"
-        name="org"
-        placeholder="Enter your organisation"
-        style="display: none"
-      />
-
-      <center>
-        <button type="button" id="editButton">Edit Profile</button>
-        <button type="submit" id="updateButton" style="display: none">
-          Update Profile
-        </button>
-        <form method="post" action="{% url 'logout' %}">
-          {% csrf_token %}
-          <button type="submit">Logout</button>
-        </form>
-      </center>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>UNRCE GLOBAL NETWORK</th>
-          <th>Project</th>
-          <th>Contributing Organisation(s)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>
-            "How do we know it’s working? Monitoring and evaluating education
-            for sustainable development in Higher Education"
-          </td>
-          <td>
-            <ul>
-              University of St Andrews EAUC (The Alliance for Sustainability
+            <div class="profile-usermenu mt-4">
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#"
+                    ><i class="fas fa-home"></i> Home</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"
+                    ><i class="fas fa-cogs"></i> Settings</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"
+                    ><i class="fas fa-tasks"></i> Projects</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"
+                    ><i class="fas fa-question-circle"></i> Help</a
+                  >
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">
+                      {% csrf_token %}
+                        <i class="fas fa-hand-peace"></i> Logout
+                    </a>
+                </li>
+                      
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-9">
+          <div class="profile-content p-5">
+            <h4>About Client</h4>
+            <p>
+              University of Western Australia (The Alliance for Sustainability
               Leadership in Education)
-            </ul>
-            <ul>
-              Scotland Students Organising for Sustainability UK Sparqs (Student
-              Partnerships in Quality Scotland )
-            </ul>
-            <ul>
-              University of Edinburgh Learning for Sustainability Scotland (RCE
-              Scotland)
-            </ul>
-            <ul>
-              UK Quality Assurance Agency (QAA)for Higher Education (funder)
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Data 1</td>
-          <td>Data 2</td>
-        </tr>
-      </tbody>
-    </table>
+            </p>
 
-    <script>
-      document.getElementById("homeButton").addEventListener("click", () => {
-        window.location.href = "{% url 'initial-landing' %}";
-      });
-      let isEditing = false;
-
-      const toggleEditing = () => {
-        isEditing = !isEditing;
-
-        const fields = ["name", "username", "email", "org", "profilePic"];
-        fields.forEach((field) => {
-          const inputField = document.getElementById(field);
-          const displayField = document.getElementById(
-            "display" + capitalizeFirstLetter(field)
-          );
-
-          if (isEditing) {
-            inputField.style.display = "block";
-            displayField.style.display = "none";
-            if (field !== "profilePic") {
-              inputField.value = displayField.textContent;
-            }
-          } else {
-            displayField.style.display = "block";
-            inputField.style.display = "none";
-            if (field !== "profilePic") {
-              displayField.textContent = inputField.value;
-            }
-          }
-        });
-
-        document.getElementById("editButton").style.display = isEditing
-          ? "none"
-          : "block";
-        document.getElementById("updateButton").style.display = isEditing
-          ? "block"
-          : "none";
-      };
-
-      const capitalizeFirstLetter = (string) => {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-      };
-
-      document
-        .getElementById("editButton")
-        .addEventListener("click", toggleEditing);
-      document
-        .getElementById("updateButton")
-        .addEventListener("click", toggleEditing);
-    </script>
+            <a href="#"><i class="fas fa-globe"></i> client website</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
-  {% endblock %}
+</html>
+{% endblock %}
