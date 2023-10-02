@@ -105,29 +105,6 @@
 
 
 
-<!--This is where users are linked  -->
-    <div class="form-group">
-   
-        <div id="available-users-section">
-            <h4>Available Users</h4>
-            <input type="text" id="user-search" placeholder="Search by name..." onkeyup="filterUsers()">
-            <div id="all-users">
-                {% for user in all_users %}
-                    <div class="user-item" data-user-id="{{ user.id }}" data-user-name="{{ user.first_name }} {{ user.last_name }}" onclick="addUser(this)" style="display: none;">
-                        {{ user.first_name }} {{ user.last_name }}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div id="linked-users-section">
-            <h4>Linked Users</h4>
-            <div id="selected-users"></div>
-        </div>
-
-        <select multiple name="linked_users" id="linked-users-select" style="display:none;">
-        </select>
-    </div>
-    
 
     <!-- format_project -->
     <div class="form-group {% if report_form.format_project.errors %}has-error{% endif %}">
@@ -432,9 +409,12 @@
       <div class="save-options">
         <button type="submit">Save Report</button>
       </div>
-    </form>
   </div>
-
+  <div class="save-options">
+    <button type="submit" name="save">Save Report</button>
+    <button type="submit" name="submit_for_approval">Submit for Approval</button>
+</div>  
+</form>
   {% endblock %}
 
   <script>
@@ -454,48 +434,6 @@ radios.forEach(function(radio) {
         }
     });
 });
-
-// JS functions for user operations
-window.addUser = function(element) {
-    var userId = element.getAttribute('data-user-id');
-    var userName = element.textContent;
-    var userElement = document.createElement('div');
-    userElement.className = 'user-item';
-    userElement.setAttribute('data-user-id', userId);
-    userElement.textContent = userName;
-    userElement.onclick = function() { removeUser(userElement); };
-    document.getElementById('selected-users').appendChild(userElement);
-
-    var optionElement = document.createElement('option');
-    optionElement.value = userId;
-    optionElement.textContent = userName;
-    optionElement.selected = true;
-    document.getElementById('linked-users-select').appendChild(optionElement);
-    element.style.display = 'none';
-};
-
-window.removeUser = function(element) {
-    var userId = element.getAttribute('data-user-id');
-    document.querySelector('#all-users [data-user-id="' + userId + '"]').style.display = 'block';
-    element.remove();
-    var optionElement = document.querySelector('#linked-users-select option[value="' + userId + '"]');
-    optionElement.remove();
-};
-
-window.filterUsers = function() {
-    var searchQuery = document.getElementById('user-search').value.toLowerCase();
-    var allUserElements = document.querySelectorAll('#all-users .user-item');
-    var displayedCount = 0;
-    allUserElements.forEach(function(userElement) {
-        var userName = userElement.getAttribute('data-user-name').toLowerCase();
-        if (userName.includes(searchQuery) && displayedCount < 10) {
-            userElement.style.display = 'block';
-            displayedCount++;
-        } else {
-            userElement.style.display = 'none';
-        }
-    });
-};
 
 // Simplified Add button function for organizations
 const orgFormSetsContainer = document.querySelector('.organization-formsets');

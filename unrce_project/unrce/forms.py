@@ -8,13 +8,6 @@ from django.core.validators import MinLengthValidator
 
 class ReportForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        super(ReportForm, self).__init__(*args, **kwargs)
-        self.fields['linked_users'].label_from_instance = self.label_from_user_instance
-
-    def label_from_user_instance(self, user):
-        return f"{user.first_name} {user.last_name}"
-
     audience = forms.MultipleChoiceField(
         choices=AUDIENCE_CHOICES,
         widget=forms.CheckboxSelectMultiple
@@ -26,8 +19,7 @@ class ReportForm(forms.ModelForm):
    
     class Meta:
         model = Report
-        fields = '__all__'
-        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved','direct_esd_themes','indirect_esd_themes','direct_priority_areas', 'indirect_priority_areas'   ]
+        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved','direct_esd_themes','indirect_esd_themes','direct_priority_areas', 'indirect_priority_areas', 'submitted'   ]
 
 class ReportImagesForm(forms.ModelForm):
     image = forms.ImageField(required=False)

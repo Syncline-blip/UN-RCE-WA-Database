@@ -96,7 +96,6 @@ class Report(models.Model):
     submitting_RCE = models.CharField(max_length=200, choices=RCE_CHOICES, null=True)
 
 #Focal point(s) and affiliation(s)
-    linked_users = models.ManyToManyField(User, related_name='linked_reports', blank=True)
     format_project = models.CharField(max_length=200, null=True)
     delivery = ArrayField(
         models.CharField(max_length=200, choices=DELIVERY_CHOICES),
@@ -177,6 +176,7 @@ class Report(models.Model):
     last_modified = models.DateTimeField(auto_now=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     approved = models.BooleanField(default=False, null=True)
+    submitted = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return f"{self.title_project}   {self.created_at}"

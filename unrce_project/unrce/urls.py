@@ -22,12 +22,12 @@ urlpatterns = [
     path('report_edit/<int:report_id>/', views.report_edit, name='report_edit'),
     path('report_details/<int:report_id>/', views.report_details, name='report_details'),
     path('delete_image/<int:image_id>/', views.delete_image, name='delete_image'),
-    path('users_list/', views.users_list, name='users_list'),
     path('eoi_review/', views.eoi_review, name='eoi_review'),
+    path('approve_report/<int:report_id>/', views.approve_report, name='approve_report'),
 
 
 ]
 
 
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
