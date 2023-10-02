@@ -168,5 +168,6 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'jlumagbas.unrce@gmail.com'
 EMAIL_HOST_PASSWORD = 'rkcc tibq mdiq lzmq' 
-EMAIL_USE_SSL = False
-EMAIL_USE_TLS = False
+EMAIL_SSL_CA_FILE = None
+
+

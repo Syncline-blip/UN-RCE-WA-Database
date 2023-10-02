@@ -392,5 +392,5 @@ def org_eoi(request):
             ['miltonyong@gmail.com'],  # OWNER EMAIL
             fail_silently=False,
         )
-        return redirect('success_page.html')
+        return redirect('success_page')
     return render(request, 'unrce/organization_eoi.html')
