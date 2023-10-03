@@ -81,8 +81,11 @@
                 <div class="input-control">
                   <label for="password2" class="input-label" hidden>Confirm Password</label>
                   <input type="password" id="password2" name="password2" class="input-field" placeholder="Confirm Password" required>
+                </div>
+                <div class="input-control">
                   <p class="error-message" id="password-confirm-error"></p>
                 </div>
+                
                 <div class="input-control">
                     <button type="submit" id="signup-button" class="input-submit" disabled>Sign Up</button>
                 </div>
@@ -95,11 +98,7 @@
 </main>
 
 <script>
-  document.getElementById('username-error').textContent = "Username must be at least 5 characters.";
-
-  document.getElementById('email-error').textContent = "Please enter a valid email.";
-
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function() {
     const usernameField = document.getElementById("username");
     const emailField = document.getElementById("email");
     const passwordField = document.getElementById("password1");
@@ -109,9 +108,22 @@
     const strengthText = document.getElementById("password-strength-text");
 
     function isEmailValid(email) {
-        // Simple pattern to check if email is valid
         const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         return pattern.test(email);
+    }
+
+    function checkPasswordMatch() {
+        const password = passwordField.value;
+        const confirmPassword = passwordConfirmField.value;
+        const errorElement = document.getElementById('password-confirm-error');
+
+        if (password !== confirmPassword) {
+            errorElement.textContent = "Passwords do not match.";
+            return false;
+        } else {
+            errorElement.textContent = "";
+            return true;
+        }
     }
 
     function updateSignupButton() {
@@ -119,21 +131,29 @@
         const isEmailValidValue = isEmailValid(emailField.value.trim());
         const password = passwordField.value;
         const isPasswordValid = zxcvbn(password).score >= 1;
-        const isPasswordConfirmValid = password === passwordConfirmField.value;
+        const isPasswordConfirmValid = checkPasswordMatch();
 
         signupButton.disabled = !(isUsernameValid && isEmailValidValue && isPasswordValid && isPasswordConfirmValid);
     }
 
-    usernameField.addEventListener("input", updateSignupButton);
-    emailField.addEventListener("input", updateSignupButton);
-    passwordField.addEventListener("input", updateSignupButton);
-    passwordConfirmField.addEventListener("input", updateSignupButton);
+    usernameField.addEventListener("input", function() {
+      const usernameErrorElement = document.getElementById("username-error");
+      if (usernameField.value.length > 0 && usernameField.value.length < 5) {
+          usernameErrorElement.textContent = "Username must be at least 5 characters.";
+          usernameErrorElement.style.display = "block";  // Show the error
+      } else {
+          usernameErrorElement.textContent = "";
+          usernameErrorElement.style.display = "none";   // Hide the error
+      }
+      updateSignupButton();
+  });
 
-    passwordField.addEventListener("input", function () {
+    emailField.addEventListener("input", updateSignupButton);
+
+    passwordField.addEventListener("input", function() {
         const password = passwordField.value;
         const result = zxcvbn(password);
 
-        
         strengthMeter.value = result.score;
 
         let feedbackMessage;
@@ -144,22 +164,29 @@
         } else {
             feedbackMessage = "Password is strong. Good job!";
         }
-    
+
         strengthText.textContent = feedbackMessage;
-    
+
         const colors = [
-            "#FF0000", // Weak color
-            "#FFD700", // Moderate color
-            "#00FF00", // Strong color
+            "#FF0000",
+            "#FFD700",
+            "#00FF00",
         ];
         const colorIndex = result.score === 0 ? 0 : (result.score === 1 ? 1 : 2);
         strengthMeter.style.backgroundColor = colors[colorIndex];
-    
+
+        checkPasswordMatch();
+        updateSignupButton();
+    });
+
+    passwordConfirmField.addEventListener("input", function() {
+        checkPasswordMatch();
         updateSignupButton();
     });
 });
 
 </script>
+
 
 </body>
 </html>
