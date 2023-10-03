@@ -93,13 +93,9 @@
 </main>
 
 <script>
-  // If username is invalid
   document.getElementById('username-error').textContent = "Username must be at least 5 characters.";
 
-// If email is invalid
   document.getElementById('email-error').textContent = "Please enter a valid email.";
-
-// ... and so on for other fields.
 
   document.addEventListener("DOMContentLoaded", function () {
     const usernameField = document.getElementById("username");
@@ -120,7 +116,7 @@
         const isUsernameValid = usernameField.value.trim().length >= 5;
         const isEmailValidValue = isEmailValid(emailField.value.trim());
         const password = passwordField.value;
-        const isPasswordValid = zxcvbn(password).score >= 3;
+        const isPasswordValid = zxcvbn(password).score >= 1;
         const isPasswordConfirmValid = password === passwordConfirmField.value;
 
         signupButton.disabled = !(isUsernameValid && isEmailValidValue && isPasswordValid && isPasswordConfirmValid);
@@ -135,20 +131,28 @@
         const password = passwordField.value;
         const result = zxcvbn(password);
 
-        strengthMeter.style.backgroundColor = "#FF0000"; // Default to red
-
+        
         strengthMeter.value = result.score;
-        strengthText.textContent = result.feedback.suggestions.join(" ");
 
+        let feedbackMessage;
+        if (result.score === 0) {
+            feedbackMessage = "Password is weak. Try adding a few more characters.";
+        } else if (result.score === 1) {
+            feedbackMessage = "Password is moderate. Consider adding a number or a special character for more security.";
+        } else {
+            feedbackMessage = "Password is strong. Good job!";
+        }
+    
+        strengthText.textContent = feedbackMessage;
+    
         const colors = [
-            "#FF0000",
-            "#FF5E00",
-            "#FFD700",
-            "#7FFF00",
-            "#00FF00",
+            "#FF0000", // Weak color
+            "#FFD700", // Moderate color
+            "#00FF00", // Strong color
         ];
-        strengthMeter.style.backgroundColor = colors[result.score];
-
+        const colorIndex = result.score === 0 ? 0 : (result.score === 1 ? 1 : 2);
+        strengthMeter.style.backgroundColor = colors[colorIndex];
+    
         updateSignupButton();
     });
 });
