@@ -1,90 +1,59 @@
-{% extends "base.html" %} {% load static %}
+{% extends "base.html" %}
+{% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
+{% block head %}
     {{ block.super }}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Landing Page{% endblock %}</title>
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- Font Awesome Icons -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
-  </head>
-  {% block content %}
-  <body>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<body>
     <div class="container mt-5">
-      <div class="row profile">
-        <div class="col-md-3">
-          <div class="profile-sidebar">
-            <div class="profile-userpic">
-              <img
-                src="https://d33wubrfki0l68.cloudfront.net/1484aa80faa12a0025d69af681b6428147f1104f/5a9c3/assets/logos/uwa.png"
-                class="img-fluid rounded-circle"
-                alt="User"
-              />
-            </div>
-            <div class="profile-usertitle mt-3">
-              <h5 class="text-center">
-                {{ user.first_name }} {{ user.last_name }}
-              </h5>
-              <p class="text-muted text-center">{{ account.organization }}</p>
-            </div>
+        <div class="row profile">
+            <div class="col-md-3">
+                <div class="profile-sidebar">
+                    <div class="profile-userpic">
+                        <img src="https://d33wubrfki0l68.cloudfront.net/1484aa80faa12a0025d69af681b6428147f1104f/5a9c3/assets/logos/uwa.png" class="img-fluid rounded-circle" alt="User">
+                    </div>
+                    <div class="profile-usertitle mt-3">
+                        <h5 class="text-center">{{ user.first_name }} {{ user.last_name }}</h5>
+                        <p class="text-muted text-center">{{ account.organization }}</p>
+                    </div>
 
-            <div class="profile-usermenu mt-4">
-              <ul class="nav flex-column">
-                <li class="nav-item">
-                  <a class="nav-link active" href="#"
-                    ><i class="fas fa-home"></i> Home</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#"
-                    ><i class="fas fa-cogs"></i> Settings</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#"
-                    ><i class="fas fa-tasks"></i> Projects</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#"
-                    ><i class="fas fa-question-circle"></i> Help</a
-                  >
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">
-                      {% csrf_token %}
-                        <i class="fas fa-hand-peace"></i> Logout
-                    </a>
-                </li>
-                      
-                </li>
-              </ul>
+                    <div class="profile-usermenu mt-4">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#"><i class="fas fa-home"></i> Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-cogs"></i> Settings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-tasks"></i> Projects</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-question-circle"></i> Help</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <i class="fas fa-hand-peace"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="col-lg-9">
+                <div class="profile-content p-5">
+                    <h4>About Client</h4>
+                    <p>University of Western Australia (The Alliance for Sustainability Leadership in Education)</p>
+                    <a href="#"><i class="fas fa-globe"></i> client website</a>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-9">
-          <div class="profile-content p-5">
-            <h4>About Client</h4>
-            <p>
-              University of Western Australia (The Alliance for Sustainability
-              Leadership in Education)
-            </p>
-
-            <a href="#"><i class="fas fa-globe"></i> client website</a>
-          </div>
-        </div>
-      </div>
     </div>
-  </body>
-</html>
+</body>
 {% endblock %}
