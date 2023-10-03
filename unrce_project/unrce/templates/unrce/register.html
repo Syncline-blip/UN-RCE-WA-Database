@@ -1,162 +1,159 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Sign Up </title>
+    <link rel='stylesheet' href='https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css'>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
-    <title>Sign Up</title>
-  </head>
-  <body>
-    <div class="auth-container">
-      <h2>Sign Up</h2>
-      <form
-        class="auth-form"
-        action="{% url 'register' %}"
-        method="post"
-        id="signup-form"
-      >
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Username"
-            required
-          />
-          <small class="form-text text-muted">
-            User name must be 5 characters long
-          </small>
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Email"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="first_name">First Name</label>
-          <input
-            type="text"
-            id="first_name"
-            name="first_name"
-            placeholder="First Name"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="last_name">Last Name</label>
-          <input
-            type="text"
-            id="last_name"
-            name="last_name"
-            placeholder="Last Name"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="org">Organization</label>
-          <input
-            type="text"
-            id="org"
-            name="org"
-            placeholder="Organization"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="password1">Password</label>
-          <input
-            type="password"
-            id="password1"
-            name="password1"
-            placeholder="Password"
-            required
-          />
-          <meter max="4" id="password-strength-meter"></meter>
-          <p id="password-strength-text"></p>
-        </div>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1rem;
+        font-weight: normal;
+        line-height: 1.5;
+        color: var(--color-black);
+        background: url(https://i.redd.it/u2klg77z1kr51.jpg);
+        background-size: cover; /* Adjust the background size as needed */
+        background-repeat: no-repeat; /* Prevent the background image from repeating */
+      }
+    </style>
+</head>
+<body>
 
-        <div class="form-group">
-          <label for="password2">Confirm Password</label>
-          <input
-            type="password"
-            id="password2"
-            name="password2"
-            placeholder="Confirm Password"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <button type="submit" id="signup-button" disabled>Sign Up</button>
-        </div>
-        <div class="auth-options">
-          <span
-            >Already have an account?
-            <a href="{% url 'login' %}">Log In</a></span
-          >
-          <span><a href="{% url 'initial-landing' %}">Home</a></span>
-        </div>
-      </form>
+<main class="main">
+    <div class="container">
+        <section class="wrapper">
+          <div class="back-button">
+
+            <a href="/">
+                <i class="ion ion-arrow-left-circled"></i> Back to UNRCE Home
+            </a>
+          </div>
+            <div class="heading">
+              <div class="logo">
+                <img src="{% static 'icons/unrce_log.bmp' %}" alt="UNRCE Logo"> 
+            </div>
+                <h1 class="text text-large">UNRCE Sign Up</h1>
+                <p class="text text-normal">or <span><a href="{% url 'login' %}" class="text text-links">Log in to UNRCE</a></span></p>
+            </div>
+            <form class="form" action="{% url 'register' %}" method="post" id="signup-form">
+                {% csrf_token %}
+                <div class="input-control">
+                  <label for="username" class="input-label" hidden>Username</label>
+                  <input type="text" id="username" name="username" class="input-field" placeholder="Username" required>
+                  <p class="error-message" id="username-error"></p>
+                </div>
+                <div class="input-control">
+                  <label for="email" class="input-label" hidden>Email</label>
+                  <input type="email" id="email" name="email" class="input-field" placeholder="Email" required>
+                  <p class="error-message" id="email-error"></p>
+                </div>
+                <div class="input-control">
+                    <label for="first_name" class="input-label" hidden>First Name</label>
+                    <input type="text" id="first_name" name="first_name" class="input-field" placeholder="First Name" required>
+                </div>
+                <div class="input-control">
+                    <label for="last_name" class="input-label" hidden>Last Name</label>
+                    <input type="text" id="last_name" name="last_name" class="input-field" placeholder="Last Name" required>
+                </div>
+                <div class="input-control">
+                    <label for="org" class="input-label" hidden>Organization</label>
+                    <input type="text" id="org" name="org" class="input-field" placeholder="Organization" required>
+                </div>
+                <div class="input-control">
+                  <label for="password1" class="input-label" hidden>Password</label>
+                  <input type="password" id="password1" name="password1" class="input-field" placeholder="Password" required>
+                </div>
+                <div class="input-control">
+                  <meter max="4" id="password-strength-meter"></meter>
+                  <p id="password-strength-text"></p>
+                  <p class="error-message" id="password-error"></p>
+                </div>
+              
+                <div class="input-control">
+                  <label for="password2" class="input-label" hidden>Confirm Password</label>
+                  <input type="password" id="password2" name="password2" class="input-field" placeholder="Confirm Password" required>
+                  <p class="error-message" id="password-confirm-error"></p>
+                </div>
+                <div class="input-control">
+                    <button type="submit" id="signup-button" class="input-submit" disabled>Sign Up</button>
+                </div>
+                <div class="auth-options">
+                    <span>Already have an account? <a href="{% url 'login' %}" class="text text-links">Log In</a></span>
+                </div>
+            </form>
+        </section>
     </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const usernameField = document.getElementById("username");
-        const passwordField = document.getElementById("password1");
-        const passwordConfirmField = document.getElementById("password2");
-        const signupButton = document.getElementById("signup-button");
-        const strengthMeter = document.getElementById(
-          "password-strength-meter"
-        );
-        const strengthText = document.getElementById("password-strength-text");
+</main>
 
-        function updateSignupButton() {
-          // Check if the username length is correct and if the password is valid
-          const isUsernameValid = usernameField.value.length >= 5; // Adjust the minimum username length
-          const password = passwordField.value;
-          const isPasswordValid = zxcvbn(password).score >= 3; // Adjust the password strength score
+<script>
+  // If username is invalid
+  document.getElementById('username-error').textContent = "Username must be at least 5 characters.";
 
-          // Enable or disable the signup button based on validation
-          signupButton.disabled = !(isUsernameValid && isPasswordValid);
-        }
+// If email is invalid
+  document.getElementById('email-error').textContent = "Please enter a valid email.";
 
-        // Listen for input in username and password fields
-        usernameField.addEventListener("input", updateSignupButton);
-        passwordField.addEventListener("input", updateSignupButton);
+// ... and so on for other fields.
 
-        // Password strength meter code (same as before)
-        passwordField.addEventListener("input", function () {
-          const password = passwordField.value;
-          const result = zxcvbn(password);
+  document.addEventListener("DOMContentLoaded", function () {
+    const usernameField = document.getElementById("username");
+    const emailField = document.getElementById("email");
+    const passwordField = document.getElementById("password1");
+    const passwordConfirmField = document.getElementById("password2");
+    const signupButton = document.getElementById("signup-button");
+    const strengthMeter = document.getElementById("password-strength-meter");
+    const strengthText = document.getElementById("password-strength-text");
 
-          strengthMeter.style.backgroundColor = "#FF0000"; // Default to red
+    function isEmailValid(email) {
+        // Simple pattern to check if email is valid
+        const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return pattern.test(email);
+    }
 
-          strengthMeter.value = result.score;
-          strengthText.textContent = result.feedback.suggestions.join(" ");
+    function updateSignupButton() {
+        const isUsernameValid = usernameField.value.trim().length >= 5;
+        const isEmailValidValue = isEmailValid(emailField.value.trim());
+        const password = passwordField.value;
+        const isPasswordValid = zxcvbn(password).score >= 3;
+        const isPasswordConfirmValid = password === passwordConfirmField.value;
 
-          const colors = [
+        signupButton.disabled = !(isUsernameValid && isEmailValidValue && isPasswordValid && isPasswordConfirmValid);
+    }
+
+    usernameField.addEventListener("input", updateSignupButton);
+    emailField.addEventListener("input", updateSignupButton);
+    passwordField.addEventListener("input", updateSignupButton);
+    passwordConfirmField.addEventListener("input", updateSignupButton);
+
+    passwordField.addEventListener("input", function () {
+        const password = passwordField.value;
+        const result = zxcvbn(password);
+
+        strengthMeter.style.backgroundColor = "#FF0000"; // Default to red
+
+        strengthMeter.value = result.score;
+        strengthText.textContent = result.feedback.suggestions.join(" ");
+
+        const colors = [
             "#FF0000",
             "#FF5E00",
             "#FFD700",
             "#7FFF00",
             "#00FF00",
-          ];
-          strengthMeter.style.backgroundColor = colors[result.score];
+        ];
+        strengthMeter.style.backgroundColor = colors[result.score];
 
-          updateSignupButton(); // Call the update function to check password validity
-        });
-      });
-    </script>
-  </body>
+        updateSignupButton();
+    });
+});
+
+</script>
+
+</body>
 </html>
