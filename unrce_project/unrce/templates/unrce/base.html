@@ -19,7 +19,7 @@
     <div class="container">
       <div class="nav-start">
         <a class="logo" href="{% url 'initial-landing' %}">
-          <img src="{% static 'icons/unrce_log.bmp' %}" width="35" height="35" alt="Inc Logo" />
+          <img src="{% static 'icons/unrce_log.png' %}" width="35" height="35" alt="Inc Logo" />
           <span class="logo-text">UNRCE</span>
         </a>
         <nav class="menu">
@@ -123,7 +123,7 @@
               </div>
             </li>
             {% endif %}
-            <li><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+            <li><a class="nav-link" href="/">Contact Us</a></li>
           </ul>
         </nav>
       </div>
@@ -185,11 +185,4 @@
 <div class="content flex-container">
   {% block content %}{% endblock %}
 </div>
-
-<div class="content flex-container">
-  {% block contact %}{% endblock %}
-</div>
-
-
-
 </html>
