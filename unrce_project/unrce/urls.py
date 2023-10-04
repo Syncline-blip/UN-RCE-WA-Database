@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='initial-landing'),
+    path('contact/', views.contact, name='contact'),
     path('eoi/', views.add_interest, name='eoi'),
     path('register/', views.register, name='register'),
     path('login/', LoginView.as_view(template_name='unrce/login.html', success_url='profile'), name='login'),
@@ -21,11 +22,12 @@ urlpatterns = [
     path('report_edit/<int:report_id>/', views.report_edit, name='report_edit'),
     path('report_details/<int:report_id>/', views.report_details, name='report_details'),
     path('delete_image/<int:image_id>/', views.delete_image, name='delete_image'),
-    path('users_list/', views.users_list, name='users_list'),
     path('eoi_review/', views.eoi_review, name='eoi_review'),
+    path('approve_report/<int:report_id>/', views.approve_report, name='approve_report'),
 
 
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

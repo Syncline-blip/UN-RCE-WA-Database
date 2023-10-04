@@ -69,6 +69,25 @@ REGION_CHOICES = [
     ('test', 'Test'),
     ('demo', 'DEmo'),
 ]
+themes_esd = [
+    'Disaster Risk Reduction',
+    'Traditional Knowledge',
+    'Agriculture',
+    'Arts',
+    'Curriculum Development',
+    'Ecotourism',
+    'Forests/Trees',
+    'Plants & Animals',
+    'Waste'
+]
+
+priority_action_areas = [
+    'Priority Action Area 1 - Advancing policy',
+    'Priority Action Area 2 - Transforming learning and training environments',
+    'Priority Action Area 3 - Developing capacities of educators and trainers',
+    'Priority Action Area 4 - Mobilizing youth',
+    'Priority Action Area 5 - Accelerating sustainable solutions at local level'
+]
 
 
 class Report(models.Model):
@@ -77,7 +96,6 @@ class Report(models.Model):
     submitting_RCE = models.CharField(max_length=200, choices=RCE_CHOICES, null=True)
 
 #Focal point(s) and affiliation(s)
-    linked_users = models.ManyToManyField(User, related_name='linked_reports', blank=True)
     format_project = models.CharField(max_length=200, null=True)
     delivery = ArrayField(
         models.CharField(max_length=200, choices=DELIVERY_CHOICES),
@@ -130,14 +148,35 @@ class Report(models.Model):
         blank=True,
         null=True,
     )
+
+    direct_esd_themes = ArrayField(
+        models.CharField(max_length=255),  # since themes are strings, we store them as CharFields
+        blank=True,
+        null=True,
+    )
+    indirect_esd_themes = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        null=True,
+    )
+
+    direct_priority_areas = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        null=True,
+    )
+    indirect_priority_areas = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        null=True,
+    )
 #Make another set of these for ESD and ESD 2030
 
-    current_partners = ArrayField(models.CharField(max_length=200), blank=True, null=True)
-    contact = models.CharField(max_length=200, null=True)
     created_at = models.DateField(auto_now_add=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     approved = models.BooleanField(default=False, null=True)
+    submitted = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return f"{self.title_project}   {self.created_at}"

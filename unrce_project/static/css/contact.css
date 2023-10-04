@@ -1,0 +1,39 @@
+body {
+    font-family: "Inter", sans-serif; /* Making sure we have a nice readable font */
+}
+
+.contact-container {
+    background-color: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-box {
+    background-color: #ffffff;
+    padding: 60px 80px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 70%;
+    max-width: 600px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+.contact-box h1 {
+    margin-bottom: 30px;
+    text-align: center; /* Centering the title */
+    font-size: 2em;
+}
+
+.contact-box p {
+    margin-bottom: 20px;
+    text-align: center; /* Centering the text */
+}
+
+.show-contact{
+    opacity: 1;
+    transform: scale(1);
+}

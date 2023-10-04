@@ -111,10 +111,6 @@
         {% for report in reports %}
               <tr onclick="window.location='{% url 'report_edit' report.id %}'" style="cursor: pointer;">
                 <td>{{ report.id }}</td>
-                <td>{{ report.lead_organisation }}</td>
-                <td>{{ report.name_project }}</td>
-                <td>{{ report.project_description_short }}</td>
-                <td>{{ report.contact }}</td>
                 <td>{{ report.images.count }}</td>
                 <td>{{ report.created_at }}</td>
                 <td>{{ report.last_modified }}</td>
