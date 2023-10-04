@@ -357,14 +357,16 @@
               </div>
           {% endfor %}
       </div>
-      
+      <br>
       <div id="esd-themes-container">
         {% for theme in themes_esd %}
             <div class="esd-theme-item">
                 {{ theme }} 
+                <br>
                 <div class="esd-theme-options">
                     <input type="radio" name="esd_theme_option_{{ theme }}" value="direct" {% if theme in report.direct_esd_themes %}checked{% endif %}> Direct
                     <input type="radio" name="esd_theme_option_{{ theme }}" value="indirect" {% if theme in report.indirect_esd_themes %}checked{% endif %}> Indirect
+                    <br><br>
                 </div>
             </div>
         {% endfor %}
@@ -374,9 +376,12 @@
         {% for area in priority_action_areas %}
             <div class="esd-priority-item">
                 {{ area }}
+                <br>
                 <div class="esd-priority-options">
                     <input type="radio" name="esd_priority_option_{{ area }}" value="direct" {% if area in report.direct_priority_areas %}checked{% endif %}> Direct
                     <input type="radio" name="esd_priority_option_{{ area }}" value="indirect" {% if area in report.indirect_priority_areas %}checked{% endif %}> Indirect
+                    <br>
+                    <br>
                 </div>
             </div>
         {% endfor %}
