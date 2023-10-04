@@ -40,8 +40,7 @@ def create_report(request):
             images = request.FILES.getlist('image')
             files = request.FILES.getlist('file')
 
-            direct_sdgs = []
-            indirect_sdgs = []
+            direct_sdgs, indirect_sdgs = [], []
             for i in range(1, 18):
                 option = request.POST.get(f'sdg_option_{i}')
                 if option == 'direct':
@@ -49,8 +48,7 @@ def create_report(request):
                 elif option == 'indirect':
                     indirect_sdgs.append(str(i))
 
-            direct_esd = []
-            indirect_esd = []
+            direct_esd, indirect_esd = [], []
             for theme in themes_esd:
                 option = request.POST.get(f'esd_theme_option_{theme}')
                 if option == 'direct':
@@ -58,8 +56,7 @@ def create_report(request):
                 elif option == 'indirect':
                     indirect_esd.append(theme)
 
-            direct_priority = []
-            indirect_priority = []
+            direct_priority, indirect_priority = [], []
             for area in priority_action_areas:
                 option = request.POST.get(f'esd_priority_option_{area}')
                 if option == 'direct':
@@ -85,11 +82,11 @@ def create_report(request):
                 report.direct_priority_areas = direct_priority
                 report.indirect_priority_areas = indirect_priority
                 report.save()
-
-                organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
+                print(organization_formset.cleaned_data)
+                
                 if organization_formset.is_valid():
+                    organization_formset.instance = report
                     organization_formset.save()
-                report_form.save_m2m()  
 
                 if images:
                     for image in images:

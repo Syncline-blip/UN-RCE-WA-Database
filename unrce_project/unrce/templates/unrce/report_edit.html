@@ -3,6 +3,7 @@
 
 
 {% block content %}
+
 <h2>Edit Report</h2>
 <style>
     .sdg-img {
@@ -25,11 +26,19 @@
 {% endfor %}
 
     <h3>Organization Details</h3>
-    {{ organization_formset.management_form }}
-    {% for form in organization_formset %}
-        {{ form.as_p }}
-    {% endfor %}
-
+        <div class="organization-formsets">
+            {{ organization_formset.management_form }}
+            {% for form in organization_formset %}
+                <div class="organization-form" data-prefix="{{ form.prefix }}">
+                    {{ form.name.label }}: {{ form.name }}<br>
+                    {{ form.email.label }}: {{ form.email }}<br>
+                    {{ form.website.label }}: {{ form.website }}<br>
+                    <button type="button" class="remove-org-form">Remove</button>
+                </div>
+            {% endfor %}
+            <button type="button" id="add-organization">Add Another Organization</button>
+        </div>
+    
     <div class="form-group">
     
 
@@ -37,7 +46,7 @@
     <div id="sdg-container">
         {% for i in sdg_list %}
             <div class="sdg-item">
-                <img src="{% static 'css/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
+                <img src="{% static 'images/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
                 <div class="sdg-options">
                     <input type="radio" name="sdg_option_{{ i }}" value="direct" {% if i|add:0 in report.direct_sdgs %}checked{% endif %}> Direct
                     <input type="radio" name="sdg_option_{{ i }}" value="indirect" {% if i|add:0 in report.indirect_sdgs %}checked{% endif %}> Indirect
@@ -93,43 +102,45 @@
     <input type="submit" value="Update Report">
 </form>
 
-{% endblock %}
 <script>
-
-    
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('Script loaded');
     
-    // Handle radio button behavior
-    let radios = document.querySelectorAll('input[type="radio"]');
-    radios.forEach(function(radio) {
-        radio.addEventListener('click', function() {
-            if (radio.getAttribute('data-checked') == 'true') {
-                radio.checked = false;
-                radio.removeAttribute('data-checked');
-            } else {
-                radio.setAttribute('data-checked', 'true');
-            }
-        });
-    });
+        const radios = document.querySelectorAll('input[type="radio"]');
     
+        radios.forEach(radio => {
+            console.log('Event listener attached');
+            radio.addEventListener('click', function () {
+                console.log('Radio clicked');
+                if (radio.getAttribute('data-last-clicked') === 'true') {
+                    radio.checked = false;
+                    radio.setAttribute('data-last-clicked', 'false');
+                } else {
+                    radio.setAttribute('data-last-clicked', 'true');
+                }
     
-    // Simplified Add button function for organizations
-    const orgFormSetsContainer = document.querySelector('.organization-formsets');
-    const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
-    
-    document.getElementById('add-organization').addEventListener('click', function() {
-        const newForm = orgFormTemplate.cloneNode(true);
-    
-        // Clear any input values in the cloned form
-        newForm.querySelectorAll('input').forEach(input => input.value = '');
-    
-        const removeBtn = newForm.querySelector('.remove-org-form');
-        removeBtn.addEventListener('click', function() {
-            newForm.remove();
-            // Potential re-indexing of formsets can be handled here if needed
+                // Deselect other radios with the same name attribute if the current one is checked
+                radios.forEach(otherRadio => {
+                    if (otherRadio.name === radio.name && otherRadio !== radio) {
+                        otherRadio.setAttribute('data-last-clicked', 'false');
+                    }
+                });
+            });
         });
     
-        orgFormSetsContainer.appendChild(newForm);
-    });
+        // Simplified Add button function for organizations
+        const orgFormSetsContainer = document.querySelector('.organization-formsets');
+        const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
+        
+        document.getElementById('add-organization').addEventListener('click', function() {
+            const newForm = orgFormTemplate.cloneNode(true);
+            newForm.querySelectorAll('input').forEach(input => input.value = '');
+            const removeBtn = newForm.querySelector('.remove-org-form');
+            removeBtn.addEventListener('click', function() {
+                newForm.remove();
+            });
+            orgFormSetsContainer.appendChild(newForm);
+        });
     });
     </script>
+    {% endblock %}

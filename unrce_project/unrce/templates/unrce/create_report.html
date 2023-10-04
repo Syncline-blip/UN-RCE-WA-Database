@@ -59,6 +59,14 @@
 
 <div class="form-group-section">
     <h3>Basic Information</h3>
+    <!-- status -->
+    <div class="form-group {% if report_form.status.errors %}has-error{% endif %}">
+        <label for="{{ report_form.status.id_for_label }}">{{ report_form.status.label }}</label>
+        {{ report_form.status }}
+        {% for error in report_form.status.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    </div>
 
     <!-- title_project -->
     <div class="form-group {% if report_form.title_project.errors %}has-error{% endif %}">
@@ -244,15 +252,6 @@
 <div class="form-group-section">
     <h3>Contents</h3>
 
-    <!-- status -->
-    <div class="form-group {% if report_form.status.errors %}has-error{% endif %}">
-        <label for="{{ report_form.status.id_for_label }}">{{ report_form.status.label }}</label>
-        {{ report_form.status }}
-        {% for error in report_form.status.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
     <!-- start_project -->
     <div class="form-group {% if report_form.start_project.errors %}has-error{% endif %}">
         <label for="{{ report_form.start_project.id_for_label }}">{{ report_form.start_project.label }}</label>
@@ -357,7 +356,7 @@
       <div id="sdg-container">
           {% for i in sdg_list %}
               <div class="sdg-item">
-                  <img src="{% static 'css/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
+                  <img src="{% static 'images/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
                   <div class="sdg-options">
                       <input type="radio" name="sdg_option_{{ i }}" value="direct"> Direct
                       <input type="radio" name="sdg_option_{{ i }}" value="indirect"> Indirect
@@ -371,26 +370,25 @@
             <div class="esd-theme-item">
                 {{ theme }} 
                 <div class="esd-theme-options">
-                    <input type="radio" name="esd_theme_option_{{ forloop.counter }}" value="direct"> Direct
-                    <input type="radio" name="esd_theme_option_{{ forloop.counter }}" value="indirect"> Indirect
+                    <input type="radio" name="esd_theme_option_{{ theme }}" value="direct" {% if theme in report.direct_esd_themes %}checked{% endif %}> Direct
+                    <input type="radio" name="esd_theme_option_{{ theme }}" value="indirect" {% if theme in report.indirect_esd_themes %}checked{% endif %}> Indirect
                 </div>
             </div>
         {% endfor %}
     </div>
     
-    <!-- ESD for 2030-Priority Action Areas -->
     <div id="esd-priority-container">
         {% for area in priority_action_areas %}
             <div class="esd-priority-item">
                 {{ area }}
                 <div class="esd-priority-options">
-                    <input type="radio" name="esd_priority_option_{{ forloop.counter }}" value="direct"> Direct
-                    <input type="radio" name="esd_priority_option_{{ forloop.counter }}" value="indirect"> Indirect
+                    <input type="radio" name="esd_priority_option_{{ area }}" value="direct" {% if area in report.direct_priority_areas %}checked{% endif %}> Direct
+                    <input type="radio" name="esd_priority_option_{{ area }}" value="indirect" {% if area in report.indirect_priority_areas %}checked{% endif %}> Indirect
                 </div>
             </div>
         {% endfor %}
     </div>
-
+    
     
 
 
@@ -406,10 +404,6 @@
     </div>
     
       <!--Save form button-->
-      <div class="save-options">
-        <button type="submit">Save Report</button>
-      </div>
-  </div>
   <div class="save-options">
     <button type="submit" name="save">Save Report</button>
     <button type="submit" name="submit_for_approval">Submit for Approval</button>
@@ -436,23 +430,27 @@ radios.forEach(function(radio) {
 });
 
 // Simplified Add button function for organizations
-const orgFormSetsContainer = document.querySelector('.organization-formsets');
-const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
+        const orgFormSetsContainer = document.querySelector('.organization-formsets');
+        const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
+        
+        // Add event listener for each remove button already on the page
+        const existingRemoveButtons = orgFormSetsContainer.querySelectorAll('.remove-org-form');
+        existingRemoveButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                button.closest('.organization-form').remove();
+            });
+        });
 
-document.getElementById('add-organization').addEventListener('click', function() {
-    const newForm = orgFormTemplate.cloneNode(true);
-
-    // Clear any input values in the cloned form
-    newForm.querySelectorAll('input').forEach(input => input.value = '');
-
-    const removeBtn = newForm.querySelector('.remove-org-form');
-    removeBtn.addEventListener('click', function() {
-        newForm.remove();
-        // Potential re-indexing of formsets can be handled here if needed
+        // Existing code for add organization button
+        document.getElementById('add-organization').addEventListener('click', function() {
+            const newForm = orgFormTemplate.cloneNode(true);
+            newForm.querySelectorAll('input').forEach(input => input.value = '');
+            const removeBtn = newForm.querySelector('.remove-org-form');
+            removeBtn.addEventListener('click', function() {
+                newForm.remove();
+            });
+            orgFormSetsContainer.appendChild(newForm);
+        });
     });
-
-    orgFormSetsContainer.appendChild(newForm);
-});
-});
 </script>
     
