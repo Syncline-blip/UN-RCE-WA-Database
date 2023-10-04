@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -107,7 +105,7 @@ DATABASES = {
         "ENGINE": 'django.db.backends.postgresql',
         "NAME": 'unrce',
         'USER': 'postgres',
-        'PASSWORD': '123',
+        'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -161,5 +159,15 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DEBUG = True
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'jlumagbas.unrce@gmail.com'
+EMAIL_HOST_PASSWORD = 'rkcc tibq mdiq lzmq' 
+EMAIL_SSL_CA_FILE = None
+
+
