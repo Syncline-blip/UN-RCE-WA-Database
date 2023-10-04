@@ -7,445 +7,650 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/create_report.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/create_report.css' %}"> -->
     <title>{% block title %}Create Report{% endblock %}</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'admin/js/jquery.init.js' %}"></script>
     <script src="{% static 'admin/js/actions.js' %}"></script>
     <script src="{% static 'admin/js/inlines.js' %}"></script>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #f4f4f4, #003087, #DAAA00);
+    margin: 0;
+    padding: 0;
+  }
+  
+ /* .heaer {
+    background-color:rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 10px;
+    z-index: 1999;
+    top: 2rem;
+    align-items: center;
+    border: 2px solid #DAAA00;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: calc(100% - 10px); 
+    max-width: 100%;
+  }  */
+  
+  .header h1 {
+    text-align: center;
+    margin: 0;
+    color:#DAAA00;
+  }
 
-<style>
-    .sdg-img {
-    width: 100px; /* Adjust as needed */
-    height: 100px; /* Adjust as needed */
-}
-</style>
-
+.heaer a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+} 
+  
+  .report-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    border: none;
+    border-left: 8px solid #dce286;
+    box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group h3 {
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  input[type="radio"] {
+    margin-right: 10px;
+  }
+  
+  
+  #add-organization {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .remove-organization {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  
+  #user-search {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .user-item {
+    background-color: #003087;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  #linked-users-section {
+    margin-top: 20px;
+  }
+  
+  /* SDG styling */
+  .sdg-item {
+    display: inline-block;
+    margin-right: 20px;
+  }
+  
+  .sdg-img {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .sdg-options {
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  
+  .save-options {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .save-options button[type="submit"] {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .save-options button[type="submit"]:hover {
+    background-color: #219a52;
+  }
+    </style>
 </head>
 {% endblock %}
 
 <body>
-  <!--
-    This block is for the creation of the reports, it contains the form that is populated based on the fields
-    of the model. The formset is for adding images to the model.
-  -->
-  {% block content %}
-  <div class="header">
-    <h1>Create Report</h1>
-    <!-- <a href="{% url 'initial-landing' %}">home</a> -->
-  </div> 
-
-  {% if report_form.non_field_errors %}
-    <div class="alert alert-danger">
-        {% for error in report_form.field_name.errors %}
-        <span class="help-block">{{ error }}</span>
-    {% endfor %}
+    <!--
+      This block is for the creation of the reports, it contains the form that is populated based on the fields
+      of the model. The formset is for adding images to the model.
+    -->
+    {% block content %}
+    <div class="header">
+      <h1>Create Report</h1>
     </div>
-  {% endif %}
-
-  <div class="report-container">
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-
-
-      <!-- Basic Information -->
-
-<div class="form-group-section">
-    <h3>Basic Information</h3>
-
-    <!-- title_project -->
-    <div class="form-group {% if report_form.title_project.errors %}has-error{% endif %}">
-        <label for="{{ report_form.title_project.id_for_label }}">{{ report_form.title_project.label }}</label>
-        {{ report_form.title_project }}
-        {% for error in report_form.title_project.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- submitting_RCE -->
-    <div class="form-group {% if report_form.submitting_RCE.errors %}has-error{% endif %}">
-        <label for="{{ report_form.submitting_RCE.id_for_label }}">{{ report_form.submitting_RCE.label }}</label>
-        {{ report_form.submitting_RCE }}
-        {% for error in report_form.submitting_RCE.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Focal point(s) and affiliation(s) -->
-
-
-
-<div class="form-group-section">
-    <h3>Focal point(s) and affiliation(s)</h3>
-    <div class="organization-formsets">
-        {{ organization_formset.management_form }}
-        {% for form in organization_formset %}
-    <div class="organization-form" data-prefix="{{ form.prefix }}">
-        {{ form.name.label }}: {{ form.name }}<br>
-        {{ form.email.label }}: {{ form.email }}<br>
-        {{ form.website.label }}: {{ form.website }}<br>
-        <button type="button" class="remove-org-form">Remove</button>
-    </div>
-{% endfor %}
-        <button type="button" id="add-organization">Add Another Organization</button>
-    </div>
-</div>
-
-    
-
-
-
-
-
-
-    <!-- format_project -->
-    <div class="form-group {% if report_form.format_project.errors %}has-error{% endif %}">
-        <label for="{{ report_form.format_project.id_for_label }}">{{ report_form.format_project.label }}</label>
-        {{ report_form.format_project }}
-        {% for error in report_form.format_project.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- delivery -->
-    <div class="form-group {% if report_form.delivery.errors %}has-error{% endif %}">
-        <label for="{{ report_form.delivery.id_for_label }}">{{ report_form.delivery.label }}</label>
-        {{ report_form.delivery }}
-        {% for error in report_form.delivery.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- frequency -->
-    <div class="form-group {% if report_form.frequency.errors %}has-error{% endif %}">
-        <label for="{{ report_form.frequency.id_for_label }}">{{ report_form.frequency.label }}</label>
-        {{ report_form.frequency }}
-        {% for error in report_form.frequency.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- language_project -->
-    <div class="form-group {% if report_form.language_project.errors %}has-error{% endif %}">
-        <label for="{{ report_form.language_project.id_for_label }}">{{ report_form.language_project.label }}</label>
-        {{ report_form.language_project }}
-        {% for error in report_form.language_project.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- web_link -->
-    <div class="form-group {% if report_form.web_link.errors %}has-error{% endif %}">
-        <label for="{{ report_form.web_link.id_for_label }}">{{ report_form.web_link.label }}</label>
-        {{ report_form.web_link }}
-        {% for error in report_form.web_link.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- additional_resources -->
-    <div class="form-group {% if report_form.additional_resources.errors %}has-error{% endif %}">
-        <label for="{{ report_form.additional_resources.id_for_label }}">{{ report_form.additional_resources.label }}</label>
-        {{ report_form.additional_resources }}
-        {% for error in report_form.additional_resources.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Geographical & Education Information -->
-
-<div class="form-group-section">
-    <h3>Geographical & Education Information</h3>
-
-    <!-- region -->
-    <div class="form-group {% if report_form.region.errors %}has-error{% endif %}">
-        <label for="{{ report_form.region.id_for_label }}">{{ report_form.region.label }}</label>
-        {{ report_form.region }}
-        {% for error in report_form.region.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- country -->
-    <div class="form-group {% if report_form.country.errors %}has-error{% endif %}">
-        <label for="{{ report_form.country.id_for_label }}">{{ report_form.country.label }}</label>
-        {{ report_form.country }}
-        {% for error in report_form.country.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- locations -->
-    <div class="form-group {% if report_form.locations.errors %}has-error{% endif %}">
-        <label for="{{ report_form.locations.id_for_label }}">{{ report_form.locations.label }}</label>
-        {{ report_form.locations }}
-        {% for error in report_form.locations.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- address -->
-    <div class="form-group {% if report_form.address.errors %}has-error{% endif %}">
-        <label for="{{ report_form.address.id_for_label }}">{{ report_form.address.label }}</label>
-        {{ report_form.address }}
-        {% for error in report_form.address.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- ecosystem -->
-    <div class="form-group {% if report_form.ecosystem.errors %}has-error{% endif %}">
-        <label for="{{ report_form.ecosystem.id_for_label }}">{{ report_form.ecosystem.label }}</label>
-        {{ report_form.ecosystem }}
-        {% for error in report_form.ecosystem.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- audience -->
-    <div class="form-group {% if report_form.audience.errors %}has-error{% endif %}">
-        <label for="{{ report_form.audience.id_for_label }}">{{ report_form.audience.label }}</label>
-        {{ report_form.audience }}
-        {% for error in report_form.audience.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- socio_economic_characteristics -->
-    <div class="form-group {% if report_form.socio_economic_characteristics.errors %}has-error{% endif %}">
-        <label for="{{ report_form.socio_economic_characteristics.id_for_label }}">{{ report_form.socio_economic_characteristics.label }}</label>
-        {{ report_form.socio_economic_characteristics }}
-        {% for error in report_form.socio_economic_characteristics.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- development_challenges -->
-    <div class="form-group {% if report_form.development_challenges.errors %}has-error{% endif %}">
-        <label for="{{ report_form.development_challenges.id_for_label }}">{{ report_form.development_challenges.label }}</label>
-        {{ report_form.development_challenges }}
-        {% for error in report_form.development_challenges.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Contents -->
-
-<div class="form-group-section">
-    <h3>Contents</h3>
-
-    <!-- status -->
-    <div class="form-group {% if report_form.status.errors %}has-error{% endif %}">
+  
+    {% if report_form.non_field_errors %}
+      <div class="alert alert-danger">
+          {% for error in report_form.field_name.errors %}
+          <span class="help-block">{{ error }}</span>
+      {% endfor %}
+      </div>
+    {% endif %}
+  
+    <div class="report-container">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+  
+  
+        <!-- Basic Information -->
+  
+  <div class="form-group-section">
+      <h3>Basic Information</h3>
+      <div class="form-group {% if report_form.status.errors %}has-error{% endif %}">
         <label for="{{ report_form.status.id_for_label }}">{{ report_form.status.label }}</label>
         {{ report_form.status }}
         {% for error in report_form.status.errors %}
             <span class="help-block">{{ error }}</span>
         {% endfor %}
-    </div>
-
-    <!-- start_project -->
-    <div class="form-group {% if report_form.start_project.errors %}has-error{% endif %}">
-        <label for="{{ report_form.start_project.id_for_label }}">{{ report_form.start_project.label }}</label>
-        {{ report_form.start_project }}
-        {% for error in report_form.start_project.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- end_project -->
-    <div class="form-group {% if report_form.end_project.errors %}has-error{% endif %}">
-        <label for="{{ report_form.end_project.id_for_label }}">{{ report_form.end_project.label }}</label>
-        {{ report_form.end_project }}
-        {% for error in report_form.end_project.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- rationale -->
-    <div class="form-group {% if report_form.rationale.errors %}has-error{% endif %}">
-        <label for="{{ report_form.rationale.id_for_label }}">{{ report_form.rationale.label }}</label>
-        {{ report_form.rationale }}
-        {% for error in report_form.rationale.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- objectives -->
-    <div class="form-group {% if report_form.objectives.errors %}has-error{% endif %}">
-        <label for="{{ report_form.objectives.id_for_label }}">{{ report_form.objectives.label }}</label>
-        {{ report_form.objectives }}
-        {% for error in report_form.objectives.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- activities_practices -->
-    <div class="form-group {% if report_form.activities_practices.errors %}has-error{% endif %}">
-        <label for="{{ report_form.activities_practices.id_for_label }}">{{ report_form.activities_practices.label }}</label>
-        {{ report_form.activities_practices }}
-        {% for error in report_form.activities_practices.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- size_academic -->
-    <div class="form-group {% if report_form.size_academic.errors %}has-error{% endif %}">
-        <label for="{{ report_form.size_academic.id_for_label }}">{{ report_form.size_academic.label }}</label>
-        {{ report_form.size_academic }}
-        {% for error in report_form.size_academic.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- results -->
-    <div class="form-group {% if report_form.results.errors %}has-error{% endif %}">
-        <label for="{{ report_form.results.id_for_label }}">{{ report_form.results.label }}</label>
-        {{ report_form.results }}
-        {% for error in report_form.results.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- lessons_learned -->
-    <div class="form-group {% if report_form.lessons_learned.errors %}has-error{% endif %}">
-        <label for="{{ report_form.lessons_learned.id_for_label }}">{{ report_form.lessons_learned.label }}</label>
-        {{ report_form.lessons_learned }}
-        {% for error in report_form.lessons_learned.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- key_message -->
-    <div class="form-group {% if report_form.key_message.errors %}has-error{% endif %}">
-        <label for="{{ report_form.key_message.id_for_label }}">{{ report_form.key_message.label }}</label>
-        {{ report_form.key_message }}
-        {% for error in report_form.key_message.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- relationship_activities -->
-    <div class="form-group {% if report_form.relationship_activities.errors %}has-error{% endif %}">
-        <label for="{{ report_form.relationship_activities.id_for_label }}">{{ report_form.relationship_activities.label }}</label>
-        {{ report_form.relationship_activities }}
-        {% for error in report_form.relationship_activities.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- funding -->
-    <div class="form-group {% if report_form.funding.errors %}has-error{% endif %}">
-        <label for="{{ report_form.funding.id_for_label }}">{{ report_form.funding.label }}</label>
-        {{ report_form.funding }}
-        {% for error in report_form.funding.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-</div>
-<!-- SDG list -->
-      <div id="sdg-container">
-          {% for i in sdg_list %}
-              <div class="sdg-item">
-                  <img src="{% static 'css/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
-                  <div class="sdg-options">
-                      <input type="radio" name="sdg_option_{{ i }}" value="direct"> Direct
-                      <input type="radio" name="sdg_option_{{ i }}" value="indirect"> Indirect
-                  </div>
-              </div>
+        </div>
+      <!-- title_project -->
+      <div class="form-group {% if report_form.title_project.errors %}has-error{% endif %}">
+          <label for="{{ report_form.title_project.id_for_label }}">{{ report_form.title_project.label }}</label>
+          {{ report_form.title_project }}
+          {% for error in report_form.title_project.errors %}
+              <span class="help-block">{{ error }}</span>
           {% endfor %}
       </div>
-      
-      <div id="esd-themes-container">
-        {% for theme in themes_esd %}
-            <div class="esd-theme-item">
-                {{ theme }} 
-                <div class="esd-theme-options">
-                    <input type="radio" name="esd_theme_option_{{ forloop.counter }}" value="direct"> Direct
-                    <input type="radio" name="esd_theme_option_{{ forloop.counter }}" value="indirect"> Indirect
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-    
-    <!-- ESD for 2030-Priority Action Areas -->
-    <div id="esd-priority-container">
-        {% for area in priority_action_areas %}
-            <div class="esd-priority-item">
-                {{ area }}
-                <div class="esd-priority-options">
-                    <input type="radio" name="esd_priority_option_{{ forloop.counter }}" value="direct"> Direct
-                    <input type="radio" name="esd_priority_option_{{ forloop.counter }}" value="indirect"> Indirect
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-
-    
-
-
-      <!-- Image upload -->
-      <div class="form-group">
-        <label for="image">Upload Images</label>
-        <input type="file" name="image" id="image" multiple>
-    </div>
-    <!--File upload-->
-    <div class="form-group">
-        <label for="files">Upload Files</label>
-        <input type="file" name="file" id="files" multiple>
-    </div>
-    
-      <!--Save form button-->
-      <div class="save-options">
-        <button type="submit">Save Report</button>
+  
+      <!-- submitting_RCE -->
+      <div class="form-group {% if report_form.submitting_RCE.errors %}has-error{% endif %}">
+          <label for="{{ report_form.submitting_RCE.id_for_label }}">{{ report_form.submitting_RCE.label }}</label>
+          {{ report_form.submitting_RCE }}
+          {% for error in report_form.submitting_RCE.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
       </div>
   </div>
-  <div class="save-options">
-    <button type="submit" name="save">Save Report</button>
-    <button type="submit" name="submit_for_approval">Submit for Approval</button>
-</div>  
-</form>
-  {% endblock %}
-
-  <script>
-
-    
-document.addEventListener('DOMContentLoaded', function() {
-
-// Handle radio button behavior
-let radios = document.querySelectorAll('input[type="radio"]');
-radios.forEach(function(radio) {
-    radio.addEventListener('click', function() {
-        if (radio.getAttribute('data-checked') == 'true') {
-            radio.checked = false;
-            radio.removeAttribute('data-checked');
-        } else {
-            radio.setAttribute('data-checked', 'true');
-        }
-    });
-});
-
-// Simplified Add button function for organizations
-const orgFormSetsContainer = document.querySelector('.organization-formsets');
-const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
-
-document.getElementById('add-organization').addEventListener('click', function() {
-    const newForm = orgFormTemplate.cloneNode(true);
-
-    // Clear any input values in the cloned form
-    newForm.querySelectorAll('input').forEach(input => input.value = '');
-
-    const removeBtn = newForm.querySelector('.remove-org-form');
-    removeBtn.addEventListener('click', function() {
-        newForm.remove();
-        // Potential re-indexing of formsets can be handled here if needed
-    });
-
-    orgFormSetsContainer.appendChild(newForm);
-});
-});
-</script>
-    
+  
+  <!-- Focal point(s) and affiliation(s) -->
+  
+  
+  
+  <div class="form-group-section">
+      <h3>Focal point(s) and affiliation(s)</h3>
+      <!-- This is formset for organization affiliation-->
+      <div class="organization-formsets">
+          {{ organization_formset.management_form }}
+          {% for form in organization_formset %}
+     </div>
+      <div class="organization-form" data-prefix="{{ form.prefix }}">
+            {{ form.name.label }}: {{ form.name }}<br>
+            {{ form.email.label }}: {{ form.email }}<br>
+            {{ form.website.label }}: {{ form.website }}<br>
+            <button type="button" class="remove-org-form">Remove</button>
+     </div>
+    {% endfor %}
+        <button type="button" id="add-organization">Add Another Organization</button>
+          
+      <!-- format_project -->
+      <div class="form-group {% if report_form.format_project.errors %}has-error{% endif %}">
+          <label for="{{ report_form.format_project.id_for_label }}">{{ report_form.format_project.label }}</label>
+          {{ report_form.format_project }}
+          {% for error in report_form.format_project.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- delivery -->
+      <div class="form-group {% if report_form.delivery.errors %}has-error{% endif %}">
+          <label for="{{ report_form.delivery.id_for_label }}">{{ report_form.delivery.label }}</label>
+          {{ report_form.delivery }}
+          {% for error in report_form.delivery.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- frequency -->
+      <div class="form-group {% if report_form.frequency.errors %}has-error{% endif %}">
+          <label for="{{ report_form.frequency.id_for_label }}">{{ report_form.frequency.label }}</label>
+          {{ report_form.frequency }}
+          {% for error in report_form.frequency.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- language_project -->
+      <div class="form-group {% if report_form.language_project.errors %}has-error{% endif %}">
+          <label for="{{ report_form.language_project.id_for_label }}">{{ report_form.language_project.label }}</label>
+          {{ report_form.language_project }}
+          {% for error in report_form.language_project.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- web_link -->
+      <div class="form-group {% if report_form.web_link.errors %}has-error{% endif %}">
+          <label for="{{ report_form.web_link.id_for_label }}">{{ report_form.web_link.label }}</label>
+          {{ report_form.web_link }}
+          {% for error in report_form.web_link.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- additional_resources -->
+      <div class="form-group {% if report_form.additional_resources.errors %}has-error{% endif %}">
+          <label for="{{ report_form.additional_resources.id_for_label }}">{{ report_form.additional_resources.label }}</label>
+          {{ report_form.additional_resources }}
+          {% for error in report_form.additional_resources.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  </div>
+  
+  <!-- Geographical & Education Information -->
+  
+  <div class="form-group-section">
+      <h3>Geographical & Education Information</h3>
+  
+      <!-- region -->
+      <div class="form-group {% if report_form.region.errors %}has-error{% endif %}">
+          <label for="{{ report_form.region.id_for_label }}">{{ report_form.region.label }}</label>
+          {{ report_form.region }}
+          {% for error in report_form.region.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- country -->
+      <div class="form-group {% if report_form.country.errors %}has-error{% endif %}">
+          <label for="{{ report_form.country.id_for_label }}">{{ report_form.country.label }}</label>
+          {{ report_form.country }}
+          {% for error in report_form.country.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- locations -->
+      <div class="form-group {% if report_form.locations.errors %}has-error{% endif %}">
+          <label for="{{ report_form.locations.id_for_label }}">{{ report_form.locations.label }}</label>
+          {{ report_form.locations }}
+          {% for error in report_form.locations.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- address -->
+      <div class="form-group {% if report_form.address.errors %}has-error{% endif %}">
+          <label for="{{ report_form.address.id_for_label }}">{{ report_form.address.label }}</label>
+          {{ report_form.address }}
+          {% for error in report_form.address.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- ecosystem -->
+      <div class="form-group {% if report_form.ecosystem.errors %}has-error{% endif %}">
+          <label for="{{ report_form.ecosystem.id_for_label }}">{{ report_form.ecosystem.label }}</label>
+          {{ report_form.ecosystem }}
+          {% for error in report_form.ecosystem.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- audience -->
+      <div class="form-group {% if report_form.audience.errors %}has-error{% endif %}">
+          <label for="{{ report_form.audience.id_for_label }}">{{ report_form.audience.label }}</label>
+          {{ report_form.audience }}
+          {% for error in report_form.audience.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- socio_economic_characteristics -->
+      <div class="form-group {% if report_form.socio_economic_characteristics.errors %}has-error{% endif %}">
+          <label for="{{ report_form.socio_economic_characteristics.id_for_label }}">{{ report_form.socio_economic_characteristics.label }}</label>
+          {{ report_form.socio_economic_characteristics }}
+          {% for error in report_form.socio_economic_characteristics.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- development_challenges -->
+      <div class="form-group {% if report_form.development_challenges.errors %}has-error{% endif %}">
+          <label for="{{ report_form.development_challenges.id_for_label }}">{{ report_form.development_challenges.label }}</label>
+          {{ report_form.development_challenges }}
+          {% for error in report_form.development_challenges.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  </div>
+  
+  <!-- Contents -->
+  
+  <div class="form-group-section">
+      <h3>Contents</h3>
+  
+      <!-- status -->
+      
+  
+      <!-- start_project -->
+      <div class="form-group {% if report_form.start_project.errors %}has-error{% endif %}">
+          <label for="{{ report_form.start_project.id_for_label }}">{{ report_form.start_project.label }}</label>
+          {{ report_form.start_project }}
+          {% for error in report_form.start_project.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- end_project -->
+      <div class="form-group {% if report_form.end_project.errors %}has-error{% endif %}">
+          <label for="{{ report_form.end_project.id_for_label }}">{{ report_form.end_project.label }}</label>
+          {{ report_form.end_project }}
+          {% for error in report_form.end_project.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- rationale -->
+      <div class="form-group {% if report_form.rationale.errors %}has-error{% endif %}">
+          <label for="{{ report_form.rationale.id_for_label }}">{{ report_form.rationale.label }}</label>
+          {{ report_form.rationale }}
+          {% for error in report_form.rationale.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- objectives -->
+      <div class="form-group {% if report_form.objectives.errors %}has-error{% endif %}">
+          <label for="{{ report_form.objectives.id_for_label }}">{{ report_form.objectives.label }}</label>
+          {{ report_form.objectives }}
+          {% for error in report_form.objectives.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- activities_practices -->
+      <div class="form-group {% if report_form.activities_practices.errors %}has-error{% endif %}">
+          <label for="{{ report_form.activities_practices.id_for_label }}">{{ report_form.activities_practices.label }}</label>
+          {{ report_form.activities_practices }}
+          {% for error in report_form.activities_practices.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- size_academic -->
+      <div class="form-group {% if report_form.size_academic.errors %}has-error{% endif %}">
+          <label for="{{ report_form.size_academic.id_for_label }}">{{ report_form.size_academic.label }}</label>
+          {{ report_form.size_academic }}
+          {% for error in report_form.size_academic.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- results -->
+      <div class="form-group {% if report_form.results.errors %}has-error{% endif %}">
+          <label for="{{ report_form.results.id_for_label }}">{{ report_form.results.label }}</label>
+          {{ report_form.results }}
+          {% for error in report_form.results.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- lessons_learned -->
+      <div class="form-group {% if report_form.lessons_learned.errors %}has-error{% endif %}">
+          <label for="{{ report_form.lessons_learned.id_for_label }}">{{ report_form.lessons_learned.label }}</label>
+          {{ report_form.lessons_learned }}
+          {% for error in report_form.lessons_learned.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- key_message -->
+      <div class="form-group {% if report_form.key_message.errors %}has-error{% endif %}">
+          <label for="{{ report_form.key_message.id_for_label }}">{{ report_form.key_message.label }}</label>
+          {{ report_form.key_message }}
+          {% for error in report_form.key_message.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- relationship_activities -->
+      <div class="form-group {% if report_form.relationship_activities.errors %}has-error{% endif %}">
+          <label for="{{ report_form.relationship_activities.id_for_label }}">{{ report_form.relationship_activities.label }}</label>
+          {{ report_form.relationship_activities }}
+          {% for error in report_form.relationship_activities.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+  
+      <!-- funding -->
+      <div class="form-group {% if report_form.funding.errors %}has-error{% endif %}">
+          <label for="{{ report_form.funding.id_for_label }}">{{ report_form.funding.label }}</label>
+          {{ report_form.funding }}
+          {% for error in report_form.funding.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+   </div>
+  <!-- SDG list -->
+        <div id="sdg-container">
+            {% for i in sdg_list %}
+                <div class="sdg-item">
+                    <img src="{% static 'css/images/SDG_'|add:i|add:'.jpg' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
+                    <div class="sdg-options">
+                        <input type="radio" name="sdg_option_{{ i }}" value="direct"> Direct
+                        <input type="radio" name="sdg_option_{{ i }}" value="indirect"> Indirect
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        </div>
+    </div>
+  
+      
+  
+  
+        <!-- Image upload -->
+        <div class="form-group">
+          <label for="image">Upload Images</label>
+          <input type="file" name="image" id="image" multiple>
+      </div>
+      <!--File upload-->
+      <div class="form-group">
+          <label for="files">Upload Files</label>
+          <input type="file" name="file" id="files" multiple>
+      </div>
+      
+        <!--Save form button-->
+        <div class="save-options">
+          <button type="submit">Save Report</button>
+        </div>
+      </form>
+    </div>
+  
+    {% endblock %}
+  
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+  
+  // Handle radio button behavior
+  let radios = document.querySelectorAll('input[type="radio"]');
+  radios.forEach(function(radio) {
+      radio.addEventListener('click', function() {
+          if (radio.getAttribute('data-checked') == 'true') {
+              radio.checked = false;
+              radio.removeAttribute('data-checked');
+          } else {
+              radio.setAttribute('data-checked', 'true');
+          }
+      });
+  });
+  
+  function updateRemoveButtonVisibility() {
+      let allOrganizationFormsets = document.querySelectorAll('.organization-formset');
+      // If there's only one organization, hide its remove button
+      if (allOrganizationFormsets.length === 1) {
+          allOrganizationFormsets[0].querySelector('.remove-organization').style.display = 'none';
+      } else {
+          // If there are multiple organizations, show all remove buttons
+          allOrganizationFormsets.forEach(function(formset) {
+              formset.querySelector('.remove-organization').style.display = 'block';
+          });
+      }
+  }
+  
+  // JS functions for user operations
+  window.addUser = function(element) {
+      var userId = element.getAttribute('data-user-id');
+      var userName = element.textContent;
+      var userElement = document.createElement('div');
+      userElement.className = 'user-item';
+      userElement.setAttribute('data-user-id', userId);
+      userElement.textContent = userName;
+      userElement.onclick = function() { removeUser(userElement); };
+      document.getElementById('selected-users').appendChild(userElement);
+  
+      var optionElement = document.createElement('option');
+      optionElement.value = userId;
+      optionElement.textContent = userName;
+      optionElement.selected = true;
+      document.getElementById('linked-users-select').appendChild(optionElement);
+      element.style.display = 'none';
+  };
+  
+  window.removeUser = function(element) {
+      var userId = element.getAttribute('data-user-id');
+      document.querySelector('#all-users [data-user-id="' + userId + '"]').style.display = 'block';
+      element.remove();
+      var optionElement = document.querySelector('#linked-users-select option[value="' + userId + '"]');
+      optionElement.remove();
+  };
+  
+  window.filterUsers = function() {
+      var searchQuery = document.getElementById('user-search').value.toLowerCase();
+      var allUserElements = document.querySelectorAll('#all-users .user-item');
+      var displayedCount = 0;
+      allUserElements.forEach(function(userElement) {
+          var userName = userElement.getAttribute('data-user-name').toLowerCase();
+          if (userName.includes(searchQuery) && displayedCount < 10) {
+              userElement.style.display = 'block';
+              displayedCount++;
+          } else {
+              userElement.style.display = 'none';
+          }
+      });
+  };
+  
+  // Add another formset
+  document.getElementById('add-organization').addEventListener('click', function() {
+      let prefix = 'organization_set';
+      let totalForms = document.getElementById('id_' + prefix + '-TOTAL_FORMS');
+      let nextFormNum = parseInt(totalForms.value, 10);
+      let formElem = document.querySelector('.organization-formset').cloneNode(true);
+  
+      // Use multiple selectors combined to replace ':input' in vanilla JS
+      let inputs = formElem.querySelectorAll('input, select, textarea, button');
+  
+      for(let input of inputs) {
+          let nameAttr = input.getAttribute('name');
+          let idAttr = input.getAttribute('id');
+          if(nameAttr) {
+              input.setAttribute('name', nameAttr.replace(/-\d+-/, '-' + nextFormNum + '-'));
+          }
+          if(idAttr) {
+              input.setAttribute('id', idAttr.replace(/-\d+-/, '-' + nextFormNum + '-'));
+          }
+          if(input.type === 'text' || input.type === 'textarea' || input.type === 'number') {
+              input.value = '';
+          }
+      }
+  
+      let formsetsContainer = document.querySelector('.organization-formsets');
+      if(formsetsContainer) {  // Ensure the container exists before appending
+          formsetsContainer.appendChild(formElem);
+      }
+      totalForms.value = nextFormNum + 1;
+  
+      updateRemoveButtonVisibility();
+  });
+  
+  // Use event delegation for all the delete buttons
+  document.querySelector('.organization-formsets').addEventListener('click', function(event) {
+      if(event.target.classList.contains('remove-organization')) {
+          let formset = event.target.closest('.organization-formset');
+          if (formset) {
+              formset.remove();
+              let totalForms = document.getElementById('id_organization_set-TOTAL_FORMS');
+              totalForms.value = parseInt(totalForms.value, 10) - 1;
+  
+              updateRemoveButtonVisibility();
+          }
+      }
+  });
+  
+  // Set the initial state of the remove buttons on page load
+  updateRemoveButtonVisibility();
+  
+  });
+  </script>
