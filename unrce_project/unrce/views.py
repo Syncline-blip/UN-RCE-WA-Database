@@ -269,8 +269,6 @@ def report_edit(request, report_id):
                 report.indirect_esd_themes = indirect_esd
                 report.direct_priority_areas = direct_priority
                 report.indirect_priority_areas = indirect_priority
-                linked_user_ids = request.POST.getlist('linked_users')
-                report.linked_users.set(linked_user_ids)
                 
                 report.save()  # Now save after updating the above fields
 
@@ -307,8 +305,6 @@ def report_edit(request, report_id):
             'sdg_list': sdg_list,
             'themes_esd': themes_esd,
             'priority_action_areas': priority_action_areas,
-            'all_users': User.objects.all(),
-            'linked_users': report.linked_users.all(),
             'existing_images': ReportImages.objects.filter(report=report),
             'existing_files': ReportFiles.objects.filter(report=report)
         }

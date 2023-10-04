@@ -13,7 +13,7 @@
     <script src="{% static 'admin/js/jquery.init.js' %}"></script>
     <script src="{% static 'admin/js/actions.js' %}"></script>
     <script src="{% static 'admin/js/inlines.js' %}"></script>
-    <!-- <style>
+<!-- <style>
     body {
         font-family: Arial, sans-serif;
         background: linear-gradient(to bottom, #f4f4f4, #003087, #DAAA00);
@@ -176,6 +176,14 @@
         background-color: #219a52;
       }
 </style> -->
+<style>
+    .sdg-img {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+      }
+</style>
 
 </head>
 {% endblock %}
@@ -188,7 +196,6 @@
   {% block content %}
   <div class="header">
     <h1>Create Report</h1>
-    <!-- <a href="{% url 'initial-landing' %}">home</a> -->
   </div> 
 
   {% if report_form.non_field_errors %}
