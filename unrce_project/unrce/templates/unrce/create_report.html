@@ -63,14 +63,6 @@
         {% endfor %}
     </div>
 
-    <!-- submitting_RCE -->
-    <div class="form-group {% if report_form.submitting_RCE.errors %}has-error{% endif %}">
-        <label for="{{ report_form.submitting_RCE.id_for_label }}">{{ report_form.submitting_RCE.label }}</label>
-        {{ report_form.submitting_RCE }}
-        {% for error in report_form.submitting_RCE.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
 </div>
 
 <!-- Focal point(s) and affiliation(s) -->
@@ -94,14 +86,6 @@
         <button type="button" id="add-organization">Add Another Organization</button>
     </div>
 
-    <!-- format_project -->
-    <div class="form-group {% if report_form.format_project.errors %}has-error{% endif %}">
-        <label for="{{ report_form.format_project.id_for_label }}">{{ report_form.format_project.label }}</label>
-        {{ report_form.format_project }}
-        {% for error in report_form.format_project.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
 
     <!-- delivery -->
     <div class="form-group {% if report_form.delivery.errors %}has-error{% endif %}">
@@ -121,14 +105,6 @@
         {% endfor %}
     </div>
 
-    <!-- language_project -->
-    <div class="form-group {% if report_form.language_project.errors %}has-error{% endif %}">
-        <label for="{{ report_form.language_project.id_for_label }}">{{ report_form.language_project.label }}</label>
-        {{ report_form.language_project }}
-        {% for error in report_form.language_project.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
 
     <!-- web_link -->
     <div class="form-group {% if report_form.web_link.errors %}has-error{% endif %}">
@@ -163,31 +139,7 @@
         {% endfor %}
     </div>
 
-    <!-- country -->
-    <div class="form-group {% if report_form.country.errors %}has-error{% endif %}">
-        <label for="{{ report_form.country.id_for_label }}">{{ report_form.country.label }}</label>
-        {{ report_form.country }}
-        {% for error in report_form.country.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- locations -->
-    <div class="form-group {% if report_form.locations.errors %}has-error{% endif %}">
-        <label for="{{ report_form.locations.id_for_label }}">{{ report_form.locations.label }}</label>
-        {{ report_form.locations }}
-        {% for error in report_form.locations.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
-    </div>
-
-    <!-- address -->
-    <div class="form-group {% if report_form.address.errors %}has-error{% endif %}">
-        <label for="{{ report_form.address.id_for_label }}">{{ report_form.address.label }}</label>
-        {{ report_form.address }}
-        {% for error in report_form.address.errors %}
-            <span class="help-block">{{ error }}</span>
-        {% endfor %}
+}
     </div>
 
     <!-- ecosystem -->

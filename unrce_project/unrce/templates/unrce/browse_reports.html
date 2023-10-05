@@ -94,14 +94,11 @@
   <table  border="1">
     <thead>
         <tr>
-            <th>Report ID</th>
-            <th>Lead Organisation</th>
+
             <th>Name of Project</th>
-            <th>Project Description Short</th>
-            <th>Contact</th>
-            <th>Image Count</th>
-            <th>Created At</th>
-            <th>Last Modified</th>
+            <th>Report Status</th>
+            <th>Region</th>
+            <th>Audience</th>
         </tr>
     </thead>
 <!-- 
@@ -109,11 +106,12 @@
 -->
     <tbody>
         {% for report in reports %}
-                <td>{{ report.id }}</td>
-                <td>{{ report.images.count }}</td>
-                <td>{{ report.created_at }}</td>
-                <td>{{ report.last_modified }}</td>
-            </tr>
+        <tr>
+             <td>{{ report.title_project }}</td>
+             <td>{{ report.status }}</td>
+             <td>{{ report.region }}</td>
+             <td>{{ report.audience }}</td>
+        </tr>
         {% endfor %}
     </tbody>
 </table>

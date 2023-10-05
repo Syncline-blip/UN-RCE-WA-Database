@@ -26,18 +26,15 @@
 {% endfor %}
 
     <h3>Organization Details</h3>
-        <div class="organization-formsets">
-            {{ organization_formset.management_form }}
-            {% for form in organization_formset %}
-                <div class="organization-form" data-prefix="{{ form.prefix }}">
-                    {{ form.name.label }}: {{ form.name }}<br>
-                    {{ form.email.label }}: {{ form.email }}<br>
-                    {{ form.website.label }}: {{ form.website }}<br>
-                    <button type="button" class="remove-org-form">Remove</button>
-                </div>
-            {% endfor %}
-            <button type="button" id="add-organization">Add Another Organization</button>
-        </div>
+    <div class="organization-formsets">
+        {{ organization_formset.management_form }}
+        {% for form in organization_formset %}
+            <div class="organization-form" data-prefix="{{ form.prefix }}">
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+    </div>
+    
     
     <div class="form-group">
     
@@ -127,20 +124,10 @@
                 });
             });
         });
-    
-        // Simplified Add button function for organizations
-        const orgFormSetsContainer = document.querySelector('.organization-formsets');
-        const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
-        
-        document.getElementById('add-organization').addEventListener('click', function() {
-            const newForm = orgFormTemplate.cloneNode(true);
-            newForm.querySelectorAll('input').forEach(input => input.value = '');
-            const removeBtn = newForm.querySelector('.remove-org-form');
-            removeBtn.addEventListener('click', function() {
-                newForm.remove();
-            });
-            orgFormSetsContainer.appendChild(newForm);
-        });
     });
+
+    
+
+
     </script>
     {% endblock %}

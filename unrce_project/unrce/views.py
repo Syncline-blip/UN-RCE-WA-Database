@@ -282,14 +282,16 @@ def report_edit(request, report_id):
                 
                 report.save()  # Now save after updating the above fields
 
-                organization_formset.save()
+                organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
+                if organization_formset.is_valid():
+                    organization_formset.save()
+                report_form.save_m2m()  
+
 
                 # Removing existing images/files and add new ones
-                report.reportimages_set.all().delete()
                 for image in images:
                     ReportImages.objects.create(report=report, image=image)
 
-                report.reportfiles_set.all().delete()
                 for file in files:
                     ReportFiles.objects.create(report=report, file=file)
 
