@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
-from django_countries.fields import CountryField
 
 #This model is for the reports 
 FREQUENCY_CHOICES = [
@@ -66,8 +65,9 @@ STATUS_CHOICES = [
     ('new_report', 'New Report'),
 ]
 REGION_CHOICES = [
-    ('test', 'Test'),
-    ('demo', 'DEmo'),
+    ('perth_metro', 'Perth Metro'),
+    ('great_southern', 'Great Southern'),
+    ('wa', 'WA'),
 ]
 themes_esd = [
     'Disaster Risk Reduction',
@@ -92,91 +92,88 @@ priority_action_areas = [
 
 class Report(models.Model):
 #Basic information
-    title_project = models.CharField(max_length=200, null=True)
-    submitting_RCE = models.CharField(max_length=200, choices=RCE_CHOICES, null=True)
+    title_project = models.CharField(max_length=200, default='')
 
-#Focal point(s) and affiliation(s)
-    format_project = models.CharField(max_length=200, null=True)
+    # Focal point(s) and affiliation(s)
     delivery = ArrayField(
         models.CharField(max_length=200, choices=DELIVERY_CHOICES),
         blank=True,
         null=True,
+        default=list
     )
     frequency = models.CharField(max_length=200, choices=FREQUENCY_CHOICES, null=True)
-    language_project = models.CharField(max_length=200, null=True)
-    web_link = models.URLField(max_length=200, null=True)
-    additional_resources = models.TextField(null=True)
-    #Sustainable development policy true/false into box
+    web_link = models.URLField(max_length=200, blank=True, default='')
+    additional_resources = models.TextField(blank=True, default='')
 
-#Geographical & educaiton information
+    # Geographical & education information
     region = models.CharField(max_length=200, choices=REGION_CHOICES, null=True)
-    country = CountryField(null=True)
-    locations = models.CharField(max_length=200, null=True, blank=True)
-    address = models.CharField(max_length=200, null=True)
-    ecosystem = models.CharField(max_length=200, choices=ECOSYSTEM_CHOICES, null=True)
+    ecosystem = models.CharField(max_length=200, choices=ECOSYSTEM_CHOICES, blank=True, default='')
     audience = ArrayField(
         models.CharField(max_length=200, choices=AUDIENCE_CHOICES),
         blank=True,
         null=True,
+        default=list
     )
-    socio_economic_characteristics = models.TextField(null=True)
-    development_challenges = models.TextField(null=True)
+    socio_economic_characteristics = models.TextField(blank=True, default='')
+    development_challenges = models.TextField(blank=True, default='')
+    sustainable_development_policy = models.TextField(blank=True, default='')
 
-#Contents
-    status = models.CharField(max_length=200, choices=STATUS_CHOICES, null=True)
-    start_project = models.DateField(null=True)
-    end_project = models.DateField(null=True)
-    rationale = models.TextField(null=True)
-    objectives = models.TextField(null=True)
-    activities_practices = models.TextField(null=True)
-    size_academic = models.IntegerField(null=True)
-    results = models.TextField(null=True)
-    lessons_learned = models.TextField(null=True)
-    key_message = models.TextField(null=True)
-    relationship_activities = models.TextField(null=True)
-    funding = models.TextField(null=True)
+    # Contents
+    status = models.CharField(max_length=200, choices=STATUS_CHOICES, null=True, blank=True)
+    start_project = models.DateField(blank=True, null=True) 
+    end_project = models.DateField(blank=True, null=True)    
+    rationale = models.TextField(blank=True, default='')
+    objectives = models.TextField(blank=True, default='')
+    activities_practices = models.TextField(blank=True, default='')
+    size_academic = models.IntegerField(blank=True, null=True, default=None)
+    results = models.TextField(blank=True, default='')
+    lessons_learned = models.TextField(blank=True, default='')
+    key_message = models.TextField(blank=True, default='')
+    relationship_activities = models.TextField(blank=True, default='')
+    funding = models.TextField(blank=True, default='')
+
 
 
 #UN Sustainable Development Goals (SDGs)
     direct_sdgs = ArrayField(
         models.IntegerField(),
         blank=True,
-        null=True,
+        default=list
     )
     indirect_sdgs = ArrayField(
         models.IntegerField(),
         blank=True,
-        null=True,
+        default=list
     )
 
     direct_esd_themes = ArrayField(
-        models.CharField(max_length=255),  # since themes are strings, we store them as CharFields
+        models.CharField(max_length=255), 
         blank=True,
-        null=True,
+        default=list
     )
     indirect_esd_themes = ArrayField(
         models.CharField(max_length=255),
         blank=True,
-        null=True,
+        default=list
     )
 
     direct_priority_areas = ArrayField(
         models.CharField(max_length=255),
         blank=True,
-        null=True,
+        default=list
     )
     indirect_priority_areas = ArrayField(
         models.CharField(max_length=255),
         blank=True,
-        null=True,
+        default=list
     )
-#Make another set of these for ESD and ESD 2030
 
-    created_at = models.DateField(auto_now_add=True, null=True)
-    last_modified = models.DateTimeField(auto_now=True, null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    approved = models.BooleanField(default=False, null=True)
-    submitted = models.BooleanField(default=False, null=True)
+    # Additional fields
+    created_at = models.DateField(auto_now_add=True) 
+    last_modified = models.DateTimeField(auto_now=True)  
+    author = models.ForeignKey(User, on_delete=models.CASCADE)  
+    approved = models.BooleanField(default=False)
+    submitted = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.title_project}   {self.created_at}"
@@ -194,9 +191,9 @@ class ReportFiles(models.Model):
 
 class Organization(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
-    email = models.EmailField(max_length=200)
-    website = models.URLField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=200, default='')
+    email = models.EmailField(max_length=200, null=True, blank=True)
+    website = models.URLField(max_length=200, null=True, blank=True, default='')
 
 
 
@@ -208,8 +205,8 @@ class Expression_of_interest(models.Model):
     name = models.CharField(max_length=200)
     organisation_affiliation = models.CharField(max_length=200)
     email = models.EmailField(max_length=254, default='default@email.com')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    created_at = models.DateField(auto_now_add=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return f"{self.title_of_project}  {self.created_at}"

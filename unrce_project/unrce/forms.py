@@ -10,13 +10,20 @@ class ReportForm(forms.ModelForm):
 
     audience = forms.MultipleChoiceField(
         choices=AUDIENCE_CHOICES,
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.CheckboxSelectMultiple,
+        required=False
     )
     delivery = forms.MultipleChoiceField(
         choices=DELIVERY_CHOICES,
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.CheckboxSelectMultiple,
+        required=False
     )
-   
+
+    def __init__(self, *args, **kwargs):
+        super(ReportForm, self).__init__(*args, **kwargs)
+        self.fields['frequency'].required = False
+        self.fields['region'].required = False
+        
     class Meta:
         model = Report
         exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved','direct_esd_themes','indirect_esd_themes','direct_priority_areas', 'indirect_priority_areas', 'submitted'   ]
