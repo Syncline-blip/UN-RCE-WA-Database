@@ -164,6 +164,15 @@ def report_list(request):
     reports = Report.objects.filter(author=request.user)
     return render(request, 'unrce/report_list.html', {'reports': reports})
 
+def browse_reports(request):
+    """
+    Lists all the approved Report objects.
+    Fetches and filters the Report objects by approved attribute being True 
+    and renders them in 'unrce/approved_reports_list.html'.
+    """
+    approved_reports = Report.objects.filter(approved=True)
+    return render(request, 'unrce/browse_reports.html', {'reports': approved_reports})
+
 @login_required
 def delete_image(request, image_id):
     """
@@ -202,7 +211,8 @@ def report_details(request, report_id):
     
     context = {
         'form': report_form, 
-        'existing_images': existing_images
+        'existing_images': existing_images,
+        'report': report
     }
     return render(request, 'unrce/report_details.html', context)
 
@@ -365,9 +375,6 @@ def must_be_signed_in(request):
 def edit_reporting(request):
     return render(request, 'unrce/report_list.html')
 
-@login_required
-def reportDetails(request):
-    return render(request, 'unrce/report_details.html')
 
 @login_required
 def org_eoi(request):
@@ -390,3 +397,9 @@ def org_eoi(request):
         )
         return redirect('success_page')
     return render(request, 'unrce/organization_eoi.html')
+
+def approve_report(request, report_id):
+    report = get_object_or_404(Report, id=report_id)
+    report.approved = True
+    report.save()
+    return redirect('report_details', report_id=report_id)

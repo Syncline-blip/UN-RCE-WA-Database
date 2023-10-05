@@ -512,8 +512,10 @@
       <div id="sdg-container">
           {% for i in sdg_list %}
               <div class="sdg-item">
+                <p>---------------------------------</p>
                   <img src="{% static 'images/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
                   <div class="sdg-options">
+                    
                       <input type="radio" name="sdg_option_{{ i }}" value="direct"> Direct
                       <input type="radio" name="sdg_option_{{ i }}" value="indirect"> Indirect
                   </div>
@@ -524,12 +526,13 @@
       <div id="esd-themes-container">
         {% for theme in themes_esd %}
             <div class="esd-theme-item">
+                <p>---------------------------------</p>
                 {{ theme }} 
-                <br>
+                <br><br>
                 <div class="esd-theme-options">
                     <input type="radio" name="esd_theme_option_{{ theme }}" value="direct" {% if theme in report.direct_esd_themes %}checked{% endif %}> Direct
                     <input type="radio" name="esd_theme_option_{{ theme }}" value="indirect" {% if theme in report.indirect_esd_themes %}checked{% endif %}> Indirect
-                    <br><br>
+                    <br>
                 </div>
             </div>
         {% endfor %}
@@ -538,12 +541,12 @@
     <div id="esd-priority-container">
         {% for area in priority_action_areas %}
             <div class="esd-priority-item">
+                <p>---------------------------------</p>
                 {{ area }}
-                <br>
+                <br><br>
                 <div class="esd-priority-options">
                     <input type="radio" name="esd_priority_option_{{ area }}" value="direct" {% if area in report.direct_priority_areas %}checked{% endif %}> Direct
                     <input type="radio" name="esd_priority_option_{{ area }}" value="indirect" {% if area in report.indirect_priority_areas %}checked{% endif %}> Indirect
-                    <br>
                     <br>
                 </div>
             </div>
@@ -570,48 +573,63 @@
     <button type="submit" name="submit_for_approval">Submit for Approval</button>
 </div>  
 </form>
-  {% endblock %}
 
   <script>
 
     
 document.addEventListener('DOMContentLoaded', function() {
 
-// Handle radio button behavior
-let radios = document.querySelectorAll('input[type="radio"]');
-radios.forEach(function(radio) {
-    radio.addEventListener('click', function() {
-        if (radio.getAttribute('data-checked') == 'true') {
+const radios = document.querySelectorAll('input[type="radio"]');
+
+radios.forEach(radio => {
+    radio.addEventListener('click', function () {
+        console.log('Radio clicked');
+        if (radio.getAttribute('data-last-clicked') === 'true') {
             radio.checked = false;
-            radio.removeAttribute('data-checked');
+            radio.setAttribute('data-last-clicked', 'false');
         } else {
-            radio.setAttribute('data-checked', 'true');
+            radio.setAttribute('data-last-clicked', 'true');
         }
+
+        // Deselect other radios with the same name attribute if the current one is checked
+        radios.forEach(otherRadio => {
+            if (otherRadio.name === radio.name && otherRadio !== radio) {
+                otherRadio.setAttribute('data-last-clicked', 'false');
+            }
+        });
     });
 });
 
-// Simplified Add button function for organizations
-        const orgFormSetsContainer = document.querySelector('.organization-formsets');
-        const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
-        
-        // Add event listener for each remove button already on the page
-        const existingRemoveButtons = orgFormSetsContainer.querySelectorAll('.remove-org-form');
-        existingRemoveButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                button.closest('.organization-form').remove();
-            });
-        });
+const orgFormSetsContainer = document.querySelector('.organization-formsets');
+const orgFormTemplate = orgFormSetsContainer.querySelector('.organization-form').cloneNode(true);
+const totalFormsInput = document.getElementById('id_organization_set-TOTAL_FORMS');
 
-        // Existing code for add organization button
-        document.getElementById('add-organization').addEventListener('click', function() {
-            const newForm = orgFormTemplate.cloneNode(true);
-            newForm.querySelectorAll('input').forEach(input => input.value = '');
-            const removeBtn = newForm.querySelector('.remove-org-form');
-            removeBtn.addEventListener('click', function() {
-                newForm.remove();
-            });
-            orgFormSetsContainer.appendChild(newForm);
+function updateFormsetIndexes() {
+    const organizationForms = orgFormSetsContainer.querySelectorAll('.organization-form');
+    organizationForms.forEach((form, index) => {
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            const updatedName = input.name.replace(/-\d+-/, `-${index}-`);
+            const updatedId = input.id.replace(/-\d+-/, `-${index}-`);
+            input.name = updatedName;
+            input.id = updatedId;
         });
     });
+    totalFormsInput.value = organizationForms.length;
+}
+
+document.getElementById('add-organization').addEventListener('click', function() {
+    const newForm = orgFormTemplate.cloneNode(true);
+    newForm.querySelectorAll('input').forEach(input => input.value = '');
+    const removeBtn = newForm.querySelector('.remove-org-form');
+    removeBtn.addEventListener('click', function() {
+        newForm.remove();
+        updateFormsetIndexes();
+    });
+    orgFormSetsContainer.appendChild(newForm);
+    updateFormsetIndexes();
+});
+});
 </script>
     
+{% endblock %}
