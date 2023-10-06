@@ -19,14 +19,14 @@
     <div class="container">
       <div class="nav-start">
         <a class="logo" href="{% url 'initial-landing' %}">
-          <img src="{% static 'icons/unrce_log.png' %}" width="35" height="35" alt="Inc Logo" />
-          <span class="logo-text">UNRCE</span>
+          <img src="{% static 'icons/unrce_log.bmp' %}" width="35" height="35" alt="Inc Logo" />
+          <span class="logo-text">UNRCE WA</span>
         </a>
         <nav class="menu">
           <ul class="menu-bar">
             {% if not user.is_authenticated %}
             <li>
-              <li><a class="nav-link" href="/">About UNRCE</a></li>
+              <li><a class="nav-link" href="/">About UNRCE WA</a></li>
             </li>
             <li>
             {% endif %}
@@ -111,7 +111,7 @@
                     </a>
                   </li>
                   <li role="menuitem">
-                    <a class="dropdown-link" href="org_eoi">
+                    <a class="dropdown-link" href="/">
                       <img src="{% static 'icons/membership.png' %}" class="icon" />
                       <div>
                         <span class="dropdown-link-title">Join UNRCE</span>
@@ -123,7 +123,7 @@
               </div>
             </li>
             {% endif %}
-            <li><a class="nav-link" href="/">Contact Us</a></li>
+            <li><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
           </ul>
         </nav>
       </div>
@@ -185,4 +185,11 @@
 <div class="content flex-container">
   {% block content %}{% endblock %}
 </div>
+
+<div class="content flex-container">
+  {% block contact %}{% endblock %}
+</div>
+
+
+
 </html>

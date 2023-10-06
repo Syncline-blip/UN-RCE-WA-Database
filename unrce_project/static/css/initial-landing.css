@@ -59,9 +59,13 @@ Containers
   .my-container {
     margin: 0 auto;
     max-width: 800px;
-    padding: 2em 0; /* Added padding */
+    padding: 2em 0;
   }
 
+  .title{
+    font-size:42px;
+    margin-bottom:40px;
+  }
 /* ========================
 Sections
 ======================== */
@@ -119,6 +123,11 @@ Sections
   .my-features h2{
     padding-bottom: 15px;
   }
+
+  .my-lead {
+    font-weight: 300;  /* This is in between normal and bold, adjust as needed */
+}
+
 
   /* ========================
 Goals & Objectives Boxes
@@ -189,11 +198,12 @@ Goals & Objectives Boxes
 }
 
   .my-footer {
-    background-color: #2C3E50;
+    background-color: #a9b6c3;
     color:  #fff;
     font-size: 1.5em;
     text-align: center;
     padding: 0.5em 0;
+    position:relative;
   }
   
   .my-footer a {
@@ -205,6 +215,32 @@ Goals & Objectives Boxes
     margin-right: 0;
   }
   
+  .footer-logo {
+    max-width: 250px; /* or whatever width you prefer */
+    width:100%;
+    height:auto;
+    position:absolute;
+    top:10px;
+    left:10px;
+}
+
+@media (max-width: 500px) {
+  .footer-logo {
+      width: 150px; /* This is a fixed size, adjust according to your needs */
+  }
+}
+
+/* Limit the logo size for large screens */
+@media (min-width: 1200px) {
+  .footer-logo {
+      width: 250px; /* This ensures the logo doesn't become too large */
+  }
+}
+
+  .terms-container{
+    margin-bottom:20px;
+    font-size:0.6em;
+  }
 
   @media (min-width: 768px) {
   
@@ -257,3 +293,4 @@ Goals & Objectives Boxes
       }
   }
   
+ 
