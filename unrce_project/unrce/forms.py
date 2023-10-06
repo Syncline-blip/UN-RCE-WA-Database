@@ -6,28 +6,36 @@ from zxcvbn import zxcvbn  # Import the zxcvbn library
 from django.core.validators import MinLengthValidator
 
 
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
 class ReportForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(ReportForm, self).__init__(*args, **kwargs)
-        self.fields['linked_users'].label_from_instance = self.label_from_user_instance
-
-    def label_from_user_instance(self, user):
-        return f"{user.first_name} {user.last_name}"
 
     audience = forms.MultipleChoiceField(
         choices=AUDIENCE_CHOICES,
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.CheckboxSelectMultiple,
+        required=False
     )
     delivery = forms.MultipleChoiceField(
         choices=DELIVERY_CHOICES,
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.CheckboxSelectMultiple,
+        required=False
     )
-   
+
+    def __init__(self, *args, **kwargs):
+        super(ReportForm, self).__init__(*args, **kwargs)
+        self.fields['frequency'].required = False
+        self.fields['region'].required = False
+
     class Meta:
         model = Report
-        fields = '__all__'
-        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved','direct_esd_themes','indirect_esd_themes','direct_priority_areas', 'indirect_priority_areas'   ]
+        widgets = {
+            'start_project': DateInput(),
+            'end_project': DateInput(),
+        }
+        exclude = ['author', 'created_at', 'last_modified', 'contributing_organisations', 'direct_sdgs', 'indirect_sdgs', 'approved','direct_esd_themes','indirect_esd_themes','direct_priority_areas', 'indirect_priority_areas', 'submitted'   ]
 
 class ReportImagesForm(forms.ModelForm):
     image = forms.ImageField(required=False)
@@ -98,6 +106,9 @@ class RegistrationForm(UserCreationForm):
         return password1
     
 OrganizationInlineFormSet = forms.inlineformset_factory(
-    Report, Organization,
-    form=OrganizationForm, extra=1, can_delete=True
+    Report,
+    Organization,
+    fields=('name', 'email', 'website'),
+    extra=3,   
+    can_delete=True
 )

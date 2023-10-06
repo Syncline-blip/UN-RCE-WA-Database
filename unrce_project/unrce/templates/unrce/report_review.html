@@ -78,12 +78,23 @@
     font-size: 14px;
     color: #333;
   }
+  .status-ongoing {
+    color: green;
+}
+
+.status-completed {
+    color: yellow;
+}
+
+.status-new {
+    color: blue;
+}
   
 </style>
 </head>
 <body>
 <div class="header">
-  <h1>Report List</h1>
+  <h1>Report Review</h1>
   <a href="{% url 'initial-landing' %}">home</a>
 </div>
 <!--
@@ -101,6 +112,9 @@
             <th>Image Count</th>
             <th>File Count</th>
             <th>Created At</th>
+            <th>Status</th>
+            <th>Submitted</th>   
+            <th>Approved</th>
             <th>Report Details</th>
             <th>Report Download</th>
         </tr>
@@ -111,16 +125,38 @@
                 <td>{{ report.author }}</td>
                 <td>{{ report.title_project}}</td>
                 <td>{{ report.images.count }}</td>
-                <td>{{ report.file.count }}</td>
+                <td>{{ report.files.count }}</td>
                 <td>{{ report.created_at }}</td>
                 <td>
-                    <!-- For Report Details -->
-                    <a href="{% url 'report_details' report.id %}" >Details</a>
-                </td>
+                  {% if report.status == "ongoing" %}
+                      <span class="status-ongoing">Ongoing</span>
+                  {% elif report.status == "completed" %}
+                      <span class="status-completed">Completed</span>
+                  {% elif report.status == "new_report" %}
+                      <span class="status-new">New Report</span>
+                  {% endif %}
+              </td>
                 <td>
-                    <!-- For Report Download -->
-                    <a href="{% url 'report_edit' report.id %}" >Download</a>
-                </td>
+                  {% if report.submitted %}
+                      <span style="color: green;">Submitted for Review</span>
+                  {% else %}
+                      <span style="color: red;">Not Submitted</span>
+                  {% endif %}
+              </td>
+              <td>
+                  {% if report.approved %}
+                      <span style="color: green;">Approved</span>
+                  {% else %}
+                      <span style="color: red;">Not Approved</span>
+                  {% endif %}
+              </td>
+              <td>
+                  <a href="{% url 'report_details' report.id %}" >Details</a>
+              </td>
+              <td>
+                  <a href="{% url 'report_edit' report.id %}" >Download</a>
+              </td>
+
             </tr>
         {% endfor %}
     </tbody>

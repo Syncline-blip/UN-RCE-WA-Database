@@ -13,6 +13,9 @@ import os, json
 import pandas as pd
 import logging
 from django.db.models import Q
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 # sample data, not to be used, just for testing
@@ -161,6 +164,15 @@ def report_list(request):
     reports = Report.objects.filter(author=request.user)
     return render(request, 'unrce/report_list.html', {'reports': reports})
 
+def browse_reports(request):
+    """
+    Lists all the approved Report objects.
+    Fetches and filters the Report objects by approved attribute being True 
+    and renders them in 'unrce/approved_reports_list.html'.
+    """
+    approved_reports = Report.objects.filter(approved=True)
+    return render(request, 'unrce/browse_reports.html', {'reports': approved_reports})
+
 @login_required
 def delete_image(request, image_id):
     """
@@ -199,7 +211,8 @@ def report_details(request, report_id):
     
     context = {
         'form': report_form, 
-        'existing_images': existing_images
+        'existing_images': existing_images,
+        'report': report
     }
     return render(request, 'unrce/report_details.html', context)
 
@@ -266,19 +279,19 @@ def report_edit(request, report_id):
                 report.indirect_esd_themes = indirect_esd
                 report.direct_priority_areas = direct_priority
                 report.indirect_priority_areas = indirect_priority
-                linked_user_ids = request.POST.getlist('linked_users')
-                report.linked_users.set(linked_user_ids)
                 
                 report.save()  # Now save after updating the above fields
 
-                organization_formset.save()
+                organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
+                if organization_formset.is_valid():
+                    organization_formset.save()
+                report_form.save_m2m()  
+
 
                 # Removing existing images/files and add new ones
-                report.reportimages_set.all().delete()
                 for image in images:
                     ReportImages.objects.create(report=report, image=image)
 
-                report.reportfiles_set.all().delete()
                 for file in files:
                     ReportFiles.objects.create(report=report, file=file)
 
@@ -304,8 +317,6 @@ def report_edit(request, report_id):
             'sdg_list': sdg_list,
             'themes_esd': themes_esd,
             'priority_action_areas': priority_action_areas,
-            'all_users': User.objects.all(),
-            'linked_users': report.linked_users.all(),
             'existing_images': ReportImages.objects.filter(report=report),
             'existing_files': ReportFiles.objects.filter(report=report)
         }
@@ -366,7 +377,31 @@ def must_be_signed_in(request):
 def edit_reporting(request):
     return render(request, 'unrce/report_list.html')
 
-@login_required
-def reportDetails(request):
-    return render(request, 'unrce/report_details.html')
 
+@login_required
+def org_eoi(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        organization = request.POST.get('organization')
+        message = request.POST.get('message')
+
+
+        subject = 'Expression of Interest'
+        email_message = f'Username: {username}\nOrganization: {organization}\nMessage: {message}'
+
+
+        send_mail(
+            subject,
+            email_message,
+            settings.EMAIL_HOST_USER,
+            ['miltonyong@gmail.com'],  # OWNER EMAIL
+            fail_silently=False,
+        )
+        return redirect('success_page')
+    return render(request, 'unrce/organization_eoi.html')
+
+def approve_report(request, report_id):
+    report = get_object_or_404(Report, id=report_id)
+    report.approved = True
+    report.save()
+    return redirect('report_details', report_id=report_id)
