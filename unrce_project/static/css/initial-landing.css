@@ -224,6 +224,19 @@ Goals & Objectives Boxes
     left:10px;
 }
 
+@media (max-width: 500px) {
+  .footer-logo {
+      width: 150px; /* This is a fixed size, adjust according to your needs */
+  }
+}
+
+/* Limit the logo size for large screens */
+@media (min-width: 1200px) {
+  .footer-logo {
+      width: 250px; /* This ensures the logo doesn't become too large */
+  }
+}
+
   .terms-container{
     margin-bottom:20px;
     font-size:0.6em;
