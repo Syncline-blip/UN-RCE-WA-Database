@@ -125,7 +125,7 @@ Sections
   }
 
   .my-lead {
-    font-weight: 450;  /* This is in between normal and bold, adjust as needed */
+    font-weight: 300;  /* This is in between normal and bold, adjust as needed */
 }
 
 
@@ -216,12 +216,18 @@ Goals & Objectives Boxes
   }
   
   .footer-logo {
-    width: 150px; /* or whatever width you prefer */
-    height:100px;
+    max-width: 250px; /* or whatever width you prefer */
+    width:100%;
+    height:auto;
     position:absolute;
     top:10px;
     left:10px;
 }
+
+  .terms-container{
+    margin-bottom:20px;
+    font-size:0.6em;
+  }
 
   @media (min-width: 768px) {
   
