@@ -59,7 +59,7 @@ Containers
   .my-container {
     margin: 0 auto;
     max-width: 800px;
-    padding: 2em 0; /* Added padding */
+    padding: 2em 0;
   }
 
   .title{

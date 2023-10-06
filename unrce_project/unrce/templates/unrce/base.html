@@ -20,13 +20,13 @@
       <div class="nav-start">
         <a class="logo" href="{% url 'initial-landing' %}">
           <img src="{% static 'icons/unrce_log.bmp' %}" width="35" height="35" alt="Inc Logo" />
-          <span class="logo-text">UNRCE</span>
+          <span class="logo-text">UNRCE WA</span>
         </a>
         <nav class="menu">
           <ul class="menu-bar">
             {% if not user.is_authenticated %}
             <li>
-              <li><a class="nav-link" href="/">About UNRCE</a></li>
+              <li><a class="nav-link" href="/">About UNRCE WA</a></li>
             </li>
             <li>
             {% endif %}
