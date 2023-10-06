@@ -193,11 +193,12 @@ Goals & Objectives Boxes
 }
 
   .my-footer {
-    background-color: #2C3E50;
+    background-color: #a9b6c3;
     color:  #fff;
     font-size: 1.5em;
     text-align: center;
     padding: 0.5em 0;
+    position:relative;
   }
   
   .my-footer a {
@@ -209,6 +210,13 @@ Goals & Objectives Boxes
     margin-right: 0;
   }
   
+  .footer-logo {
+    width: 150px; /* or whatever width you prefer */
+    height:100px;
+    position:absolute;
+    top:10px;
+    left:10px;
+}
 
   @media (min-width: 768px) {
   
@@ -261,3 +269,4 @@ Goals & Objectives Boxes
       }
   }
   
+ 
