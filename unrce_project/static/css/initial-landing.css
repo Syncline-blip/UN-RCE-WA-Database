@@ -124,6 +124,11 @@ Sections
     padding-bottom: 15px;
   }
 
+  .my-lead {
+    font-weight: 450;  /* This is in between normal and bold, adjust as needed */
+}
+
+
   /* ========================
 Goals & Objectives Boxes
 ======================== */
