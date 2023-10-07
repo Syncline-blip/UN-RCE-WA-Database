@@ -15,9 +15,10 @@
     {% endblock %}
   </head>
   {% block content %}
+  <div class="header">
+    <h1>Edit Report</h1>
+  </div> 
   <div class="report-container">
-    <h2>Edit Report</h2>
-
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
