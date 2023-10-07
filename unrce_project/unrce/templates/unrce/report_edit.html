@@ -1,133 +1,139 @@
-{% extends "base.html" %}
-{% load static %}
-
-
-{% block content %}
-
-<h2>Edit Report</h2>
-<style>
-    .sdg-img {
-    width: 100px; /* Adjust as needed */
-    height: 100px; /* Adjust as needed */
-}
-</style>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-
-    {% for field in report_form %}
-        <p>
-            {{ field.label_tag }}<br>
-            {{ field }}
-            {% if field.errors %}
-                <div class="error">{{ field.errors|join:", " }}</div>
-            {% endif %}
-        </p>
-{% endfor %}
-
-    <h3>Organization Details</h3>
-    <div class="organization-formsets">
-        {{ organization_formset.management_form }}
-        {% for form in organization_formset %}
-            <div class="organization-form" data-prefix="{{ form.prefix }}">
-                {{ form.as_p }}
-            </div>
-        {% endfor %}
-    </div>
-    
-    
-    <div class="form-group">
-    
-
-    <h3>SDGs</h3>
-    <div id="sdg-container">
-        {% for i in sdg_list %}
-            <div class="sdg-item">
-                <img src="{% static 'images/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
-                <div class="sdg-options">
-                    <input type="radio" name="sdg_option_{{ i }}" value="direct" {% if i|add:0 in report.direct_sdgs %}checked{% endif %}> Direct
-                    <input type="radio" name="sdg_option_{{ i }}" value="indirect" {% if i|add:0 in report.indirect_sdgs %}checked{% endif %}> Indirect
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-    
-
-    
-<div id="esd-themes-container">
-    {% for theme in themes_esd %}
-        <div class="esd-theme-item">
-            {{ theme }} 
-            <div class="esd-theme-options">
-                <input type="radio" name="esd_theme_option_{{ theme }}" value="direct" {% if theme in report.direct_esd_themes %}checked{% endif %}> Direct
-                <input type="radio" name="esd_theme_option_{{ theme }}" value="indirect" {% if theme in report.indirect_esd_themes %}checked{% endif %}> Indirect
-            </div>
-        </div>
-    {% endfor %}
-</div>
-
-  
-  <!-- ESD for 2030-Priority Action Areas -->
-  <div id="esd-priority-container">
-    {% for area in priority_action_areas %}
-        <div class="esd-priority-item">
-            {{ area }}
-            <div class="esd-priority-options">
-                <input type="radio" name="esd_priority_option_{{ area }}" value="direct" {% if area in report.direct_priority_areas %}checked{% endif %}> Direct
-                <input type="radio" name="esd_priority_option_{{ area }}" value="indirect" {% if area in report.indirect_priority_areas %}checked{% endif %}> Indirect
-            </div>
-        </div>
-    {% endfor %}
-</div>
-
-
-  <h3>Upload Images</h3>
-  <input type="file" name="image" id="image" multiple>
-    <h4>Existing Images</h4>
-    {% for img in existing_images %}
-        <img src="{{ img.image.url }}" width="100" alt="Image">
-    {% endfor %}
-
-    <h3>Upload Files</h3>
-    <input type="file" name="file" id="files" multiple>
-    <h4>Existing Files</h4>
-    {% for file in existing_files %}
-    <li><a href="{{ file.file.url }}" download>{{ file.file.name }}</a></li>
-    {% endfor %}
-
-    <br>
-    <input type="submit" value="Update Report">
-</form>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Script loaded');
-    
-        const radios = document.querySelectorAll('input[type="radio"]');
-    
-        radios.forEach(radio => {
-            console.log('Event listener attached');
-            radio.addEventListener('click', function () {
-                console.log('Radio clicked');
-                if (radio.getAttribute('data-last-clicked') === 'true') {
-                    radio.checked = false;
-                    radio.setAttribute('data-last-clicked', 'false');
-                } else {
-                    radio.setAttribute('data-last-clicked', 'true');
-                }
-    
-                // Deselect other radios with the same name attribute if the current one is checked
-                radios.forEach(otherRadio => {
-                    if (otherRadio.name === radio.name && otherRadio !== radio) {
-                        otherRadio.setAttribute('data-last-clicked', 'false');
-                    }
-                });
-            });
-        });
-    });
-
-    
-
-
-    </script>
+<head>
+    {% extends "base.html" %}
+    {% load static %}
+    {% block head %}
+        {{ block.super }}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'css/create_report.css' %}">
+        <title>{% block title %}Report List{% endblock %}</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{% static 'admin/js/jquery.init.js' %}"></script>
+        <script src="{% static 'admin/js/actions.js' %}"></script>
+        <script src="{% static 'admin/js/inlines.js' %}"></script>
     {% endblock %}
+  </head>
+  {% block content %}
+  <div class="report-container">
+    <h2>Edit Report</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% for field in report_form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="error">{{ field.errors|join:", " }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <h3>Organization Details</h3>
+        <div class="organization-formsets">
+            {{ organization_formset.management_form }}
+            {% for form in organization_formset %}
+                <div class="organization-form" data-prefix="{{ form.prefix }}">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+        <hr><hr>
+        <br>
+        <h3>SDGs</h3>
+        <br>
+        <div id="sdg-container">
+            {% for i in sdg_list %}
+                <div class="sdg-item">
+                    <img src="{% static 'images/sdg_'|add:i|add:'.png' %}" class="sdg-img" data-sdg="{{ i }}" alt="SDG {{ i }}">
+                    <div class="sdg-options">
+                        <input type="radio" name="sdg_option_{{ i }}" value="direct" {% if i|add:0 in report.direct_sdgs %}checked{% endif %}> Direct
+                        <input type="radio" name="sdg_option_{{ i }}" value="indirect" {% if i|add:0 in report.indirect_sdgs %}checked{% endif %}> Indirect
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="esd-themes-container">
+            {% for theme in themes_esd %}
+                <div class="esd-theme-item">
+                    <p>---------------------------------</p>
+                    {{ theme }} 
+                    <div class="esd-theme-options">
+                        <input type="radio" name="esd_theme_option_{{ theme }}" value="direct" {% if theme in report.direct_esd_themes %}checked{% endif %}> Direct
+                        <input type="radio" name="esd_theme_option_{{ theme }}" value="indirect" {% if theme in report.indirect_esd_themes %}checked{% endif %}> Indirect
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="esd-priority-container">
+            {% for area in priority_action_areas %}
+                <div class="esd-priority-item">
+                    <hr>
+                    <br>
+                    {{ area }}
+                    <div class="esd-priority-options">
+                        <input type="radio" name="esd_priority_option_{{ area }}" value="direct" {% if area in report.direct_priority_areas %}checked{% endif %}> Direct
+                        <input type="radio" name="esd_priority_option_{{ area }}" value="indirect" {% if area in report.indirect_priority_areas %}checked{% endif %}> Indirect
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+        <h3>Upload Images</h3>
+        <input type="file" name="image" id="image" multiple>
+        <br>
+        <h4>Existing Images</h4>
+        {% for img in existing_images %}
+            <img src="{{ img.image.url }}" width="100" alt="Image">
+        {% endfor %}
+        <br>
+        <h3>Upload Files</h3>
+        <input type="file" name="file" id="files" multiple>
+        <br>
+        <h4>Existing Files</h4>
+        <ul>
+            {% for file in existing_files %}
+                <li><a href="{{ file.file.url }}" download>{{ file.file.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <br>
+    </div>
+        <br>
+        <div class="save-options">
+            <button type="submit" name="update">Update Report </button>
+        </div>
+    </form>
+  </div>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          console.log('Script loaded');
+          const radios = document.querySelectorAll('input[type="radio"]');
+
+          radios.forEach(radio => {
+              console.log('Event listener attached');
+              radio.addEventListener('click', function () {
+                  console.log('Radio clicked');
+                  if (radio.getAttribute('data-last-clicked') === 'true') {
+                      radio.checked = false;
+                      radio.setAttribute('data-last-clicked', 'false');
+                  } else {
+                      radio.setAttribute('data-last-clicked', 'true');
+                  }
+
+                  // Deselect other radios with the same name attribute if the current one is checked
+                  radios.forEach(otherRadio => {
+                      if (otherRadio.name === radio.name && otherRadio !== radio) {
+                          otherRadio.setAttribute('data-last-clicked', 'false');
+                      }
+                  });
+              });
+          });
+      });
+  </script>
+{% endblock %}
