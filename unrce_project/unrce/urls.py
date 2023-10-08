@@ -27,6 +27,7 @@ urlpatterns = [
     path('org_eoi/', views.org_eoi, name='org_eoi'),
     path('browse_reports/', views.browse_reports, name='browse_reports'),
     path('approve_report/<int:report_id>/', views.approve_report, name='approve_report'),
+    path('change-group/<int:user_id>/', views.change_group, name='change_group'),
 
 ]
 

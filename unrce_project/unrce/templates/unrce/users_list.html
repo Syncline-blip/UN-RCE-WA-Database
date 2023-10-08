@@ -95,6 +95,7 @@
               <th>Email</th>
               <th>Organization</th>
               <th>Groups</th>
+              <th>Change Group</th>
           </tr>
       </thead>
       <tbody>
@@ -106,6 +107,17 @@
                   <td>{{ user.email }}</td>
                   <td>{{ user.profile.organization }}</td> 
                   <td>{{ user.groups.all|join:", " }}</td> 
+                  <td>
+                    <form method="post" action="{% url 'change_group' user.id %}">
+                        {% csrf_token %}
+                        <select name="group">
+                            {% for group in all_groups %}
+                                <option value="{{ group.id }}" {% if group in user.groups.all %}selected{% endif %}>{{ group.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Change">
+                    </form>
+                </td>
               </tr>
           {% endfor %}
       </tbody>

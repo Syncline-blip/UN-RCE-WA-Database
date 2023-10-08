@@ -190,6 +190,7 @@ def users_list(request):
     users = User.objects.all().prefetch_related('groups', 'account')  
     context = {
         'users': users,
+        'all_groups': Group.objects.all() 
     }
     return render(request, 'unrce/users_list.html', context)
 
@@ -405,3 +406,14 @@ def approve_report(request, report_id):
     report.approved = True
     report.save()
     return redirect('report_details', report_id=report_id)
+
+@login_required
+def change_group(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        group_id = request.POST.get('group')
+        group = get_object_or_404(Group, id=group_id)
+        user.groups.clear()  # Remove user from all current groups
+        user.groups.add(group)  # Add user to the selected group
+        user.save()
+    return redirect('users_list')
