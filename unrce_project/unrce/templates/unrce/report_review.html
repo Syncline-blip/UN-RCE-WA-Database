@@ -1,101 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Database List Table</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-  }
-
-  .header{
-    text-align: center;
-    background-color: #007bff;
-    color: #fff;
-    padding: 20px;
-  } 
-
-
-.header button {
-  background-color: #fff;
-  color: #007bff;
-  border: none;
-  padding: 5px 15px;
-  margin: 0px 150px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-
-.header button:hover {
-  background-color: #ddd;
-}
-
-  .table-container {
-    max-width: 4000px;
-    margin: 10px auto;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th, td {
-    padding: 6px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-  }
-
-  th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 14px;
-    color: #444;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  tr:hover {
-    background-color: #e0e0e0;
-    transition: background-color 0.2s;
-  }
-
-  td {
-    font-size: 14px;
-    color: #333;
-  }
-  .status-ongoing {
-    color: green;
-}
-
-.status-completed {
-    color: yellow;
-}
-
-.status-new {
-    color: blue;
-}
-  
-</style>
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+    {{ block.super }}
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/report_edit.css' %}">
+    <title>{% block title %}Database List Table{% endblock %}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'admin/js/jquery.init.js' %}"></script>
+    <script src="{% static 'admin/js/actions.js' %}"></script>
+    <script src="{% static 'admin/js/inlines.js' %}"></script>
 </head>
+{% endblock %}
+  
 <body>
-<div class="header">
+  {% block content %}
+<div class="title">
   <h1>Report Review</h1>
-  <a href="{% url 'initial-landing' %}">home</a>
 </div>
 <!--
     This page is to allow someone with elevated privelages, to see all reports and give them options, what options are 
@@ -150,10 +75,10 @@
                       <span style="color: red;">Not Approved</span>
                   {% endif %}
               </td>
-              <td>
+              <td class="details">
                   <a href="{% url 'report_details' report.id %}" >Details</a>
               </td>
-              <td>
+              <td class="download">
                   <a href="{% url 'report_edit' report.id %}" >Download</a>
               </td>
 
@@ -162,5 +87,6 @@
     </tbody>
 </table>
 </div>
+{% endblock %}
 </body>
 </html>
