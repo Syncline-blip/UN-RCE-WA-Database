@@ -264,8 +264,8 @@
 
 .error-message {
   display: block;
-  color: rgb(15, 15, 15);
-  margin-top: 4px;
+  color: black;
+  margin-top: 4px; /* add a bit of margin for spacing */
 }
 
 
