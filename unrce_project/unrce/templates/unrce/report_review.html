@@ -19,9 +19,8 @@
   
 <body>
 {% block content %}
-<div class="header">
+<div class="title">
   <h1>Report Review</h1>
-  <a href="{% url 'initial-landing' %}">home</a>
 </div>
 <!--
     This page is to allow someone with elevated privelages, to see all reports and give them options, what options are 
@@ -77,10 +76,14 @@
                   {% endif %}
               </td>
               <td>
-                  <a href="{% url 'report_details' report.id %}" >Details</a>
+                <div class="details">
+                    <a href="{% url 'report_details' report.id %}" >Details</a>
+                </div>
               </td>
               <td>
-                  <a href="{% url 'report_edit' report.id %}" >Download</a>
+                <div class="download">
+                    <a href="{% url 'report_edit' report.id %}" >Download</a>
+                </div>
               </td>
 
             </tr>
