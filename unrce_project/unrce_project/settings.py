@@ -30,7 +30,7 @@ ROOT_URLCONF = 'unrce_project.urls'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*',"https://unrcedeploytest-30a0e0462f02.herokuapp.com/"]
 
 LOGIN_REDIRECT_URL = '/profile/'
 LOGOUT_REDIRECT_URL = '/'
