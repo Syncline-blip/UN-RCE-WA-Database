@@ -263,11 +263,11 @@
 }
 
 .error-message {
-    color: black;
-    position: absolute;
-    margin-bottom: 5px;
-    display:none;
-  }
+  display: block;
+  color: black;
+  margin-top: 4px; /* add a bit of margin for spacing */
+}
+
 
   meter {
     width: 100%;

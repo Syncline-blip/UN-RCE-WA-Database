@@ -16,6 +16,8 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db.models import Q
+
 
 logger = logging.getLogger(__name__)
 # sample data, not to be used, just for testing
@@ -170,8 +172,37 @@ def browse_reports(request):
     Fetches and filters the Report objects by approved attribute being True 
     and renders them in 'unrce/approved_reports_list.html'.
     """
-    approved_reports = Report.objects.filter(approved=True)
-    return render(request, 'unrce/browse_reports.html', {'reports': approved_reports})
+    filters = {
+        'status': request.GET.get('statusFilter'),
+        'region': request.GET.get('regionFilter'),
+        'frequency': request.GET.get('frequencyFilter'),
+        'approved': True
+    }
+
+    audience_filter = request.GET.getlist('audienceFilter')
+    if audience_filter:
+        filters['audience__overlap'] = audience_filter
+
+    filters = {k: v for k, v in filters.items() if v}
+    approved_reports = Report.objects.filter(**filters)
+
+    sdg_filter = request.GET.getlist('sdgFilter')
+    if sdg_filter:
+        q_objects = Q()
+
+        # Create Q objects for each SDG filter selected by the user
+        for sdg in sdg_filter:
+            q_objects |= Q(direct_sdgs__contains=[sdg]) | Q(indirect_sdgs__contains=[sdg])
+
+        # Filter the queryset with the OR'ed Q objects
+        approved_reports = approved_reports.filter(q_objects)
+
+    context = {
+        'sdgs': range(1, 18),
+        'reports': approved_reports
+    }
+
+    return render(request, 'unrce/browse_reports.html', context)
 
 @login_required
 def delete_image(request, image_id):
@@ -187,10 +218,24 @@ def delete_image(request, image_id):
 
 
 def users_list(request):
-    users = User.objects.all().prefetch_related('groups', 'account')  
+    query = request.GET.get('q') 
+
+    if query:
+        # Filter users by search term while looking into username, first name, last name, and email
+        users = User.objects.filter(
+            Q(username__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(email__icontains=query)|
+            Q(organization__icontains=query)
+        ).prefetch_related('groups', 'account')
+    else:
+        # If there's no search term, get all users
+        users = User.objects.all().prefetch_related('groups', 'account')
+
     context = {
         'users': users,
-        'all_groups': Group.objects.all() 
+        'all_groups': Group.objects.all()
     }
     return render(request, 'unrce/users_list.html', context)
 

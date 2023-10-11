@@ -78,15 +78,81 @@
     font-size: 14px;
     color: #333;
   }
+  select.large {
+    width: 50px;    
+    height: 150px;   
+}
   
 </style>
 </head>
 <body>
 <div class="header">
-  <h1>Report List</h1>
+  <h1>Browse Report</h1>
   <a href="{% url 'initial-landing' %}">home</a>
   <a href="{% url 'create_report' %}">create report</a>
 </div>
+
+<button id="toggleFiltersBtn">Toggle Filters</button>
+<a href="{% url 'browse_reports' %}" class="btn">Reset</a> 
+<div id="filtersSection" style="display:none;">
+    <form action="{% url 'browse_reports' %}" method="GET">
+        <!-- Status Filter -->
+        <label for="statusFilter">Status:</label>
+        <select name="statusFilter" id="statusFilter">
+            <option value="">All</option>
+            <option value="ongoing">Ongoing</option>
+            <option value="completed">Completed</option>
+        </select>
+
+        <!-- Region Filter -->
+        <label for="regionFilter">Region:</label>
+        <select name="regionFilter" id="regionFilter">
+            <option value="">All</option>
+            <option value="perth_metro">Perth Metro</option>
+            <option value="great_southern">Great Southern</option>
+            <option value="wa">WA</option>
+           
+        </select>
+
+        <!-- Audience Filter (Multiple Selection) -->
+        <label for="audienceFilter">Audience:</label>
+        <select multiple name="audienceFilter" id="audienceFilter">
+            <option value="general_public">General public (any age)</option>
+            <option value="particular_audience">Particular target Audience</option>
+            <option value="primary_school_age">Primary School age</option>
+            <option value="high_school_age">High school age</option>
+            <option value="tertiary_students">Tertiary students</option>
+            <option value="teacher_ed">Teacher Ed</option>
+            <option value="adults">Adults</option>   
+            <option value="early_years">Early years</option>   
+            <option value="adults_60">Adults >60</option>             
+        </select>
+
+        <!-- Frequency Filter -->
+        <label for="frequencyFilter">Frequency:</label>
+        <select name="frequencyFilter" id="frequencyFilter">
+            <option value="">All</option>
+            <option value="monthly">Monthly</option>
+            <option value="annually">Annually</option>
+            <option value="quarterly">Quarterly</option>
+            <option value="biannually">Biannually</option>
+            <option value="once">Once</option>
+            <option value="opportunistic_irregularly">Opportunistic/Irregularly</option>
+            <option value="permanent_on demand">Permanent/On demand</option>
+        </select>
+
+        <!-- SDGs (Multiple Selection) -->
+        <label for="sdgFilter">SDGs:</label>
+        <select name="sdgFilter" id="sdgFilter" class="large" multiple>
+          {% for sdg in sdgs %}
+          <option value="{{ sdg }}">{{ sdg }}</option>
+      {% endfor %}
+        </select>
+
+        <input type="submit" value="Filter">
+    </form>
+</div>
+
 <!--
   This Table contains all the reports that the current user is the author for, the headings are the fields in the report
 -->
@@ -99,6 +165,8 @@
             <th>Report Status</th>
             <th>Region</th>
             <th>Audience</th>
+            <th>Frequency</th>
+            <th>SDG</th>
         </tr>
     </thead>
 <!-- 
@@ -108,13 +176,48 @@
         {% for report in reports %}
         <tr>
              <td>{{ report.title_project }}</td>
-             <td>{{ report.status }}</td>
-             <td>{{ report.region }}</td>
-             <td>{{ report.audience }}</td>
+             <td>
+                  {% if report.status == "ongoing" %}
+                      <span class="status-ongoing">Ongoing</span>
+                  {% elif report.status == "completed" %}
+                      <span class="status-completed">Completed</span>
+                  {% elif report.status == "new_report" %}
+                      <span class="status-new">New Report</span>
+                  {% endif %}
+             </td>
+             <td>{{ report.region|title }}</td> <!-- Converted to title case -->
+         <td>
+          {% for audience in report.audience %}
+                 {{ audience|title}}{% if not forloop.last %}, {% endif %}
+             {% endfor %}
+         </td> 
+         <td>{{ report.frequency|title }} </td>
+         <td>
+            <strong>Direct SDGs:</strong>
+            {% for sdg in report.direct_sdgs %}
+                {{ sdg }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            <br>
+            <strong>Indirect SDGs:</strong>
+            {% for sdg in report.indirect_sdgs %}
+                {{ sdg }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+         </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 </div>
 </body>
+<script>
+  document.getElementById('toggleFiltersBtn').addEventListener('click', function() {
+      const filtersSection = document.getElementById('filtersSection');
+      if (filtersSection.style.display === 'none') {
+          filtersSection.style.display = 'block';
+      } else {
+          filtersSection.style.display = 'none';
+      }
+  });
+  </script>
+  
 </html>

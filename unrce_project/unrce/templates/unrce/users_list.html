@@ -83,6 +83,13 @@
       </style>
 </head>
 <body>
+  <form method="get" action="">
+    <input type="text" name="q" placeholder="Search users..." value="{{ request.GET.q }}">
+    <input type="submit" value="Search">
+    <a href="{% url 'users_list' %}" class="btn">Reset</a> 
+</form>
+
+
 
   <div class="table-container">
     <table border="1">
@@ -105,7 +112,7 @@
                   <td>{{ user.first_name }}</td>
                   <td>{{ user.last_name }}</td>
                   <td>{{ user.email }}</td>
-                  <td>{{ user.profile.organization }}</td> 
+                  <td>{{ user.organization }}</td> 
                   <td>{{ user.groups.all|join:", " }}</td> 
                   <td>
                     <form method="post" action="{% url 'change_group' user.id %}">

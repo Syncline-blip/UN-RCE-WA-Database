@@ -45,6 +45,22 @@ body {
     cursor: pointer;
   }
 
+  .details a{
+    color: #035468; 
+    text-decoration: none; 
+    transition: color 0.3s;
+  }
+  .download a{
+    color: #05941c; 
+    text-decoration: none; 
+    transition: color 0.3s;
+  }
+
+  .details a:hover, .download a:hover{
+    color: rgb(85, 4, 85);
+  }
+
+
   .status-ongoing {
     color: #007bff;
   }
