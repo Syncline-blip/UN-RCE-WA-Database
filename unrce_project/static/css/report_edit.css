@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #f4f4f4, #003087, #DAAA00);
+    background: linear-gradient(to bottom, #f4f4f4, #9db0d3, #bac8e0);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -8,16 +8,63 @@ body {
     padding: 0;
   }
 
-  .title h1 {
+  .header {
+    margin: 20px auto;
+    padding: 10px;
+    width: 95%;
+    background: #f4f4f4;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+    display: flex; /* Use flex display */
+    justify-content: space-between;
+    padding-right: 550px;
+}
+
+  .header h1 {
     color: #DAAA00;
     text-align: center;
+    align-items: center;
   }
 
 
+.header form {
+    display: flex;
+    align-items:left;
+    justify-content: left;
+}
+
+.header input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.header input[type="submit"] {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.header .btn {
+    background-color: #DC3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 10px;
+}
   .table-container {
     margin: 20px;
     padding: 20px;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
   }
 
@@ -59,7 +106,6 @@ body {
   .details a:hover, .download a:hover{
     color: rgb(85, 4, 85);
   }
-
 
   .status-ongoing {
     color: #007bff;
