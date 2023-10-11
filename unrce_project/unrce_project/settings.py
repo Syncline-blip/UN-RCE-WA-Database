@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-g1z^lfi0wq!p+!gohojjr$dzdaf^!(v&6o=%ksw+0yee0%d-lw
 ROOT_URLCONF = 'unrce_project.urls'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*',"https://unrcedeploytest-30a0e0462f02.herokuapp.com/"]
 
