@@ -23,12 +23,18 @@ body {
 .title {
   flex: 1; /* This will make the title expand and take the available space */
   text-align: center; /* This centers the title text horizontally */
+  margin-right: 30% ;
 }
 
-.header h1 {
+h1 {
   color: #DAAA00;
   text-align: center;
   align-items: center;
+}
+
+.header p{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-style: italic;
 }
 
 #filtersSection {
