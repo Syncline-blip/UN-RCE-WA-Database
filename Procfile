@@ -1,1 +1,1 @@
-web gunicorn unrce.wsgi:application --log-file -
+web: gunicorn unrce_project.wsgi:application --log-file -
