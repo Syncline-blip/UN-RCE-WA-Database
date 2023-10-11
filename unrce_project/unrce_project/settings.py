@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'unrce_project.unrce',
 ]
 
 AUTHENTICATION_BACKENDS = [
