@@ -139,7 +139,7 @@
     usernameField.addEventListener("input", function() {
       const usernameErrorElement = document.getElementById("username-error");
       if (usernameField.value.length > 0 && usernameField.value.length < 5) {
-          usernameErrorElement.textContent = "Username must be at least 5 characters.";
+ 
           usernameErrorElement.style.display = "block";  // Show the error
       } else {
           usernameErrorElement.textContent = "";
