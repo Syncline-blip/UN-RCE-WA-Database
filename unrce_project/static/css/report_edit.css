@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #ffffff, #e2e8f2, #bac8e0);
+    background: linear-gradient(to bottom, #f4f4f4, #e2e8f2, #bac8e0);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -23,14 +23,43 @@ body {
 .title {
   flex: 1; /* This will make the title expand and take the available space */
   text-align: center; /* This centers the title text horizontally */
-  
 }
 
-  .header h1 {
-    color: #DAAA00;
-    text-align: center;
-    align-items: center;
-  }
+.header h1 {
+  color: #DAAA00;
+  text-align: center;
+  align-items: center;
+}
+
+#filtersSection {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  margin: 20px auto; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  max-width: 95%; /* Adjust the maximum width as needed */
+}
+
+#filtersSection label, #filtersSection select, #filtersSection input[type="submit"] {
+  flex: 1;
+  margin-right: 21px;
+}
+
+#filtersSection input[type="submit"] {
+  background-color: #965c1b;
+  color: white;
+  border: none;
+  padding: 7px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 14px;
+  margin-left: 5px;
+  align-items: center;
+}
+
+#filtersSection select[multiple] {
+  height: auto; /* Allow the select with multiple options to grow as needed */
+}
 
 
 .header form {
@@ -47,6 +76,16 @@ body {
     font-size: 14px;
 }
 
+.header #toggleFiltersBtn{
+  background-color: #0d8b28;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 10px;
+}
 .header input[type="submit"] {
     background-color: #007BFF;
     color: white;
@@ -138,8 +177,8 @@ body {
 @media (max-width: 900px) {
 
   .header {
-    flex-direction: column; /* Stack items vertically */
-    align-items: stretch; /* Stretch items to full width */
+    flex-direction: column; 
+    align-items: stretch; 
     padding-right: 0;
   }
 
@@ -156,11 +195,23 @@ body {
     margin: 5px 0;
   }
 
-  .table-container {
+  .table-container{
     overflow-x: auto; /* Add horizontal scrolling */
   }
 
   table {
     min-width: 800px; /* Set a minimum width for the table */
   }
+  #filtersSection {
+    flex-direction: column;
+  }
+
+  #filtersSection label {
+    flex: 0 0 100%; /* Labels should span the entire width */
+  }
+
+  #filtersSection select, #filtersSection input[type="submit"] {
+    flex: 1;
+    margin: 5px 0;
+}
 }

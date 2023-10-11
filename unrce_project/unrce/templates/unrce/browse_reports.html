@@ -1,99 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+  {% extends "base.html" %}
+  {% load static %}
+  {% block head %}
+      {{ block.super }}
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Database List Table</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-  }
-
-  .header{
-    text-align: center;
-    background-color: #007bff;
-    color: #fff;
-    padding: 20px;
-  } 
-
-
-.header button {
-  background-color: #fff;
-  color: #007bff;
-  border: none;
-  padding: 5px 15px;
-  margin: 0px 150px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-
-.header button:hover {
-  background-color: #ddd;
-}
-
-  .table-container {
-    max-width: 4000px;
-    margin: 10px auto;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th, td {
-    padding: 6px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-  }
-
-  th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 14px;
-    color: #444;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  tr:hover {
-    background-color: #e0e0e0;
-    transition: background-color 0.2s;
-  }
-
-  td {
-    font-size: 14px;
-    color: #333;
-  }
-  select.large {
-    width: 50px;    
-    height: 150px;   
-}
-  
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/report_edit.css' %}">
+    <title>{% block title %}Browse Reports{% endblock %}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'admin/js/jquery.init.js' %}"></script>
+    <script src="{% static 'admin/js/actions.js' %}"></script>
+    <script src="{% static 'admin/js/inlines.js' %}"></script>
+  {% endblock %}
 </head>
 <body>
+  {% block content %}
 <div class="header">
-  <h1>Browse Report</h1>
-  <a href="{% url 'initial-landing' %}">home</a>
-  <a href="{% url 'create_report' %}">create report</a>
-</div>
-
 <button id="toggleFiltersBtn">Toggle Filters</button>
+<h1>Browse Report</h1>
 <a href="{% url 'browse_reports' %}" class="btn">Reset</a> 
+</div>
 <div id="filtersSection" style="display:none;">
     <form action="{% url 'browse_reports' %}" method="GET">
         <!-- Status Filter -->
@@ -219,5 +148,5 @@
       }
   });
   </script>
-  
 </html>
+{% endblock %}
