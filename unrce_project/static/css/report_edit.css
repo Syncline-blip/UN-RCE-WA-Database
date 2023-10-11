@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #f4f4f4, #9db0d3, #bac8e0);
+    background: linear-gradient(to bottom, #f4f4f4, #e2e8f2, #bac8e0);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -17,7 +17,12 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
     display: flex; /* Use flex display */
     justify-content: space-between;
-    padding-right: 550px;
+    align-items:center;
+}
+
+.title {
+  flex: 1; /* This will make the title expand and take the available space */
+  text-align: center; /* This centers the title text horizontally */
 }
 
   .header h1 {
@@ -32,6 +37,7 @@ body {
     align-items:left;
     justify-content: left;
 }
+
 
 .header input[type="text"] {
     padding: 10px;
@@ -126,3 +132,34 @@ body {
   span[style="color: red;"] {
     color: #dc3545;
   }
+
+/* For screens below 768px width */
+@media (max-width: 900px) {
+
+  .header {
+    flex-direction: column; /* Stack items vertically */
+    align-items: stretch; /* Stretch items to full width */
+    padding-right: 0;
+  }
+
+  .header form {
+    margin-bottom: 10px;
+  }
+
+  .header input[type="text"] {
+    width: 100%; /* Full width for the search input */
+  }
+
+  .header input[type="submit"], .header .btn {
+    width: 49%; /* Make buttons take up half the width minus a bit for spacing */
+    margin: 5px 0;
+  }
+
+  .table-container {
+    overflow-x: auto; /* Add horizontal scrolling */
+  }
+
+  table {
+    min-width: 800px; /* Set a minimum width for the table */
+  }
+}
