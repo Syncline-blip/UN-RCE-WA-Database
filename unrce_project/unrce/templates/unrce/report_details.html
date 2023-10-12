@@ -61,11 +61,13 @@
 </ul>
 
     <a href="{% url 'report_review' %}">Return</a>
+    {% if user.groups.all.0.name == "Admin" %}
     <a href="{% url 'report_edit' report_id=report.id %}">Edit Report</a>
     <form method="post" action="{% url 'approve_report' report_id=report.id %}">
         {% csrf_token %}
         <input type="submit" value="Approve Report">
     </form>
+{% endif %}
     
 
 
