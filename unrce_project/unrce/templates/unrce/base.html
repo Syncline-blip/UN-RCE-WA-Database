@@ -35,17 +35,8 @@
               </button>
               <div id="dropdown1" class="dropdown">
                 <ul role="menu">
+                 
                   {% if user.is_authenticated %}
-                  <li role="menuitem">
-                    <a class="dropdown-link" href="{% url 'report_list' %}">
-                      <img src="{% static 'icons/project.png' %}" class="icon" />
-                      <div>
-                        <span class="dropdown-link-title">View Projects</span>
-                        <p>See projects you are involved in</p>
-                      </div>
-                    </a>
-                  </li>
-                  {% endif %}
                   <li role="menuitem">
                     <a class="dropdown-link" href="/">
                       <img src="{% static 'icons/view.png' %}" class="icon" />
@@ -55,15 +46,8 @@
                       </div>
                     </a>
                   </li>
-                  <li role="menuitem">
-                    <a class="dropdown-link" href="{% url 'eoi' %}">
-                      <img src="{% static 'icons/inquiry.png' %}" class="icon" />
-                      <div>
-                        <span class="dropdown-link-title">Project Inquiry</span>
-                        <p>Express Interest in a new or ongoing project</p>
-                      </div>
-                    </a>
-                  </li>
+                  {% endif %}
+                  
                 </ul>
               </div>
             </li>
@@ -97,19 +81,11 @@
             </li>
             <li>
               <button class="nav-link dropdown-btn" data-dropdown="dropdown3" aria-haspopup="true" aria-expanded="false" aria-label="discover">
-                Membership and Organization <i class="bx bx-chevron-down" aria-hidden="true"></i>
+                Membership <i class="bx bx-chevron-down" aria-hidden="true"></i>
               </button>
               <div id="dropdown3" class="dropdown">
                 <ul role="menu">
-                  <li role="menuitem">
-                    <a class="dropdown-link" href="{% url 'eoi' %}">
-                      <img src="{% static 'icons/proj.png' %}" class="icon" />
-                      <div>
-                        <span class="dropdown-link-title">Project Inquiry Status</span>
-                        <p>Edit your current project reports</p>
-                      </div>
-                    </a>
-                  </li>
+                  
                   <li role="menuitem">
                     <a class="dropdown-link" href="{% url 'org_eoi' %}">
                       <img src="{% static 'icons/membership.png' %}" class="icon" />
@@ -138,7 +114,7 @@
           <div class="profile-container">
             {% if user.is_authenticated %}
             <div class="profile-dropdown-toggle">
-              <img src="https://github.com/Evavic44/responsive-navbar-with-dropdown/blob/main/assets/images/user.jpg?raw=true" width="50" height="50" alt="user image" />
+              <img src="https://cdn-icons-png.flaticon.com/512/666/666201.png" width="50" height="50" alt="user image" />
             </div>
             <div class="profile-dropdown-toggle">
               <div id="profile-dropdown" class="dropdown profile-dropdown">
@@ -147,7 +123,7 @@
                     <a class="dropdown-link" href="{% url 'profile' %}">
                       <img src="{% static 'icons/settings.png' %}" class="icon" />
                       <div>
-                        <span class="dropdown-link-title">Profile Settings</span>
+                        <span class="dropdown-link-title">My Profile</span>
                         <p>View and manage your profile</p>
                       </div>
                     </a>

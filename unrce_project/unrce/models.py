@@ -212,6 +212,7 @@ class Expression_of_interest(models.Model):
         return f"{self.title_of_project}  {self.created_at}"
 
 # Account Model
+# Account Model
 class Account(models.Model):
     ''' 
         OneToOneField: Foreign Key 1:1 relationship between Account and User model
@@ -219,6 +220,9 @@ class Account(models.Model):
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     organization = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    email_name = models.CharField(max_length=30)
     def __str__(self):
         return self.user.username
 
