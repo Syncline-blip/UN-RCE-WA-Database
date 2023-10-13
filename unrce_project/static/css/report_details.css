@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.page {
+    background-color: #fff; /* White */
+    padding: 20px;
+    margin: 0px 0px auto;
+}
+
+strong.title{
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.page:nth-child(2) {
+    background-color: #f1f5fa; 
+}
+
+.page:nth-child(3) {
+    background-color: #e4c65c; 
+}
+
+.page:nth-child(4){
+  background-color: rgba(0, 48, 135, 0.6);
+}
+
+strong {
+    font-weight: bold;
+    font-size:larger;
+}
+
+.end{
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

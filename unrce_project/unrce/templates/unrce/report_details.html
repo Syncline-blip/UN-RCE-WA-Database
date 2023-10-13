@@ -8,65 +8,72 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <!-- <link rel="stylesheet" href="{% static 'css/report_edit.css' %}"> -->
+  <!-- <link rel="stylesheet" href="{% static 'css/report_details.css' %}"> -->
   <title>{% block title %} Report Details{% endblock %}</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="{% static 'admin/js/jquery.init.js' %}"></script>
   <script src="{% static 'admin/js/actions.js' %}"></script>
   <script src="{% static 'admin/js/inlines.js' %}"></script>
+  <style>
+    body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+h1 {
+    text-align: center;
+    color: black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
-        h1 {
-            text-align: center;
-            color: black;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
+.page {
+    background-color: #fff; /* White */
+    padding: 20px;
+    margin: 0px 0px auto;
+}
 
-        .page {
-            background-color: #fff; /* White */
-            padding: 20px;
-            margin: 0px 0px auto;
-        }
+strong.title{
+    text-align: center;
+    display: block;
+    font-size: 1.5em; /* Adjust the font size as needed */
+    margin: 0 auto; /* Center horizontally */
+}
 
-        .page:nth-child(2) {
-            background-color: #f1f5fa; 
-        }
+.page:nth-child(2) {
+    background-color: #f1f5fa; 
+}
 
-        .page:nth-child(3) {
-            background-color: #e4c65c; 
-        }
+.page:nth-child(3) {
+    background-color: #e4c65c; 
+}
 
-        .page:nth-child(4){
-          background-color: rgba(0, 48, 135, 0.6);
-        }
+.page:nth-child(4){
+  background-color: rgba(0, 48, 135, 0.6);
+}
 
-        strong {
-            font-weight: bold;
-        }
+strong {
+    font-weight: bold;
+    font-size:larger;
+    margin-bottom: 40px;
+}
 
-        .end{
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-        }
-    </style>
+.end{
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+  </style>
 </head>
 {% endblock %}
 <body>
   {% block content %}
-
-  <h1>View Report</h1>
-
+  <h1 class="title">Title of Project:   {{ report.title_project }}</h1>
 <div class="page">
-    <p><strong>Title of Project:</strong> {{ report.title_project }}</p>
-    <p><strong>Submitting RCE:</strong> {{ report.submitting_RCE }}</p>
+    <!-- <strong class="title">Title of Project:   {{ report.title_project }}</strong> -->
+    <div class="subpage1">
+    <strong>Submitting RCE:</strong> <p>{{ report.submitting_RCE }}</p>
     <p><strong>Format of Project:</strong> {{ report.format_project }}</p>
     <p><strong>Delivery:</strong> {{ report.delivery|join:", " }}</p>
     <p><strong>Frequency:</strong> {{ report.frequency }}</p>
@@ -74,8 +81,10 @@
     <p><strong>Web Link:</strong> {{ report.web_link }}</p>
     <p><strong>Additional Resources:</strong> {{ report.additional_resources }}</p>
 </div>
+</div>
 
 <div class="page">
+    <div class="subpage2">
     <p><strong>Socio-Economic Characteristics:</strong> {{ report.socio_economic_characteristics }}</p>
     <p><strong>Development Challenges:</strong> {{ report.development_challenges }}</p>
     <p><strong>Status:</strong> {{ report.status }}</p>
@@ -84,14 +93,16 @@
     <p><strong>Rationale:</strong> {{ report.rationale }}</p>
     <p><strong>Objectives:</strong> {{ report.objectives }}</p>
     <p><strong>Activities/Practices:</strong> {{ report.activities_practices }}</p>
-</div>
-
-<div class="page">
     <p><strong>Size Academic:</strong> {{ report.size_academic }}</p>
     <p><strong>Results:</strong> {{ report.results }}</p>
     <p><strong>Lessons Learned:</strong> {{ report.lessons_learned }}</p>
     <p><strong>Key Message:</strong> {{ report.key_message }}</p>
     <p><strong>Relationship Activities:</strong> {{ report.relationship_activities }}</p>
+    </div>
+</div>
+
+<div class="page">
+    <div class="subpage3">
     <p><strong>Funding:</strong> {{ report.funding }}</p>
     <p><strong>Direct SDGs:</strong> {{ report.direct_sdgs|join:", " }}</p>
     <p><strong>Indirect SDGs:</strong> {{ report.indirect_sdgs|join:", " }}</p>
@@ -104,6 +115,7 @@
     <p><strong>Author:</strong> {{ report.author }}</p>
     <p><strong>Approved:</strong> {{ report.approved }}</p>
     <p><strong>Submitted:</strong> {{ report.submitted }}</p>
+    </div>
 </div>
 <div class="end">
 <h2>Existing Images</h2>
