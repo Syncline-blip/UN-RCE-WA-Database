@@ -419,10 +419,11 @@ def register(request):
         logging.error(f"An exception occurred during registration: {str(e)}")  # Log the exception
         return HttpResponseServerError("An error occurred during registration")  # Return an error response
 
+ 
+
     # If the registration process was not successful, return the registration form
     form = RegistrationForm()
     return render(request, 'unrce/register.html', {'form': form})
-
 
 @login_required
 def profile(request):
