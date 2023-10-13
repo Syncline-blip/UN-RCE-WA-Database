@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #f4f4f4, #003087, #DAAA00);
+    background: linear-gradient(to bottom, #f4f4f4, #e2e8f2, #bac8e0);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -8,16 +8,115 @@ body {
     padding: 0;
   }
 
-  .title h1 {
-    color: #DAAA00;
-    text-align: center;
-  }
+  .header {
+    margin: 20px auto;
+    padding: 10px;
+    width: 95%;
+    background: #f4f4f4;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+    display: flex; /* Use flex display */
+    justify-content: space-between;
+    align-items:center;
+}
+
+.title {
+  flex: 1; /* This will make the title expand and take the available space */
+  text-align: center; /* This centers the title text horizontally */
+  margin-right: 30% ;
+}
+
+h1 {
+  color: #DAAA00;
+  text-align: center;
+  align-items: center;
+}
+
+.header p{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-style: italic;
+}
+
+#filtersSection {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  margin: 20px auto; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  max-width: 95%; /* Adjust the maximum width as needed */
+}
+
+#filtersSection label, #filtersSection select, #filtersSection input[type="submit"] {
+  flex: 1;
+  margin-right: 21px;
+}
+
+#filtersSection input[type="submit"] {
+  background-color: #965c1b;
+  color: white;
+  border: none;
+  padding: 7px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 14px;
+  margin-left: 5px;
+  align-items: center;
+}
+
+#filtersSection select[multiple] {
+  height: auto; /* Allow the select with multiple options to grow as needed */
+}
 
 
+.header form {
+    display: flex;
+    align-items:left;
+    justify-content: left;
+}
+
+
+.header input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.header #toggleFiltersBtn{
+  background-color: #0d8b28;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 10px;
+}
+.header input[type="submit"] {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.header .btn {
+    background-color: #DC3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 10px;
+}
   .table-container {
     margin: 20px;
     padding: 20px;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
   }
 
@@ -60,7 +159,6 @@ body {
     color: rgb(85, 4, 85);
   }
 
-
   .status-ongoing {
     color: #007bff;
   }
@@ -80,3 +178,46 @@ body {
   span[style="color: red;"] {
     color: #dc3545;
   }
+
+/* For screens below 768px width */
+@media (max-width: 900px) {
+
+  .header {
+    flex-direction: column; 
+    align-items: stretch; 
+    padding-right: 0;
+  }
+
+  .header form {
+    margin-bottom: 10px;
+  }
+
+  .header input[type="text"] {
+    width: 100%; /* Full width for the search input */
+  }
+
+  .header input[type="submit"], .header .btn {
+    width: 49%; /* Make buttons take up half the width minus a bit for spacing */
+    margin: 5px 0;
+  }
+
+  .table-container{
+    overflow-x: auto; /* Add horizontal scrolling */
+  }
+
+  table {
+    min-width: 800px; /* Set a minimum width for the table */
+  }
+  #filtersSection {
+    flex-direction: column;
+  }
+
+  #filtersSection label {
+    flex: 0 0 100%; /* Labels should span the entire width */
+  }
+
+  #filtersSection select, #filtersSection input[type="submit"] {
+    flex: 1;
+    margin: 5px 0;
+}
+}

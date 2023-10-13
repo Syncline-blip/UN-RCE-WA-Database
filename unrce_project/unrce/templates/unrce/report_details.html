@@ -1,76 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+    {{ block.super }}
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <!-- <link rel="stylesheet" href="{% static 'css/report_details.css' %}"> -->
+  <title>{% block title %} Report Details{% endblock %}</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'admin/js/jquery.init.js' %}"></script>
+  <script src="{% static 'admin/js/actions.js' %}"></script>
+  <script src="{% static 'admin/js/inlines.js' %}"></script>
+  <style>
+    body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.page {
+    background-color: #fff; /* White */
+    padding: 20px;
+    margin: 0px 0px auto;
+}
+
+strong.title{
+    text-align: center;
+    display: block;
+    font-size: 1.5em; /* Adjust the font size as needed */
+    margin: 0 auto; /* Center horizontally */
+}
+
+.page:nth-child(2) {
+    background-color: #f1f5fa; 
+}
+
+.page:nth-child(3) {
+    background-color: #e4c65c; 
+}
+
+.page:nth-child(4){
+  background-color: rgba(0, 48, 135, 0.6);
+}
+
+strong {
+    font-weight: bold;
+    font-size:larger;
+    margin-bottom: 40px;
+}
+
+.end{
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+  </style>
 </head>
+{% endblock %}
 <body>
-    <h1>View Report</h1>
-    
-    <h2>Report Details</h2>
-    
-    <strong>Title of Project:</strong> {{ report.title_project }} <br>
-    <strong>Submitting RCE:</strong> {{ report.submitting_RCE }} <br>
-    <strong>Format of Project:</strong> {{ report.format_project }} <br>
-    <strong>Delivery:</strong> {{ report.delivery|join:", " }} <br>
-    <strong>Frequency:</strong> {{ report.frequency }} <br>
-    <strong>Language of Project:</strong> {{ report.language_project }} <br>
-    <strong>Web Link:</strong> {{ report.web_link }} <br>
-    <strong>Additional Resources:</strong> {{ report.additional_resources }} <br>
-    <strong>Region:</strong> {{ report.region }} <br>
-    <strong>Country:</strong> {{ report.country }} <br>
-    <strong>Locations:</strong> {{ report.locations }} <br>
-    <strong>Address:</strong> {{ report.address }} <br>
-    <strong>Ecosystem:</strong> {{ report.ecosystem }} <br>
-    <strong>Audience:</strong> {{ report.audience|join:", " }} <br>
-    <strong>Socio-Economic Characteristics:</strong> {{ report.socio_economic_characteristics }} <br>
-    <strong>Development Challenges:</strong> {{ report.development_challenges }} <br>
-    <strong>Status:</strong> {{ report.status }} <br>
-    <strong>Start of Project:</strong> {{ report.start_project }} <br>
-    <strong>End of Project:</strong> {{ report.end_project }} <br>
-    <strong>Rationale:</strong> {{ report.rationale }} <br>
-    <strong>Objectives:</strong> {{ report.objectives }} <br>
-    <strong>Activities/Practices:</strong> {{ report.activities_practices }} <br>
-    <strong>Size Academic:</strong> {{ report.size_academic }} <br>
-    <strong>Results:</strong> {{ report.results }} <br>
-    <strong>Lessons Learned:</strong> {{ report.lessons_learned }} <br>
-    <strong>Key Message:</strong> {{ report.key_message }} <br>
-    <strong>Relationship Activities:</strong> {{ report.relationship_activities }} <br>
-    <strong>Funding:</strong> {{ report.funding }} <br>
-    <strong>Direct SDGs:</strong> {{ report.direct_sdgs|join:", " }} <br>
-    <strong>Indirect SDGs:</strong> {{ report.indirect_sdgs|join:", " }} <br>
-    <strong>Direct ESD Themes:</strong> {{ report.direct_esd_themes|join:", " }} <br>
-    <strong>Indirect ESD Themes:</strong> {{ report.indirect_esd_themes|join:", " }} <br>
-    <strong>Direct Priority Areas:</strong> {{ report.direct_priority_areas|join:", " }} <br>
-    <strong>Indirect Priority Areas:</strong> {{ report.indirect_priority_areas|join:", " }} <br>
-    <strong>Created At:</strong> {{ report.created_at }} <br>
-    <strong>Last Modified:</strong> {{ report.last_modified }} <br>
-    <strong>Author:</strong> {{ report.author }} <br>
-    <strong>Approved:</strong> {{ report.approved }} <br>
-    <strong>Submitted:</strong> {{ report.submitted }} <br>
-    
-    <h2>Existing Images</h2>
+  {% block content %}
+  <h1 class="title">Title of Project:   {{ report.title_project }}</h1>
+<div class="page">
+    <!-- <strong class="title">Title of Project:   {{ report.title_project }}</strong> -->
+    <div class="subpage1">
+    <strong>Submitting RCE:</strong> <p>{{ report.submitting_RCE }}</p>
+    <p><strong>Format of Project:</strong> {{ report.format_project }}</p>
+    <p><strong>Delivery:</strong> {{ report.delivery|join:", " }}</p>
+    <p><strong>Frequency:</strong> {{ report.frequency }}</p>
+    <p><strong>Language of Project:</strong> {{ report.language_project }}</p>
+    <p><strong>Web Link:</strong> {{ report.web_link }}</p>
+    <p><strong>Additional Resources:</strong> {{ report.additional_resources }}</p>
+</div>
+</div>
+
+<div class="page">
+    <div class="subpage2">
+    <p><strong>Socio-Economic Characteristics:</strong> {{ report.socio_economic_characteristics }}</p>
+    <p><strong>Development Challenges:</strong> {{ report.development_challenges }}</p>
+    <p><strong>Status:</strong> {{ report.status }}</p>
+    <p><strong>Start of Project:</strong> {{ report.start_project }}</p>
+    <p><strong>End of Project:</strong> {{ report.end_project }}</p>
+    <p><strong>Rationale:</strong> {{ report.rationale }}</p>
+    <p><strong>Objectives:</strong> {{ report.objectives }}</p>
+    <p><strong>Activities/Practices:</strong> {{ report.activities_practices }}</p>
+    <p><strong>Size Academic:</strong> {{ report.size_academic }}</p>
+    <p><strong>Results:</strong> {{ report.results }}</p>
+    <p><strong>Lessons Learned:</strong> {{ report.lessons_learned }}</p>
+    <p><strong>Key Message:</strong> {{ report.key_message }}</p>
+    <p><strong>Relationship Activities:</strong> {{ report.relationship_activities }}</p>
+    </div>
+</div>
+
+<div class="page">
+    <div class="subpage3">
+    <p><strong>Funding:</strong> {{ report.funding }}</p>
+    <p><strong>Direct SDGs:</strong> {{ report.direct_sdgs|join:", " }}</p>
+    <p><strong>Indirect SDGs:</strong> {{ report.indirect_sdgs|join:", " }}</p>
+    <p><strong>Direct ESD Themes:</strong> {{ report.direct_esd_themes|join:", " }}</p>
+    <p><strong>Indirect ESD Themes:</strong> {{ report.indirect_esd_themes|join:", " }}</p>
+    <p><strong>Direct Priority Areas:</strong> {{ report.direct_priority_areas|join:", " }}</p>
+    <p><strong>Indirect Priority Areas:</strong> {{ report.indirect_priority_areas|join:", " }}</p>
+    <p><strong>Created At:</strong> {{ report.created_at }}</p>
+    <p><strong>Last Modified:</strong> {{ report.last_modified }}</p>
+    <p><strong>Author:</strong> {{ report.author }}</p>
+    <p><strong>Approved:</strong> {{ report.approved }}</p>
+    <p><strong>Submitted:</strong> {{ report.submitted }}</p>
+    </div>
+</div>
+<div class="end">
+<h2>Existing Images</h2>
 {% for img in existing_images %}
     <img src="{{ img.image.url }}" alt="Image" width="300"><br>
 {% endfor %}
-    
+
 <h2>Existing Files</h2>
 <ul>
-{% for file in existing_files %}
-    <li><a href="{{ file.file.url }}" download>{{ file.file.name }}</a></li>
-{% endfor %}
+    {% for file in existing_files %}
+        <li><a href="{{ file.file.url }}" download>{{ file.file.name }}</a></li>
+    {% endfor %}
 </ul>
 
-    <a href="{% url 'report_review' %}">Return</a>
-    {% if user.groups.all.0.name == "Admin" %}
-    <a href="{% url 'report_edit' report_id=report.id %}">Edit Report</a>
-    <form method="post" action="{% url 'approve_report' report_id=report.id %}">
-        {% csrf_token %}
-        <input type="submit" value="Approve Report">
-    </form>
-{% endif %}
-    
-
-
-
+<a href="{% url 'report_review' %}">Return</a>
+<a href="{% url 'report_edit' report_id=report.id %}">Edit Report</a>
+<form method="post" action="{% url 'approve_report' report_id=report.id %}">
+    {% csrf_token %}
+    <input type="submit" value="Approve Report">
+</form>
+</div>
+{% endblock %}
 </body>
-</html>

@@ -1,6 +1,6 @@
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom, #f4f4f4, #003087, #DAAA00); 
+  background: linear-gradient(to bottom, #ffffff, #b2c8f1, #70a0cd); 
   margin: 0;
   padding: 0;
 }
@@ -18,7 +18,7 @@ body {
 } 
 
 .report-container {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 20px auto;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
@@ -118,14 +118,15 @@ input[type="radio"] {
   display: inline-block;
   margin-right: 20px;
   margin-left: 20px;
+  margin-bottom: 10px;
 }
 
 .sdg-img {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   border: 1px solid #ccc;
-  border-radius: 50%;
   margin-bottom: 10px;
+
 }
 
 .sdg-options {
