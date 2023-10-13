@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from zxcvbn import zxcvbn  # Import the zxcvbn library
 from django.core.validators import MinLengthValidator
+from .models import Account
 
 
 
@@ -112,3 +113,33 @@ OrganizationInlineFormSet = forms.inlineformset_factory(
     extra=3,   
     can_delete=True
 )
+
+
+class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Enter your first name'}))
+    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Enter your last name'}))
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
+    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'}))
+    
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'email']
+
+class AccountUpdateForm(forms.ModelForm):  # Renamed from "ProfileUpdateForm" to "AccountUpdateForm"
+    organization = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Enter your organisation'}))
+    # Add other fields from the Account model as needed, for example "profile_image"
+    # profile_image = forms.ImageField()
+
+    class Meta:
+        model = Account
+        fields = ['organization']  # Add other fields like 'profile_image' if you include them in the model and form
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username']
+
+class AccountUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['organization', 'picture']
