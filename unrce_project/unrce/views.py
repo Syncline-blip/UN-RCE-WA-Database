@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, OrganizationInlineFormSet
+from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, UserUpdateForm, AccountUpdateForm, OrganizationInlineFormSet
 from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles,themes_esd, priority_action_areas, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
 from django.http import HttpResponseServerError, JsonResponse  
 import os, json
@@ -18,6 +20,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Q
 from django.urls import reverse_lazy
+
 
 
 logger = logging.getLogger(__name__)
@@ -485,3 +488,46 @@ def change_group(request, user_id):
         user.groups.add(group)  # Add user to the selected group
         user.save()
     return redirect('users_list')
+
+def user_profile(request):
+    return render(request, 'unrce/userprofile.html')
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name', '').split()
+        first_name = full_name[0] if len(full_name) > 0 else ''
+        last_name = ' '.join(full_name[1:]) if len(full_name) > 1 else ''
+        request.POST = request.POST.copy()  # Make POST mutable
+        request.POST['first_name'] = first_name
+        request.POST['last_name'] = last_name
+
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        
+        account_instance = Account.objects.get(user=request.user)
+        account_form = AccountUpdateForm(request.POST, request.FILES, instance=account_instance)
+
+        if user_form.is_valid() and account_form.is_valid():
+            user_form.save()
+            account_form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('profile')
+
+        else:
+            messages.error(request, 'There was an error updating your profile. Please try again.')
+
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        account_form = AccountUpdateForm(instance=Account.objects.get(user=request.user))
+
+    context = {
+        'user_form': user_form,
+        'account_form': account_form
+    }
+
+    return render(request, 'unrce/userprofile.html', context)
+
