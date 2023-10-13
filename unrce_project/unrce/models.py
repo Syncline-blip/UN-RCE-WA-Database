@@ -219,6 +219,6 @@ class Account(models.Model):
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     organization = models.CharField(max_length=100)
+    picture = models.ImageField(upload_to='path/to/upload/directory/', null=True, blank=True) 
     def __str__(self):
         return self.user.username
-

@@ -7,7 +7,7 @@
     <style>
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f4f6;
+        background-color: #5b83a8;
         margin: 40px;
         display: flex;
         justify-content: center;
@@ -24,12 +24,6 @@
         width: 100%;
       }
 
-      img.profile-picture {
-        width: 200px;
-        height: 150px;
-        border-radius: 50%;
-        margin-bottom: 25px;
-      }
 
       label {
         display: block;
@@ -62,71 +56,58 @@
       button:hover {
         background-color: #0056b3;
       }
+
+      .home-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #f4f4f6;
+    border: 2px solid #007bff;
+    color: #007bff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-decoration: none; /* Removes underline */
+    transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+    background-color: #007bff;
+    color: #ffffff;
+}
     </style>
   </head>
 
   <body>
+    <a href="{% url 'initial-landing' %}" class="home-button">Home</a>
     <div class="profile-container">
-      <center>
-        <img
-          src="2544.webp"
-          alt="Profile Picture"
-          class="profile-picture"
-          id="displayProfilePic"
-        />
-        <input
-          type="file"
-          id="profilePic"
-          name="profilePic"
-          style="display: none"
-        />
-      </center>
-      <label for="name">Name:</label>
-      <span id="displayName">User 1</span>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        placeholder="Enter your name"
-        style="display: none"
-      />
+      <form action="{% url 'update_profile' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <label for="name">Name:</label>
+        <span id="displayName">{{ user.first_name }} {{ user.last_name }}</span>
+        <input type="text" id="name" name="full_name" placeholder="Enter your name" value="{{ user.first_name }} {{ user.last_name }}" style="display: none" />
 
-      <label for="username">Username:</label>
-      <span id="displayUsername">user_1</span>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        placeholder="Enter your username"
-        style="display: none"
-      />
+        <label for="username">Username:</label>
+        <span id="displayUsername">{{ user.username }}</span>
+        <input type="text" id="username" name="username" placeholder="Enter your username" value="{{ user.username }}" style="display: none" />
 
-      <label for="email">Email:</label>
-      <span id="displayEmail">user_1@example.com</span>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        placeholder="Enter your email"
-        style="display: none"
-      />
+        <label for="email">Email:</label>
+        <span id="displayEmail">{{ user.email }}</span>
+        <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ user.email }}" style="display: none" />
 
-      <label for="org">Organisation:</label>
-      <span id="displayOrg">UNRCE</span>
-      <input
-        type="text"
-        id="org"
-        name="org"
-        placeholder="Enter your organisation"
-        style="display: none"
-      />
+        <label for="org">Organisation:</label>
+        <span id="displayOrg">{{ account.organization }}</span>
+        <input type="text" id="org" name="org" placeholder="Enter your organisation" value="{{ account.organization }}" style="display: none" />
 
-      <center>
-        <button type="button" id="editButton">Edit Profile</button>
-        <button type="submit" id="updateButton" style="display: none">
-          Update Profile
-        </button>
-      </center>
+        <center>
+            <button type="button" id="editButton">Edit Profile</button>
+            <button type="submit" id="updateButton" style="display: none">
+              Update Profile
+            </button>
+        </center>
+      </form>
     </div>
 
     <script>
@@ -135,7 +116,7 @@
       const toggleEditing = () => {
         isEditing = !isEditing;
 
-        const fields = ["name", "username", "email", "org", "profilePic"];
+        const fields = ["name", "username", "email", "org"];
         fields.forEach((field) => {
           const inputField = document.getElementById(field);
           const displayField = document.getElementById(
