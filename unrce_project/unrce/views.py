@@ -4,6 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
@@ -18,6 +19,7 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Q
+from django.urls import reverse_lazy
 
 
 
@@ -33,8 +35,17 @@ project = [
 def home(request):
     return render(request, 'unrce/initial-landing.html')
 
+def is_admin(user):
+    return user.groups.filter(name='Admin').exists()
+
+def is_member(user):
+    return user.groups.filter(name='Member').exists() or is_admin(user)
+
+def is_visitor(user):
+    return user.groups.filter(name='Visitor').exists() or is_member(user) or is_admin(user)
 
 @login_required
+@user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
 def create_report(request): 
     try:
     
@@ -159,7 +170,9 @@ def add_interest(request):
 def contact(request):
     return render(request, 'unrce/contact.html')
 
+
 @login_required
+@user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
 def report_list(request):
     """
     Lists all the Report objects authored by the currently logged-in user.
@@ -167,6 +180,7 @@ def report_list(request):
     """
     reports = Report.objects.filter(author=request.user)
     return render(request, 'unrce/report_list.html', {'reports': reports})
+
 
 def browse_reports(request):
     """
@@ -207,6 +221,7 @@ def browse_reports(request):
     return render(request, 'unrce/browse_reports.html', context)
 
 @login_required
+@user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
 def delete_image(request, image_id):
     """
     Allows users to delete images they have uploaded to reports
@@ -218,7 +233,8 @@ def delete_image(request, image_id):
     return redirect('report_edit', report_id=report.id)
 
 
-
+@login_required
+@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def users_list(request):
     query = request.GET.get('q') 
 
@@ -229,7 +245,7 @@ def users_list(request):
             Q(first_name__icontains=query) |
             Q(last_name__icontains=query) |
             Q(email__icontains=query)|
-            Q(organization__icontains=query)
+            Q(account__organization__icontains=query)
         ).prefetch_related('groups', 'account')
     else:
         # If there's no search term, get all users
@@ -241,6 +257,8 @@ def users_list(request):
     }
     return render(request, 'unrce/users_list.html', context)
 
+@login_required
+@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def report_review(request):
     """
     Lists all the Report objects available in the system, without filtering by author.
@@ -273,7 +291,9 @@ def eoi_review(request):
     return render(request, 'unrce/eoi_review.html', {'eois': eois})
 
 
+
 @login_required
+@user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
 def report_edit(request, report_id):
     report = get_object_or_404(Report, id=report_id)
 
@@ -448,6 +468,8 @@ def org_eoi(request):
         return redirect('success_page')
     return render(request, 'unrce/organization_eoi.html')
 
+@login_required
+@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def approve_report(request, report_id):
     report = get_object_or_404(Report, id=report_id)
     report.approved = True
@@ -455,6 +477,7 @@ def approve_report(request, report_id):
     return redirect('report_details', report_id=report_id)
 
 @login_required
+@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def change_group(request, user_id):
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
