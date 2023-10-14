@@ -1,4 +1,4 @@
-from .models import Report, Account, ReportImages, Expression_of_interest, Organization, ReportFiles,  AUDIENCE_CHOICES, DELIVERY_CHOICES
+from .models import Report, Account, ReportImages, Expression_of_interest, Organization, ReportFiles,  AUDIENCE_CHOICES, DELIVERY_CHOICES, INDUSTRY_CHOICES, PROFILE_SDG_CHOICES 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -124,25 +124,6 @@ OrganizationInlineFormSet = forms.inlineformset_factory(
 
 
 class UserUpdateForm(forms.ModelForm):
-    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Enter your first name'}))
-    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Enter your last name'}))
-    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
-    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'}))
-    
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'username', 'email']
-
-class AccountUpdateForm(forms.ModelForm):  # Renamed from "ProfileUpdateForm" to "AccountUpdateForm"
-    organization = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Enter your organisation'}))
-    # Add other fields from the Account model as needed, for example "profile_image"
-    # profile_image = forms.ImageField()
-
-    class Meta:
-        model = Account
-        fields = ['organization']  # Add other fields like 'profile_image' if you include them in the model and form
-
-class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username']
@@ -151,3 +132,26 @@ class AccountUpdateForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['organization']
+
+class AccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['organization', 'profile_sdg', 'sector', 'message']
+        exclude =['approved']
+
+    profile_sdg = forms.MultipleChoiceField(
+        choices=PROFILE_SDG_CHOICES , 
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    sector = forms.ChoiceField(
+        choices=INDUSTRY_CHOICES,
+        widget=forms.Select,
+        required=False
+    )
+    message = forms.CharField(
+    widget=forms.Textarea(attrs={'class': 'input-field', 'placeholder': 'Message', 'rows': '4'}),
+    max_length=200,
+    required=True
+)
