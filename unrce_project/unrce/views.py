@@ -238,6 +238,15 @@ def delete_image(request, image_id):
         image.delete()
     return redirect('report_edit', report_id=report.id)
 
+@login_required
+@user_passes_test(is_member, login_url=reverse_lazy('initial-landing')) 
+def delete_file(request, file_id):
+    file = get_object_or_404(ReportFiles, id=file_id)  
+    report = file.report  
+    if report.author == request.user:  
+        file.delete()
+    return redirect('report_edit', report_id=report.id) 
+
 
 @login_required
 @user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
@@ -280,11 +289,13 @@ def report_details(request, report_id):
     report = get_object_or_404(Report, id=report_id)
     report_form = ReportForm(instance=report)
     existing_images = ReportImages.objects.filter(report=report)
+    existing_files = ReportFiles.objects.filter(report=report)
     
     context = {
         'form': report_form, 
         'existing_images': existing_images,
-        'report': report
+        'report': report,
+        'existing_files': existing_files
     }
     return render(request, 'unrce/report_details.html', context)
 
