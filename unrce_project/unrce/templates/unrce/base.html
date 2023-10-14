@@ -38,7 +38,7 @@
                  
                   {% if user.is_authenticated %}
                   <li role="menuitem">
-                    <a class="dropdown-link" href="/">
+                    <a class="dropdown-link" href="{% url 'browse_reports' %}">
                       <img src="{% static 'icons/view.png' %}" class="icon" />
                       <div>
                         <span class="dropdown-link-title">Browse Projects</span>
