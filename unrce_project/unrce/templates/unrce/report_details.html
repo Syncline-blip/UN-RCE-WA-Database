@@ -8,61 +8,140 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <!-- <link rel="stylesheet" href="{% static 'css/report_details.css' %}"> -->
   <title>{% block title %} Report Details{% endblock %}</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="{% static 'admin/js/jquery.init.js' %}"></script>
-  <script src="{% static 'admin/js/actions.js' %}"></script>
-  <script src="{% static 'admin/js/inlines.js' %}"></script>
   <style>
     body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f8f8;
 }
 
 h1 {
     text-align: center;
-    color: black;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    color: #034f84;
+    padding: 20px;
+    background-color: #f1f8fc;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #034f84;
 }
 
 .page {
-    background-color: #fff; /* White */
+    background-color: #fff;
     padding: 20px;
-    margin: 0px 0px auto;
-}
-
-strong.title{
-    text-align: center;
-    display: block;
-    font-size: 1.5em; /* Adjust the font size as needed */
-    margin: 0 auto; /* Center horizontally */
-}
-
-.page:nth-child(2) {
-    background-color: #f1f5fa; 
-}
-
-.page:nth-child(3) {
-    background-color: #e4c65c; 
-}
-
-.page:nth-child(4){
-  background-color: rgba(0, 48, 135, 0.6);
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
 }
 
 strong {
-    font-weight: bold;
-    font-size:larger;
-    margin-bottom: 40px;
+    display: block;
+    font-weight: 600;
+    font-size: 1.2em;
+    color: #034f84;
+    margin-bottom: 10px;
 }
 
-.end{
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.subpage1,
+.subpage2,
+.subpage3 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+.subpage1 {
+    background-color: #fff9db;
+}
+
+.subpage2 {
+    background-color: #d6e5fa;
+}
+
+.subpage3 {
+    background-color: #e0dae8;
+}
+
+.page p {
+    margin: 10px 0;
+    color: #555;
+}
+
+.end {
+    background-color: #f1f8fc;
+    padding: 20px;
+    margin-top: 20px;
+    border-top: 3px solid #034f84;
+}
+
+.end-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.end-title {
+    width: 100%;
+    color: #034f84;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.end-images,
+.end-files {
+    flex: 1;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.image-container img {
+    display: block;
+    margin: 10px auto;
+    max-width: 100%;
+}
+
+.end-files ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+}
+
+.end-actions {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.end-link,
+.end-button {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.end-link {
+    background-color: #034f84;
+}
+
+.end-button {
+    background-color: #04701f;
+    display: inline-block;
 }
   </style>
 </head>
@@ -70,72 +149,122 @@ strong {
 <body>
   {% block content %}
   <h1 class="title">Title of Project:   {{ report.title_project }}</h1>
-<div class="page">
-    <!-- <strong class="title">Title of Project:   {{ report.title_project }}</strong> -->
-    <div class="subpage1">
-    <strong>Submitting RCE:</strong> <p>{{ report.submitting_RCE }}</p>
-    <p><strong>Format of Project:</strong> {{ report.format_project }}</p>
-    <p><strong>Delivery:</strong> {{ report.delivery|join:", " }}</p>
-    <p><strong>Frequency:</strong> {{ report.frequency }}</p>
-    <p><strong>Language of Project:</strong> {{ report.language_project }}</p>
-    <p><strong>Web Link:</strong> {{ report.web_link }}</p>
-    <p><strong>Additional Resources:</strong> {{ report.additional_resources }}</p>
-</div>
-</div>
-
-<div class="page">
-    <div class="subpage2">
-    <p><strong>Socio-Economic Characteristics:</strong> {{ report.socio_economic_characteristics }}</p>
-    <p><strong>Development Challenges:</strong> {{ report.development_challenges }}</p>
-    <p><strong>Status:</strong> {{ report.status }}</p>
-    <p><strong>Start of Project:</strong> {{ report.start_project }}</p>
-    <p><strong>End of Project:</strong> {{ report.end_project }}</p>
-    <p><strong>Rationale:</strong> {{ report.rationale }}</p>
-    <p><strong>Objectives:</strong> {{ report.objectives }}</p>
-    <p><strong>Activities/Practices:</strong> {{ report.activities_practices }}</p>
-    <p><strong>Size Academic:</strong> {{ report.size_academic }}</p>
-    <p><strong>Results:</strong> {{ report.results }}</p>
-    <p><strong>Lessons Learned:</strong> {{ report.lessons_learned }}</p>
-    <p><strong>Key Message:</strong> {{ report.key_message }}</p>
-    <p><strong>Relationship Activities:</strong> {{ report.relationship_activities }}</p>
+<div class="page subpage1">
+    <div>
+        <strong>Submitting RCE:</strong>
+        <p>{{ report.submitting_RCE }}</p>
+        <strong>Format of Project:</strong>
+        <p>{{ report.format_project }}</p>
+        <strong>Delivery:</strong>
+        <p>{{ report.delivery|join:", " }}</p>
+        <strong>Frequency:</strong>
+        <p>{{ report.frequency }}</p>
+        <strong>Language of Project:</strong>
+        <p>{{ report.language_project }}</p>
+    </div>
+    <div>
+        <strong>Web Link:</strong>
+        <p>{{ report.web_link }}</p>
+        <strong>Additional Resources:</strong>
+        <p>{{ report.additional_resources }}</p>
     </div>
 </div>
 
-<div class="page">
-    <div class="subpage3">
-    <p><strong>Funding:</strong> {{ report.funding }}</p>
-    <p><strong>Direct SDGs:</strong> {{ report.direct_sdgs|join:", " }}</p>
-    <p><strong>Indirect SDGs:</strong> {{ report.indirect_sdgs|join:", " }}</p>
-    <p><strong>Direct ESD Themes:</strong> {{ report.direct_esd_themes|join:", " }}</p>
-    <p><strong>Indirect ESD Themes:</strong> {{ report.indirect_esd_themes|join:", " }}</p>
-    <p><strong>Direct Priority Areas:</strong> {{ report.direct_priority_areas|join:", " }}</p>
-    <p><strong>Indirect Priority Areas:</strong> {{ report.indirect_priority_areas|join:", " }}</p>
-    <p><strong>Created At:</strong> {{ report.created_at }}</p>
-    <p><strong>Last Modified:</strong> {{ report.last_modified }}</p>
-    <p><strong>Author:</strong> {{ report.author }}</p>
-    <p><strong>Approved:</strong> {{ report.approved }}</p>
-    <p><strong>Submitted:</strong> {{ report.submitted }}</p>
+<div class="page subpage2">
+    <div>
+        <strong>Socio-Economic Characteristics:</strong>
+        <p>{{ report.socio_economic_characteristics }}</p>
+        <strong>Development Challenges:</strong>
+        <p>{{ report.development_challenges }}</p>
+        <strong>Status:</strong>
+        <p>{{ report.status }}</p>
+        <strong>Start of Project:</strong>
+        <p>{{ report.start_project }}</p>
+        <strong>End of Project:</strong>
+        <p>{{ report.end_project }}</p>
+    </div>
+    <div>
+        <strong>Rationale:</strong>
+        <p>{{ report.rationale }}</p>
+        <strong>Objectives:</strong>
+        <p>{{ report.objectives }}</p>
+        <strong>Activities/Practices:</strong>
+        <p>{{ report.activities_practices }}</p>
+        <strong>Size Academic:</strong>
+        <p>{{ report.size_academic }}</p>
+        <strong>Results:</strong>
+        <p>{{ report.results }}</p>
+        <strong>Lessons Learned:</strong>
+        <p>{{ report.lessons_learned }}</p>
+        <strong>Key Message:</strong>
+        <p>{{ report.key_message }}</p>
+        <strong>Relationship Activities:</strong>
+        <p>{{ report.relationship_activities }}</p>
+    </div>
+</div>
+
+<div class="page subpage3">
+    <div>
+        <strong>Funding:</strong>
+        <p>{{ report.funding }}</p>
+        <strong>Direct SDGs:</strong>
+        <p>{{ report.direct_sdgs|join:", " }}</p>
+        <strong>Indirect SDGs:</strong>
+        <p>{{ report.indirect_sdgs|join:", " }}</p>
+        <strong>Direct ESD Themes:</strong>
+        <p>{{ report.direct_esd_themes|join:", " }}</p>
+        <strong>Indirect ESD Themes:</strong>
+        <p>{{ report.indirect_esd_themes|join:", " }}</p>
+        <strong>Direct Priority Areas:</strong>
+        <p>{{ report.direct_priority_areas|join:", " }}</p>
+        <strong>Indirect Priority Areas:</strong>
+        <p>{{ report.indirect_priority_areas|join:", " }}</p>
+    </div>
+    <div>
+        <strong>Created At:</strong>
+        <p>{{ report.created_at }}</p>
+        <strong>Last Modified:</strong>
+        <p>{{ report.last_modified }}</p>
+        <strong>Author:</strong>
+        <p>{{ report.author }}</p>
+        <strong>Approved:</strong>
+        <p>{{ report.approved }}</p>
+        <strong>Submitted:</strong>
+        <p>{{ report.submitted }}</p>
+      </div>
     </div>
 </div>
 <div class="end">
-<h2>Existing Images</h2>
-{% for img in existing_images %}
-    <img src="{{ img.image.url }}" alt="Image" width="300"><br>
-{% endfor %}
+    <div class="end-content">
+        <h2 class="end-title">Additional Information</h2>
+        <div class="end-images">
+            <h3>Existing Images</h3>
+            <div class="image-container">
+                {% for img in existing_images %}
+                    <img src="{{ img.image.url }}" alt="Image" width="300">
+                {% endfor %}
+            </div>
+        </div>
 
-<h2>Existing Files</h2>
-<ul>
-    {% for file in existing_files %}
-        <li><a href="{{ file.file.url }}" download>{{ file.file.name }}</a></li>
-    {% endfor %}
-</ul>
-
-<a href="{% url 'report_review' %}">Return</a>
-<a href="{% url 'report_edit' report_id=report.id %}">Edit Report</a>
-<form method="post" action="{% url 'approve_report' report_id=report.id %}">
-    {% csrf_token %}
-    <input type="submit" value="Approve Report">
-</form>
+        <div class="end-files">
+            <h3>Existing Files</h3>
+            <ul>
+                {% for file in existing_files %}
+                    <li><a href="{{ file.file.url }}" download>{{ file.file.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="end-actions">
+        <a class="end-link" href="{% url 'report_review' %}">Return</a>
+        <a class="end-link" href="{% url 'report_edit' report_id=report.id %}">Edit Report</a>
+        <br><br>
+        <form method="post" action="{% url 'approve_report' report_id=report.id %}">
+            {% csrf_token %}
+            <input class="end-button" type="submit" value="Approve Report">
+        </form>
+    </div>
 </div>
 {% endblock %}
 </body>
+</html>
