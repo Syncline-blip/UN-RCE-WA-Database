@@ -223,6 +223,7 @@ class Account(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email_name = models.CharField(max_length=30)
+    verified = models.BooleanField(default=False)
     def __str__(self):
         return self.user.username
 

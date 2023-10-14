@@ -150,4 +150,4 @@ class UserUpdateForm(forms.ModelForm):
 class AccountUpdateForm(forms.ModelForm):
     class Meta:
         model = Account
-        fields = ['organization', 'picture']
+        fields = ['organization']
