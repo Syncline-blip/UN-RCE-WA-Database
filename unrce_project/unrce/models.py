@@ -285,6 +285,9 @@ class Account(models.Model):
     approved = models.BooleanField(default=False)
     requesting = models.BooleanField(default=False)
     message = models.CharField(max_length=200, null=True)
+
+    # DO NOT REMOVE, REMOVE THIS AND IT FUCKS UP THE REGISTER I BEG
+    verified = models.BooleanField(default=False)
     def __str__(self):
         return self.user.username 
 
