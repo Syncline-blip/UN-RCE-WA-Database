@@ -32,7 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*',"https://unrcedeploytest-30a0e0462f02.herokuapp.com/"]
 
-LOGIN_REDIRECT_URL = '/profile/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/redirect/'
 
