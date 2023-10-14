@@ -18,6 +18,11 @@ body {
     display: flex; /* Use flex display */
     justify-content: space-between;
     align-items:center;
+    flex-wrap: wrap;
+}
+
+.header #toggleFiltersBtn, .header .btn {
+  margin: 5px;  /* Adjusted margin for better spacing */
 }
 
 .title {
@@ -188,8 +193,14 @@ h1 {
     padding-right: 0;
   }
 
+  .header #toggleFiltersBtn, .header .btn, .header a.btn {
+    flex-basis: 100%;  /* Make buttons take up full width */
+    margin: 5px 0;
+}
+
   .header form {
     margin-bottom: 10px;
+    flex-wrap: wrap;
   }
 
   .header input[type="text"] {
