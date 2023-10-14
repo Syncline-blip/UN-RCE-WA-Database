@@ -114,7 +114,7 @@
                     <a class="dropdown-link" href="{% url 'org_eoi' %}">
                       <img src="{% static 'icons/membership.png' %}" class="icon" />
                       <div>
-                        <span class="dropdown-link-title">Join UNRCE</span>
+                        <span class="dropdown-link-title">Join UNRCE WA</span>
                         <p>Become a UNRCE Member</p>
                       </div>
                     </a>
@@ -130,10 +130,11 @@
       <div class="nav-end">
         <div class="right-container">
           {% if user.is_authenticated %}
-          <form class="search" role="search">
+          <!-- This is a concept where people can search using a search bar-->
+          <!-- <form class="search" role="search">
             <input type="search" name="search" placeholder="Search" />
             <i class="bx bx-search" aria-hidden="true"></i>
-          </form>
+          </form> -->
           {% endif %}
           <div class="profile-container">
             {% if user.is_authenticated %}
