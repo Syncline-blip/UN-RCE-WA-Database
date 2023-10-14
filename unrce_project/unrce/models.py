@@ -272,4 +272,4 @@ class Account(models.Model):
     approved = models.BooleanField(default=False)
     message = models.CharField(max_length=200, null=True)
     def __str__(self):
-        return self.user.username
+        return self.user.username 

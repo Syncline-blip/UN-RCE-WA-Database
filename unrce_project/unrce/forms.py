@@ -119,6 +119,7 @@ class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['organization', 'profile_sdg', 'sector', 'message']
+        exclude =['approved']
 
     profile_sdg = forms.MultipleChoiceField(
         choices=PROFILE_SDG_CHOICES , 
