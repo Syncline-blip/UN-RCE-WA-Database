@@ -1,6 +1,6 @@
 from .models import Report, Account, ReportImages, Expression_of_interest, Organization, ReportFiles,  AUDIENCE_CHOICES, DELIVERY_CHOICES, INDUSTRY_CHOICES, PROFILE_SDG_CHOICES 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from zxcvbn import zxcvbn  # Import the zxcvbn library
 from django.core.validators import MinLengthValidator
@@ -154,4 +154,13 @@ class AccountForm(forms.ModelForm):
     widget=forms.Textarea(attrs={'class': 'input-field', 'placeholder': 'Message', 'rows': '4'}),
     max_length=200,
     required=True
-)
+    )
+
+
+class EditProfileForm(forms.ModelForm):
+    new_password = forms.CharField(required=False, widget=forms.PasswordInput())
+    confirm_password = forms.CharField(required=False, widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']

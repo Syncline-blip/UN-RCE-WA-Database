@@ -29,9 +29,9 @@ urlpatterns = [
     path('approve_report/<int:report_id>/', views.approve_report, name='approve_report'),
     path('change-group/<int:user_id>/', views.change_group, name='change_group'),
     path('userprofile/', views.user_profile, name='user_profile'),
-    path('update-profile/', views.update_profile, name='update_profile'),
     path('membership_review/', views.membership_review, name='membership_review'),
     path('approve_membership/<int:account_id>/', views.approve_membership, name='approve_membership'),
+    path('edit_profile/', views.edit_profile, name='edit_profile'),
 
 ]
 

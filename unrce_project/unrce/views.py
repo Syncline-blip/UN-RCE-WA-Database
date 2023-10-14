@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, UserUpdateForm, AccountForm, OrganizationInlineFormSet
+from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, UserUpdateForm, AccountForm, EditProfileForm, OrganizationInlineFormSet
 from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles,themes_esd, priority_action_areas, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
 from django.http import HttpResponseServerError, JsonResponse  
 import os, json
@@ -20,7 +20,13 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Q
 from django.urls import reverse_lazy
+from django.views.generic.edit import UpdateView
+from django.utils.decorators import method_decorator
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 logger = logging.getLogger(__name__)
@@ -492,44 +498,33 @@ def change_group(request, user_id):
 def user_profile(request):
     return render(request, 'unrce/userprofile.html')
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 
-@login_required
-def update_profile(request):
+def edit_profile(request):
     if request.method == 'POST':
-        full_name = request.POST.get('full_name', '').split()
-        first_name = full_name[0] if len(full_name) > 0 else ''
-        last_name = ' '.join(full_name[1:]) if len(full_name) > 1 else ''
-        request.POST = request.POST.copy()  # Make POST mutable
-        request.POST['first_name'] = first_name
-        request.POST['last_name'] = last_name
+        form = EditProfileForm(request.POST, instance=request.user)
 
-        user_form = UserUpdateForm(request.POST, instance=request.user)
-        
-        account_instance = Account.objects.get(user=request.user)
-        account_form = AccountForm(request.POST, request.FILES, instance=account_instance)
+        if form.is_valid():
+            user = form.save(commit=False)
 
-        if user_form.is_valid() and account_form.is_valid():
-            user_form.save()
-            account_form.save()
-            messages.success(request, 'Your profile has been updated!')
+            new_password = form.cleaned_data.get('new_password')
+            confirm_password = form.cleaned_data.get('confirm_password')
+
+            if new_password and new_password == confirm_password:
+                user.set_password(new_password)
+
+            user.save()
+
+            if new_password:
+                update_session_auth_hash(request, user)
+
             return redirect('profile')
-
         else:
-            messages.error(request, 'There was an error updating your profile. Please try again.')
-
+            print(form.errors)  # Print form errors to console for diagnosis
     else:
-        user_form = UserUpdateForm(instance=request.user)
-        account_form = AccountForm(instance=Account.objects.get(user=request.user))
+        form = EditProfileForm(instance=request.user)
 
-    context = {
-        'user_form': user_form,
-        'account_form': account_form
-    }
+    return render(request, 'edit_profile.html', {'form': form})
 
-    return render(request, 'unrce/userprofile.html', context)
 
 @login_required
 def membership_request(request):

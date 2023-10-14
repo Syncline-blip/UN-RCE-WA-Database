@@ -9,106 +9,82 @@
 
 <!-- Integrated Styles -->
 <style>
-    body {
-        background: linear-gradient(120deg, #5b83a8, #5b83a8);
-    }
-    
-    .profile-sidebar {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* increased blur and spread */
-    border-radius: 10px; /* slightly rounded corners */
-    background-color: #fdfdfd !important;
-}
+  body {
+      background: linear-gradient(120deg, #5b83a8, #5b83a8);
+  }
 
-    .profile-userpic img {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        background-color: #5b83a8 !important;
-    }
+  .profile-sidebar,
+  .profile-usermenu {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      background-color: #fdfdfd !important;
+      margin-bottom: 20px; /* Spacing between containers */
+  }
 
-    .nav-item a {
-        transition: all 0.3s;
-    }
+  .profile-userpic img {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%; /* Make image fully occupy its container */
+  }
 
-    .nav-item:hover a {
-        background-color: #e6e6e6;
-        border-radius: 5px;
-    }
+  .nav-item a {
+      transition: all 0.3s;
+  }
 
-    .nav-link.active {
-        font-weight: bold;
-        background-color: #ffffff !important;
-        border-radius: 5px;
-    }
+  .nav-item:hover a {
+      background-color: #e6e6e6;
+      border-radius: 5px;
+  }
 
-    .profile-content {
-        background: white;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-    }
-    
-    a:hover {
-        text-decoration: none;
-    }
+  .nav-link.active {
+      font-weight: bold;
+      background-color: #ffffff !important;
+      border-radius: 5px;
+  }
 </style>
-{% endblock %} 
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <div class="row profile">
-    <div class="col-md-3">
-      <div class="profile-sidebar">
-        <div class="profile-userpic">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/666/666201.png"
-            class="img-fluid rounded-circle"
-            alt="User"
-          />
-        </div>
-        <div class="profile-usertitle mt-3">
-          <h5 class="text-center">
-            {{ user.first_name }} {{ user.last_name }}
-          </h5>
-          <p class="text-muted text-center">{{ account.organization }}</p>
-        </div>
-
-        <div class="profile-usermenu mt-4">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'initial-landing' %}"
-                ><i class="fas fa-home"></i> Home</a
-              >
-          
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'report_list' %}"
-                ><i class="fas fa-tasks"></i> Projects</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'contact' %}"
-                ><i class="fas fa-question-circle"></i> Help</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">
-                {% csrf_token %}
-                <i class="fas fa-hand-peace"></i> Logout
-              </a>
-            </li>
-          </ul>
-        </div>
+  <div class="row profile">
+      <!-- User Picture -->
+      <div class="col-md-3">
+          <div class="profile-sidebar">
+              <div class="profile-userpic">
+                  <img src="https://cdn-icons-png.flaticon.com/512/666/666201.png" class="img-fluid rounded-circle" alt="User">
+              </div>
+              <div class="profile-usertitle mt-3">
+                  <h5 class="text-center">
+                      {{ user.first_name }} {{ user.last_name }}
+                  </h5>
+                  <p class="text-muted text-center">{{ account.organization }}</p>
+              </div>
+          </div>
       </div>
-    </div>
-    <div class="col-lg-9">
-      <div class="profile-content p-5">
-        <h4>About Client</h4>
-        <p>
-          University of Western Australia (The Alliance for Sustainability
-          Leadership in Education)
-        </p>
 
-        <a href="https://www.uwa.edu.au/grand-challenges/home"><i class="fas fa-globe"></i> client website</a>
+      <!-- User Menu -->
+      <div class="col-md-3">
+          <div class="profile-usermenu mt-4">
+              <ul class="nav flex-column">
+                  <li class="nav-item">
+                      <a class="nav-link active" href="{% url 'initial-landing' %}"><i class="fas fa-home"></i> Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'edit_profile' %}">
+                        <i class="fas fa-user-edit"></i> Edit Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'contact' %}"><i class="fas fa-question-circle"></i> Contact us for further Help</a>
+              </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'logout' %}">
+                          {% csrf_token %}
+                          <i class="fas fa-hand-peace"></i> Logout
+                      </a>
+                  </li>
+              </ul>
+          </div>
       </div>
-    </div>
   </div>
 </div>
 {% endblock %}
