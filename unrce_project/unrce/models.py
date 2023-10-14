@@ -89,6 +89,64 @@ priority_action_areas = [
     'Priority Action Area 5 - Accelerating sustainable solutions at local level'
 ]
 
+INDUSTRY_CHOICES = [
+    ('mining', 'Mining'),
+    ('retail', 'Retail'),
+    ('finance', 'Finance'),
+    ('construction', 'Construction'),
+    ('trade', 'Trade'),
+    ('transport', 'Transport'),
+    ('agriculture', 'Agriculture'),
+    ('education', 'Education'),
+    ('investment', 'Investment'),
+    ('health_care', 'Health Care'),
+    ('small_business', 'Small Business'),
+    ('postal_and_warehousing', 'Postal and Warehousing'),
+    ('management', 'Management'),
+    ('computers_and_information_technology', 'Computers and Information Technology'),
+    ('law', 'Law'),
+    ('financial_services', 'Financial Services'),
+    ('bank', 'Bank'),
+    ('energy_industry', 'Energy Industry'),
+    ('coal', 'Coal'),
+    ('management_consulting', 'Management Consulting'),
+    ('food_industry', 'Food Industry'),
+    ('agribusiness', 'Agribusiness'),
+    ('infrastructure', 'Infrastructure'),
+    ('engineering', 'Engineering'),
+    ('hospitality_industry', 'Hospitality Industry'),
+    ('commercial_bank', 'Commercial Bank'),
+    ('international_trade', 'International Trade'),
+    ('e_commerce', 'E-Commerce'),
+    ('natural_resource', 'Natural Resource'),
+    ('telecommunications', 'Telecommunications'),
+    ('startup_company', 'Startup Company'),
+    ('electronic_business', 'Electronic Business'),
+    ('hospitality', 'Hospitality'),
+    ('accounting', 'Accounting'),
+    ('entertainment', 'Entertainment'),
+    ('aviation', 'Aviation')
+]
+PROFILE_SDG_CHOICES = (
+    ('SDG 1', 'SDG 1 (No Poverty)'),
+    ('SDG 2', 'SDG 2 (Zero Hunger)'),
+    ('SDG 3', 'SDG 3 (Good Health and Well-being)'),
+    ('SDG 4', 'SDG 4 (Quality Education)'),
+    ('SDG 5', 'SDG 5 (Gender Equality)'),
+    ('SDG 6', 'SDG 6 (Clean Water and Sanitation)'),
+    ('SDG 7', 'SDG 7 (Affordable and Clean Energy)'),
+    ('SDG 8', 'SDG 8 (Decent Work and Economic Growth)'),
+    ('SDG 9', 'SDG 9 (Industry, Innovation, and Infrastructure)'),
+    ('SDG 10', 'SDG 10 (Reduced Inequality)'),
+    ('SDG 11', 'SDG 11 (Sustainable Cities and Communities)'),
+    ('SDG 12', 'SDG 12 (Responsible Consumption and Production)'),
+    ('SDG 13', 'SDG 13 (Climate Action)'),
+    ('SDG 14', 'SDG 14 (Life Below Water)'),
+    ('SDG 15', 'SDG 15 (Life on Land)'),
+    ('SDG 16', 'SDG 16 (Peace, Justice, and Strong Institutions)'),
+    ('SDG 17', 'SDG 17 (Partnerships for the Goals)'),
+)
+
 
 class Report(models.Model):
 #Basic information
@@ -197,20 +255,6 @@ class Organization(models.Model):
 
 
 
-
-#Model for the expression of interest, in UNRCE
-class Expression_of_interest(models.Model):
-    title_of_project = models.CharField(max_length=200)
-    contributing_organizations = models.CharField(max_length=200)
-    name = models.CharField(max_length=200)
-    organisation_affiliation = models.CharField(max_length=200)
-    email = models.EmailField(max_length=254, default='default@email.com')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.title_of_project}  {self.created_at}"
-
 # Account Model
 class Account(models.Model):
     ''' 
@@ -219,6 +263,13 @@ class Account(models.Model):
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     organization = models.CharField(max_length=100)
-    picture = models.ImageField(upload_to='path/to/upload/directory/', null=True, blank=True) 
+    profile_sdg = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        default=list
+    )
+    sector = models.CharField(max_length=200, choices=INDUSTRY_CHOICES , null=True)
+    approved = models.BooleanField(default=False)
+    message = models.CharField(max_length=200, null=True)
     def __str__(self):
         return self.user.username

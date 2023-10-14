@@ -1,10 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from .models import Report, Account, Expression_of_interest, ReportImages, ReportFiles, Organization
+from .models import Report, Account, ReportImages, ReportFiles, Organization
 
 
-admin.site.register(Expression_of_interest)
 
 '''
     Django reccomends to inherit from StackedInLine for 

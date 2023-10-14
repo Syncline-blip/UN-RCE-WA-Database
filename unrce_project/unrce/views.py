@@ -8,8 +8,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, UserUpdateForm, AccountUpdateForm, OrganizationInlineFormSet
-from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles,themes_esd, priority_action_areas, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
+from .forms import ReportForm, RegistrationForm, ReportImagesForm, ReportFilesForm, UserUpdateForm, AccountForm, OrganizationInlineFormSet
+from .models import Report, Account, ReportImages, ReportFiles,themes_esd, priority_action_areas, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
 from django.http import HttpResponseServerError, JsonResponse  
 import os, json
 import pandas as pd
@@ -147,24 +147,6 @@ def create_report(request):
         return redirect('report_list')
 
 
-def add_interest(request):
-    """
-    Handles the creation of a new Expression of Interest. This view initializes and validates
-    the InterestForm. Upon validation, it associates the current user as the author, saves the form,
-    and redirects to the initial landing page.
-    """
-    if request.method == 'POST':
-        Interest_Form = InterestForm(request.POST)
-
-        if Interest_Form.is_valid():
-            interest = Interest_Form.save(commit=False)
-            interest.author = request.user
-            interest.save()
-            return redirect('initial-landing')
-    else:
-        report_form = InterestForm()
-
-    return render(request, 'unrce/eoi.html', {'form': InterestForm})
 
 
 def contact(request):
@@ -282,13 +264,6 @@ def report_details(request, report_id):
     }
     return render(request, 'unrce/report_details.html', context)
 
-def eoi_review(request):
-    """
-    Lists all the Report objects available in the system, without filtering by author.
-    Fetches all the Report objects and renders them in 'unrce/report_review.html'.
-    """
-    eois = Expression_of_interest.objects.filter()
-    return render(request, 'unrce/eoi_review.html', {'eois': eois})
 
 
 
@@ -446,27 +421,6 @@ def edit_reporting(request):
     return render(request, 'unrce/report_list.html')
 
 
-@login_required
-def org_eoi(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        organization = request.POST.get('organization')
-        message = request.POST.get('message')
-
-
-        subject = 'Expression of Interest'
-        email_message = f'Username: {username}\nOrganization: {organization}\nMessage: {message}'
-
-
-        send_mail(
-            subject,
-            email_message,
-            settings.EMAIL_HOST_USER,
-            ['miltonyong@gmail.com'],  # OWNER EMAIL
-            fail_silently=False,
-        )
-        return redirect('success_page')
-    return render(request, 'unrce/organization_eoi.html')
 
 @login_required
 @user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
@@ -508,7 +462,7 @@ def update_profile(request):
         user_form = UserUpdateForm(request.POST, instance=request.user)
         
         account_instance = Account.objects.get(user=request.user)
-        account_form = AccountUpdateForm(request.POST, request.FILES, instance=account_instance)
+        account_form = AccountForm(request.POST, request.FILES, instance=account_instance)
 
         if user_form.is_valid() and account_form.is_valid():
             user_form.save()
@@ -521,7 +475,7 @@ def update_profile(request):
 
     else:
         user_form = UserUpdateForm(instance=request.user)
-        account_form = AccountUpdateForm(instance=Account.objects.get(user=request.user))
+        account_form = AccountForm(instance=Account.objects.get(user=request.user))
 
     context = {
         'user_form': user_form,
@@ -530,3 +484,13 @@ def update_profile(request):
 
     return render(request, 'unrce/userprofile.html', context)
 
+def membership_request(request):
+    if request.method == 'POST':
+        form = AccountForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('initial-landing')
+    else:
+        form = AccountForm()
+
+    return render(request, 'unrce/membership_request.html', {'form': form})

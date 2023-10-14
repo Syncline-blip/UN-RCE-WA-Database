@@ -8,7 +8,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.home, name='initial-landing'),
     path('contact/', views.contact, name='contact'),
-    path('eoi/', views.add_interest, name='eoi'),
     path('register/', views.register, name='register'),
     path('login/', LoginView.as_view(template_name='unrce/login.html', success_url='profile'), name='login'),
     path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),
@@ -23,13 +22,12 @@ urlpatterns = [
     path('report_details/<int:report_id>/', views.report_details, name='report_details'),
     path('delete_image/<int:image_id>/', views.delete_image, name='delete_image'),
     path('users_list/', views.users_list, name='users_list'),
-    path('eoi_review/', views.eoi_review, name='eoi_review'),
-    path('org_eoi/', views.org_eoi, name='org_eoi'),
     path('browse_reports/', views.browse_reports, name='browse_reports'),
     path('approve_report/<int:report_id>/', views.approve_report, name='approve_report'),
     path('change-group/<int:user_id>/', views.change_group, name='change_group'),
     path('userprofile/', views.user_profile, name='user_profile'),
     path('update-profile/', views.update_profile, name='update_profile'),
+    path('membership_request/', views.membership_request, name='membership_request'),
 
 ]
 
