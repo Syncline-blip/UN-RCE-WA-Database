@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, UserUpdateForm, AccountUpdateForm, OrganizationInlineFormSet
+from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, UserUpdateForm, AccountForm, OrganizationInlineFormSet
 from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles,themes_esd, priority_action_areas, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
 from django.http import HttpResponseServerError, JsonResponse  
 import os, json
@@ -509,7 +509,7 @@ def update_profile(request):
         user_form = UserUpdateForm(request.POST, instance=request.user)
         
         account_instance = Account.objects.get(user=request.user)
-        account_form = AccountUpdateForm(request.POST, request.FILES, instance=account_instance)
+        account_form = AccountForm(request.POST, request.FILES, instance=account_instance)
 
         if user_form.is_valid() and account_form.is_valid():
             user_form.save()
@@ -522,7 +522,7 @@ def update_profile(request):
 
     else:
         user_form = UserUpdateForm(instance=request.user)
-        account_form = AccountUpdateForm(instance=Account.objects.get(user=request.user))
+        account_form = AccountForm(instance=Account.objects.get(user=request.user))
 
     context = {
         'user_form': user_form,
@@ -531,3 +531,47 @@ def update_profile(request):
 
     return render(request, 'unrce/userprofile.html', context)
 
+@login_required
+def membership_request(request):
+    try:
+        # Try to get the existing account for the logged-in user
+        account = Account.objects.get(user=request.user)
+    except Account.DoesNotExist:
+        # If account does not exist, then create a new one
+        account = None
+    
+    if request.method == 'POST':
+        if account:
+            form = AccountForm(request.POST, instance=account)
+        else:
+            form = AccountForm(request.POST)
+            
+        if form.is_valid():
+            new_account = form.save(commit=False)
+            new_account.user = request.user
+            new_account.requesting = True 
+            new_account.save()
+            return redirect('initial-landing')
+    else:
+        if account:
+            form = AccountForm(instance=account)
+        else:
+            form = AccountForm()
+
+    return render(request, 'unrce/membership_request.html', {'form': form})
+
+@login_required
+def approve_membership(request, account_id):
+    account = get_object_or_404(Account, id=account_id)
+    account.approved = True
+    account.requesting = False  
+    member_group = Group.objects.get(name='Member')
+    account.user.groups.add(member_group)
+    account.save()
+    return redirect('membership_review')
+
+@login_required
+def membership_review(request):
+    accounts = Account.objects.select_related('user').filter(requesting=True, approved=False)
+
+    return render(request, 'unrce/membership_review.html', {'accounts': accounts})

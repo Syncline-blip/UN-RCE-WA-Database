@@ -97,6 +97,7 @@
             <th>Audience</th>
             <th>Frequency</th>
             <th>SDG</th>
+            <th>Details</th>
         </tr>
     </thead>
 <!-- 
@@ -133,6 +134,11 @@
                 {{ sdg }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
          </td>
+         <td>
+          <div class="details">
+              <a href="{% url 'report_details' report.id %}" >Details</a>
+          </div>
+        </td>
         </tr>
         {% endfor %}
     </tbody>
