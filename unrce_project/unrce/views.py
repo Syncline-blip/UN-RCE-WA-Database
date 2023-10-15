@@ -413,7 +413,7 @@ def report_edit(request, report_id):
         logger.error(f'Error editing report: {str(e)}')
         return redirect('report_list')
 
-
+# johN
 def register(request):
     try:
         if request.method == 'POST':
@@ -463,7 +463,7 @@ def must_be_signed_in(request):
 def edit_reporting(request):
     return render(request, 'unrce/report_list.html')
 
-
+# JOHN
 @login_required
 def org_eoi(request):
     if request.method == 'POST':
