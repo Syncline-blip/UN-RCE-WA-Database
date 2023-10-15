@@ -18,7 +18,7 @@
         font-weight: normal;
         line-height: 1.5;
         color: var(--color-black);
-        background: url(https://i.redd.it/u2klg77z1kr51.jpg);
+        background:url(https://media.istockphoto.com/id/516418070/photo/perth-city-gold-light-park.jpg?s=612x612&w=0&k=20&c=L3G0nFeYsPdtSazwo4C05DoWxP_vXMpU0Wev86EK6Hs=);
         background-size: cover; /* Adjust the background size as needed */
         background-repeat: no-repeat; /* Prevent the background image from repeating */
       }
@@ -139,7 +139,7 @@
     usernameField.addEventListener("input", function() {
       const usernameErrorElement = document.getElementById("username-error");
       if (usernameField.value.length > 0 && usernameField.value.length < 5) {
- 
+          usernameErrorElement.textContent = "Username must be at least 5 characters.";
           usernameErrorElement.style.display = "block";  // Show the error
       } else {
           usernameErrorElement.textContent = "";
