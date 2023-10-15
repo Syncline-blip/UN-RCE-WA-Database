@@ -11,12 +11,12 @@ body {
   .header {
     margin: 20px auto;
     padding: 10px;
-    width: 95%;
-    background: #f4f4f4;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     display: flex; /* Use flex display */
-    justify-content: space-between;
+    justify-content: center;
     align-items:center;
     flex-wrap: wrap;
 }
@@ -95,10 +95,10 @@ h1 {
     border-radius: 5px;
     text-decoration: none;
     font-size: 14px;
-    margin-left: 10px;
+    margin-right: 20px;
 }
 .header input[type="submit"] {
-    background-color: #b1bdca;
+    background-color: #1f66b3;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -116,7 +116,7 @@ h1 {
     border-radius: 5px;
     text-decoration: none;
     font-size: 14px;
-    margin-left: 10px;
+    margin-left: 20px;
 }
   .table-container {
     margin: 20px;
