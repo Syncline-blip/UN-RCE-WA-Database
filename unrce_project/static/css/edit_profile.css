@@ -1,0 +1,55 @@
+/* edit_profile.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #ffffff, #e2e8f2, #bac8e0);
+
+}
+
+form {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px 40px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    font-size: 18px;
+    color: #444;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.save {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.save:hover {
+    background-color: #0056b3;
+}
+
+/* If you're using the font-awesome icons, you can style them with the following: */
+.fas,
+.fa {
+    margin-right: 5px;
+}
