@@ -178,10 +178,13 @@
                 </ul>
               </div>
             </div>
+            {% if user.groups.all.0.name == "Member" or user.groups.all.0.name == "Admin" %}
             <a class="btn btn-primary" href="{% url 'create_report' %}">Create Report</a>
+            {% endif %}
             <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">
               <i class="bx bx-menu" aria-hidden="true"></i>
             </button>
+
             {% endif %}
             {% if not user.is_authenticated %}
             <ul><a class="nav-link btn btn-primary" href="{% url 'login' %}">Login</a></ul>

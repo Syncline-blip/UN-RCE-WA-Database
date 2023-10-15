@@ -12,6 +12,8 @@ from django.db.models import Q
 from django.http import HttpResponseServerError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_protect
 
 # Local application/library specific imports
 from .forms import (AccountForm, EditProfileForm, InterestForm, OrganizationInlineFormSet,
@@ -57,6 +59,7 @@ def create_report(request):
             organization_formset = OrganizationInlineFormSet(request.POST)
             images = request.FILES.getlist('image')
             files = request.FILES.getlist('file')
+            
 
             direct_sdgs = []
             indirect_sdgs = []
@@ -94,6 +97,8 @@ def create_report(request):
                 report.indirect_esd_themes = indirect_esd
                 report.direct_priority_areas = direct_priority
                 report.indirect_priority_areas = indirect_priority
+                if 'submit_for_approval' in request.POST:
+                    report.submitted = True
                 report.save()
 
                 organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
@@ -312,6 +317,8 @@ def report_edit(request, report_id):
             organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
             images = request.FILES.getlist('image')
             files = request.FILES.getlist('file')
+            if 'submit_for_approval' in request.POST:
+                report.submitted = True
 
             if report_form.is_valid() and organization_formset.is_valid():
                 report = report_form.save(commit=False)  # Do not save immediately
@@ -352,6 +359,10 @@ def report_edit(request, report_id):
                 report.indirect_priority_areas = indirect_priority
                 
                 report.save()  # Now save after updating the above fields
+
+                if 'submit_for_approval' in request.POST:
+                    report.submitted = True
+                    report.save()
 
                 organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
                 if organization_formset.is_valid():
@@ -568,3 +579,12 @@ def membership_review(request):
     accounts = Account.objects.select_related('user').filter(requesting=True, approved=False)
 
     return render(request, 'unrce/membership_review.html', {'accounts': accounts})
+
+@require_POST
+@csrf_protect
+@login_required
+@user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
+def report_delete(request, id):
+    report = get_object_or_404(Report, id=id)
+    report.delete()
+    return redirect('report_list') 

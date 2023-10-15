@@ -41,6 +41,7 @@
             <th>Approved</th>
             <th>Report Details</th>
             <th>Report Download</th>
+            <th>Delete Report</th>
         </tr>
     </thead>
     <tbody>
@@ -84,6 +85,12 @@
                     <a href="{% url 'report_edit' report.id %}" >Download</a>
                 </div>
               </td>
+              <td>
+                <form method="post" class="delete-form" action="{% url 'report_delete' report.id %}">
+                  {% csrf_token %}
+                  <input type="submit" value="Delete" class="delete-button">
+              </form>       
+              </td>
 
             </tr>
         {% endfor %}
@@ -92,4 +99,13 @@
 </div>
 {% endblock %}
 </body>
+<script>
+    $(document).ready(function(){
+        $('.delete-form').on('submit', function(e){
+            if(!confirm('Are you sure you want to delete this report? This is permanent.')){
+                e.preventDefault();
+            }
+        });
+    });
+    </script>
 </html>

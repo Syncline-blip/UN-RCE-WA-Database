@@ -31,6 +31,7 @@ urlpatterns = [
     path('approve_membership/<int:account_id>/', views.approve_membership, name='approve_membership'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('delete-file/<int:file_id>/', views.delete_file, name='delete_file'),
+    path('report/delete/<int:id>/', views.report_delete, name='report_delete'),
 
 ]
 
