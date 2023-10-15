@@ -168,6 +168,18 @@ h1 {
     color: rgb(85, 4, 85);
   }
 
+  .delete-button {
+    color: white;
+    background-color: red;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.delete-button:hover {
+    background-color: darkred;
+}
+
   .status-ongoing {
     color: #007bff;
   }
