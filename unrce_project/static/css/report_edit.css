@@ -28,7 +28,7 @@ body {
 .title {
   flex: 1; /* This will make the title expand and take the available space */
   text-align: center; /* This centers the title text horizontally */
-  margin-right: 30% ;
+  margin-right: 25% ;
 }
 
 h1 {
@@ -98,7 +98,7 @@ h1 {
     margin-left: 10px;
 }
 .header input[type="submit"] {
-    background-color: #007BFF;
+    background-color: #b1bdca;
     color: white;
     border: none;
     padding: 10px 20px;
