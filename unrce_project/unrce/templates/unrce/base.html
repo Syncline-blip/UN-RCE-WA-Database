@@ -113,7 +113,7 @@
                     <img src="{% static 'icons/membership_review_icon.png' %}" class="icon" />
                     <div>
                       <span class="dropdown-link-title">Membership Review</span>
-                      <p>Review membership requests and other related tasks</p>
+                      <p>Review membership requests</p>
                     </div>
                   </a>
                 </li>
@@ -180,7 +180,7 @@
                 </ul>
               </div>
             </div>
-            <button class="btn btn-primary">Create Report</button>
+            <a class="btn btn-primary" href="{% url 'create_report' %}">Create Report</a>
             <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">
               <i class="bx bx-menu" aria-hidden="true"></i>
             </button>
