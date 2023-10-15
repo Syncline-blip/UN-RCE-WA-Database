@@ -72,6 +72,10 @@ h1 {
   height: auto; /* Allow the select with multiple options to grow as needed */
 }
 
+#filterSection select[multiple]#sdgFilter{
+  width: 10%;
+}
+
 
 .header form {
     display: flex;
