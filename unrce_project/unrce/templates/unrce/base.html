@@ -52,6 +52,7 @@
               </div>
             </li>
             {% if user.is_authenticated %}
+            {% if user.groups.all.0.name == "Member" or user.groups.all.0.name == "Admin" %}
             <li>
               <button class="nav-link dropdown-btn" data-dropdown="dropdown2" aria-haspopup="true" aria-expanded="false" aria-label="discover">
                 Reports <i class="bx bx-chevron-down" aria-hidden="true"></i>
@@ -79,6 +80,7 @@
                  </ul>
               </div>
             </li>
+            {% endif %}
             <li>
               <button class="nav-link dropdown-btn" data-dropdown="dropdown3" aria-haspopup="true" aria-expanded="false" aria-label="discover">
                 Membership <i class="bx bx-chevron-down" aria-hidden="true"></i>
@@ -101,7 +103,7 @@
             {% endif %}
             <li><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
 
-
+            {% if user.groups.all.0.name == "Admin" %}
           <li>
             <button class="nav-link dropdown-btn" data-dropdown="dropdown4" aria-haspopup="true" aria-expanded="false" aria-label="admin functionalities">
               Admin <i class="bx bx-chevron-down" aria-hidden="true"></i>
@@ -138,6 +140,7 @@
               </ul>
             </div>
           </li>
+          {% endif %}
 
           </ul>
         </nav>
@@ -145,11 +148,6 @@
       <div class="nav-end">
         <div class="right-container">
           {% if user.is_authenticated %}
-          <!-- This is a concept where people can search using a search bar-->
-          <!-- <form class="search" role="search">
-            <input type="search" name="search" placeholder="Search" />
-            <i class="bx bx-search" aria-hidden="true"></i>
-          </form> -->
           {% endif %}
           <div class="profile-container">
             {% if user.is_authenticated %}

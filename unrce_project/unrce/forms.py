@@ -1,10 +1,17 @@
-from .models import Report, Account, ReportImages, Expression_of_interest, Organization, ReportFiles,  AUDIENCE_CHOICES, DELIVERY_CHOICES, INDUSTRY_CHOICES, PROFILE_SDG_CHOICES 
+# Django imports
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from zxcvbn import zxcvbn  # Import the zxcvbn library
 from django.core.validators import MinLengthValidator
-from .models import Account
+
+# Third-party imports
+from zxcvbn import zxcvbn 
+
+# Local application/library specific imports
+from .models import (Account, AUDIENCE_CHOICES, DELIVERY_CHOICES, 
+                     Expression_of_interest, INDUSTRY_CHOICES, 
+                     Organization, PROFILE_SDG_CHOICES, Report, 
+                     ReportFiles, ReportImages)
 
 
 

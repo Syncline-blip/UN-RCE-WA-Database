@@ -145,13 +145,17 @@
     </div>
     <div class="end-actions">
         <a class="end-link" href="{% url 'report_review' %}">Return</a>
-        <a class="end-link" href="{% url 'report_edit' report_id=report.id %}">Edit Report</a>
-        <br><br>
-        <form method="post" action="{% url 'approve_report' report_id=report.id %}">
-            {% csrf_token %}
-            <input class="end-button" type="submit" value="Approve Report">
-        </form>
+        
+        {% if user.groups.all.0.name == "Admin" %}
+            <a class="end-link" href="{% url 'report_edit' report_id=report.id %}">Edit Report</a>
+            <br><br>
+            <form method="post" action="{% url 'approve_report' report_id=report.id %}">
+                {% csrf_token %}
+                <input class="end-button" type="submit" value="Approve Report">
+            </form>
+        {% endif %}
     </div>
+    
 </div>
 {% endblock %}
 </body>

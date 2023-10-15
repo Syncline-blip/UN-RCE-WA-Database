@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 from django.views.generic.base import RedirectView
@@ -23,12 +23,10 @@ urlpatterns = [
     path('report_details/<int:report_id>/', views.report_details, name='report_details'),
     path('delete_image/<int:image_id>/', views.delete_image, name='delete_image'),
     path('users_list/', views.users_list, name='users_list'),
-    path('eoi_review/', views.eoi_review, name='eoi_review'),
     path('membership_request/', views.membership_request, name='membership_request'),
     path('browse_reports/', views.browse_reports, name='browse_reports'),
     path('approve_report/<int:report_id>/', views.approve_report, name='approve_report'),
     path('change-group/<int:user_id>/', views.change_group, name='change_group'),
-    path('userprofile/', views.user_profile, name='user_profile'),
     path('membership_review/', views.membership_review, name='membership_review'),
     path('approve_membership/<int:account_id>/', views.approve_membership, name='approve_membership'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),

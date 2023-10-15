@@ -1,34 +1,27 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User, Group
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from .forms import ReportForm, RegistrationForm, InterestForm, ReportImagesForm, ReportFilesForm, UserUpdateForm, AccountForm, EditProfileForm, OrganizationInlineFormSet
-from .models import Report, Account, ReportImages, Expression_of_interest, ReportFiles,themes_esd, priority_action_areas, AUDIENCE_CHOICES, DELIVERY_CHOICES, FREQUENCY_CHOICES
-from django.http import HttpResponseServerError, JsonResponse  
-import os, json
-import pandas as pd
+# Standard library imports
 import logging
-from django.db.models import Q
-from django.shortcuts import render, redirect
-from django.core.mail import send_mail
+
+# Third-party imports
+import pandas as pd
 from django.conf import settings
+from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import Group, User
+from django.core.mail import send_mail
 from django.db.models import Q
+from django.http import HttpResponseServerError
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic.edit import UpdateView
-from django.utils.decorators import method_decorator
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
+
+# Local application/library specific imports
+from .forms import (AccountForm, EditProfileForm, InterestForm, OrganizationInlineFormSet,
+                    ReportFilesForm, ReportForm, ReportImagesForm, RegistrationForm)
+from .models import (Account, AUDIENCE_CHOICES, DELIVERY_CHOICES,
+                     FREQUENCY_CHOICES, Report, ReportFiles, ReportImages, themes_esd,
+                     priority_action_areas)
 
 
-from django.contrib.auth.forms import PasswordChangeForm
+
 
 
 logger = logging.getLogger(__name__)
@@ -301,15 +294,6 @@ def report_details(request, report_id):
     }
     return render(request, 'unrce/report_details.html', context)
 
-def eoi_review(request):
-    """
-    Lists all the Report objects available in the system, without filtering by author.
-    Fetches all the Report objects and renders them in 'unrce/report_review.html'.
-    """
-    eois = Expression_of_interest.objects.filter()
-    return render(request, 'unrce/eoi_review.html', {'eois': eois})
-
-
 
 @login_required
 @user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
@@ -450,8 +434,8 @@ def register(request):
 @login_required
 def profile(request):
     try:
-        user = request.user  # Assuming you are using Django's authentication system
-        account = Account.objects.get(user=user)  # Retrieve the Account associated with the user
+        user = request.user  
+        account = Account.objects.get(user=user)  
     except Account.DoesNotExist:
 
         account = None
@@ -508,10 +492,9 @@ def change_group(request, user_id):
         user.save()
     return redirect('users_list')
 
-def user_profile(request):
-    return render(request, 'unrce/userprofile.html')
 
 
+@login_required
 def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance=request.user)
@@ -569,6 +552,7 @@ def membership_request(request):
     return render(request, 'unrce/membership_request.html', {'form': form})
 
 @login_required
+@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def approve_membership(request, account_id):
     account = get_object_or_404(Account, id=account_id)
     account.approved = True
@@ -579,6 +563,7 @@ def approve_membership(request, account_id):
     return redirect('membership_review')
 
 @login_required
+@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def membership_review(request):
     accounts = Account.objects.select_related('user').filter(requesting=True, approved=False)
 
