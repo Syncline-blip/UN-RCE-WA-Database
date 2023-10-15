@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <title>{% block title %}User Profile{% endblock %}</title>
 {% endblock %}
@@ -33,9 +34,6 @@
           <div class="profile-usermenu mt-4">
               <ul class="nav flex-column">
                   <li class="nav-item">
-                      <a class="nav-link active" href="{% url 'initial-landing' %}"><i class="fas fa-home"></i> Home</a>
-                  </li>
-                  <li class="nav-item">
                     <a class="nav-link" href="{% url 'edit_profile' %}">
                         <i class="fas fa-user-edit"></i> Edit Profile
                     </a>
@@ -46,7 +44,7 @@
                   <li class="nav-item">
                       <a class="nav-link" href="{% url 'logout' %}">
                           {% csrf_token %}
-                          <i class="fas fa-hand-peace"></i> Logout
+                          <i class="fa fa-sign-out"></i>Logout
                       </a>
                   </li>
               </ul>
