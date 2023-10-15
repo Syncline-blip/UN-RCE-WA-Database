@@ -1,8 +1,11 @@
-/* edit_profile.css */
-
 body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(to bottom, #ffffff, #e2e8f2, #bac8e0);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
 
 }
 
