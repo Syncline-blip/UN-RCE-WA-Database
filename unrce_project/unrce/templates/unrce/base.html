@@ -38,7 +38,7 @@
                  
                   {% if user.is_authenticated %}
                   <li role="menuitem">
-                    <a class="dropdown-link" href="/">
+                    <a class="dropdown-link" href="{% url 'browse_reports' %}">
                       <img src="{% static 'icons/view.png' %}" class="icon" />
                       <div>
                         <span class="dropdown-link-title">Browse Projects</span>
@@ -100,6 +100,45 @@
             </li>
             {% endif %}
             <li><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+
+
+          <li>
+            <button class="nav-link dropdown-btn" data-dropdown="dropdown4" aria-haspopup="true" aria-expanded="false" aria-label="admin functionalities">
+              Admin <i class="bx bx-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div id="dropdown4" class="dropdown">
+              <ul role="menu">
+                <li role="menuitem">
+                  <a class="dropdown-link" href="{% url 'membership_review' %}">
+                    <img src="{% static 'icons/membership_review_icon.png' %}" class="icon" />
+                    <div>
+                      <span class="dropdown-link-title">Membership Review</span>
+                      <p>Review membership requests</p>
+                    </div>
+                  </a>
+                </li>
+                <li role="menuitem">
+                  <a class="dropdown-link" href="{% url 'users_list' %}">
+                    <img src="{% static 'icons/users_list_icon.png' %}" class="icon" />
+                    <div>
+                      <span class="dropdown-link-title">Users List</span>
+                      <p>Manage and view all registered users</p>
+                    </div>
+                  </a>
+                </li>
+                <li role="menuitem">
+                  <a class="dropdown-link" href="{% url 'report_review' %}">
+                    <img src="{% static 'icons/report_review_icon.png' %}" class="icon" />
+                    <div>
+                      <span class="dropdown-link-title">Report Review</span>
+                      <p>Review and manage project reports</p>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
           </ul>
         </nav>
       </div>
@@ -115,7 +154,7 @@
           <div class="profile-container">
             {% if user.is_authenticated %}
             <div class="profile-dropdown-toggle">
-              <img src="https://cdn-icons-png.flaticon.com/512/666/666201.png" width="50" height="50" alt="user image" />
+              <i class='fas fa-user-circle' style='font-size:40px'></i>
             </div>
             <div class="profile-dropdown-toggle">
               <div id="profile-dropdown" class="dropdown profile-dropdown">
@@ -141,7 +180,7 @@
                 </ul>
               </div>
             </div>
-            <button class="btn btn-primary">Create Report</button>
+            <a class="btn btn-primary" href="{% url 'create_report' %}">Create Report</a>
             <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">
               <i class="bx bx-menu" aria-hidden="true"></i>
             </button>

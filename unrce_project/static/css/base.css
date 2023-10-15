@@ -54,6 +54,32 @@ button {
   border-radius: 5px;
 }
 
+.btn-primary {
+  background-color: #007BFF;
+  border: none;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;  /* Slightly darker shade of the original blue color */
+  transform: scale(1.05);  /* Enlarge the button slightly */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);  /* Add a subtle shadow */
+}
+
+.btn-primary:active {
+  /* Reset the button size when it's actively being clicked */
+  box-shadow: none;  /* Remove the shadow */
+}
+
 .icon {
  
   width: 30px;

@@ -120,7 +120,7 @@
     outline: none;
     border-radius: 0.25rem;
     color: var(--color-black);
-    background: rgba(255, 255, 255, 1); /* Adjust the alpha (last) value to control transparency */
+    background: rgba(255, 255, 255, 0.75); /* Adjust the alpha (last) value to control transparency */
     box-shadow: var(--shadow-large);
   }
   .main .wrapper .form {

@@ -1,46 +1,14 @@
-{% load static %} 
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+    {{ block.super }}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-{% block title %}{%endblock %} 
-
-{% block head %} 
-<!-- External Stylesheets -->
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-
-<!-- Integrated Styles -->
-<style>
-  body {
-      background: linear-gradient(120deg, #5b83a8, #5b83a8);
-  }
-
-  .profile-sidebar,
-  .profile-usermenu {
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
-      background-color: #fdfdfd !important;
-      margin-bottom: 20px; /* Spacing between containers */
-  }
-
-  .profile-userpic img {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 100%; /* Make image fully occupy its container */
-  }
-
-  .nav-item a {
-      transition: all 0.3s;
-  }
-
-  .nav-item:hover a {
-      background-color: #e6e6e6;
-      border-radius: 5px;
-  }
-
-  .nav-link.active {
-      font-weight: bold;
-      background-color: #ffffff !important;
-      border-radius: 5px;
-  }
-</style>
+    <title>{% block title %}User Profile{% endblock %}</title>
 {% endblock %}
 
 {% block content %}
@@ -49,8 +17,9 @@
       <!-- User Picture -->
       <div class="col-md-3">
           <div class="profile-sidebar">
-              <div class="profile-userpic">
-                  <img src="https://cdn-icons-png.flaticon.com/512/666/666201.png" class="img-fluid rounded-circle" alt="User">
+              <div class="profile-userpic text-center">
+                <img src="{% static 'icons/unrce_log.bmp' %}" width="35" height="35" alt="Inc Logo" />
+                <span class="logo-text">UNRCE WA</span>
               </div>
               <div class="profile-usertitle mt-3">
                   <h5 class="text-center">
@@ -66,9 +35,6 @@
           <div class="profile-usermenu mt-4">
               <ul class="nav flex-column">
                   <li class="nav-item">
-                      <a class="nav-link active" href="{% url 'initial-landing' %}"><i class="fas fa-home"></i> Home</a>
-                  </li>
-                  <li class="nav-item">
                     <a class="nav-link" href="{% url 'edit_profile' %}">
                         <i class="fas fa-user-edit"></i> Edit Profile
                     </a>
@@ -79,7 +45,7 @@
                   <li class="nav-item">
                       <a class="nav-link" href="{% url 'logout' %}">
                           {% csrf_token %}
-                          <i class="fas fa-hand-peace"></i> Logout
+                          <i class="fa fa-sign-out"></i>Logout
                       </a>
                   </li>
               </ul>
