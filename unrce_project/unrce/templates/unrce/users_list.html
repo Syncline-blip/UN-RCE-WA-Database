@@ -18,16 +18,15 @@
 {% endblock %}
 
 <body>
-  {% block content %}
+{% block content %}
+<br>
+<h1>User List</h1>
 <div class="header">
   <form method="get" action="">
       <input type="text" name="q" placeholder="Search users..." value="{{ request.GET.q }}">
       <input type="submit" value="Search">
       <a href="{% url 'users_list' %}" class="btn">Reset</a>
   </form>
-  <div class="title">
-    <h1>User List</h1>
-  </div>
 </div>
 
 
