@@ -79,7 +79,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "unrce_project.urls"
 
 TEMPLATES = [
     {
