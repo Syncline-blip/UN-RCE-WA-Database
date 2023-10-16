@@ -2,14 +2,20 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Sign Up </title>
-    <link rel='stylesheet' href='https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css'>
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
     <style>
       body {
@@ -18,175 +24,259 @@
         font-weight: normal;
         line-height: 1.5;
         color: var(--color-black);
-        background:url(https://media.istockphoto.com/id/516418070/photo/perth-city-gold-light-park.jpg?s=612x612&w=0&k=20&c=L3G0nFeYsPdtSazwo4C05DoWxP_vXMpU0Wev86EK6Hs=);
+        background: url(https://media.istockphoto.com/id/516418070/photo/perth-city-gold-light-park.jpg?s=612x612&w=0&k=20&c=L3G0nFeYsPdtSazwo4C05DoWxP_vXMpU0Wev86EK6Hs=);
         background-size: cover; /* Adjust the background size as needed */
         background-repeat: no-repeat; /* Prevent the background image from repeating */
       }
     </style>
-</head>
-<body>
-
-<main class="main">
-    <div class="container">
+  </head>
+  <body>
+    <main class="main">
+      <div class="container">
         <section class="wrapper">
           <div class="back-button">
-
             <a href="/">
-                <i class="ion ion-arrow-left-circled"></i> Back to UNRCE Home
+              <i class="ion ion-arrow-left-circled"></i> Back to UNRCE Home
             </a>
           </div>
-            <div class="heading">
-              <div class="logo">
-                <img src="{% static 'icons/unrce_log.bmp' %}" alt="UNRCE Logo"> 
+          <div class="heading">
+            <div class="logo">
+              <img src="{% static 'icons/unrce_log.bmp' %}" alt="UNRCE Logo" />
             </div>
-                <h1 class="text text-large">UNRCE Sign Up</h1>
-                <p class="text text-normal">or <span><a href="{% url 'login' %}" class="text text-links">Log in to UNRCE</a></span></p>
+            <h1 class="text text-large">UNRCE Sign Up</h1>
+            <p class="text text-normal">
+              or
+              <span
+                ><a href="{% url 'login' %}" class="text text-links"
+                  >Log in to UNRCE</a
+                ></span
+              >
+            </p>
+          </div>
+          <form
+            class="form"
+            action="{% url 'register' %}"
+            method="post"
+            id="signup-form"
+          >
+            {% csrf_token %}
+            <div class="input-control">
+              <label for="username" class="input-label" hidden>Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="input-field"
+                placeholder="Username"
+                required
+              />
+              <p class="error-message" id="username-error"></p>
             </div>
-            <form class="form" action="{% url 'register' %}" method="post" id="signup-form">
-                {% csrf_token %}
-                <div class="input-control">
-                  <label for="username" class="input-label" hidden>Username</label>
-                  <input type="text" id="username" name="username" class="input-field" placeholder="Username" required>
-                  <p class="error-message" id="username-error"></p>
-                </div>
-                <div class="input-control">
-                  <label for="email" class="input-label" hidden>Email</label>
-                  <input type="email" id="email" name="email" class="input-field" placeholder="Email" required>
-                  <p class="error-message" id="email-error"></p>
-                </div>
-                <div class="input-control">
-                    <label for="first_name" class="input-label" hidden>First Name</label>
-                    <input type="text" id="first_name" name="first_name" class="input-field" placeholder="First Name" required>
-                </div>
-                <div class="input-control">
-                    <label for="last_name" class="input-label" hidden>Last Name</label>
-                    <input type="text" id="last_name" name="last_name" class="input-field" placeholder="Last Name" required>
-                </div>
-                <div class="input-control">
-                    <label for="org" class="input-label" hidden>Organization</label>
-                    <input type="text" id="org" name="org" class="input-field" placeholder="Organization" required>
-                </div>
-                <div class="input-control">
-                  <label for="password1" class="input-label" hidden>Password</label>
-                  <input type="password" id="password1" name="password1" class="input-field" placeholder="Password" required>
-                </div>
-                <div class="input-control">
-                  <meter max="2" id="password-strength-meter"></meter>
-                </div>
-                <div class="input-control">
-                  <p id="password-strength-text"></p>
-                  <p class="error-message" id="password-error"></p>
-                </div>
-              
-                <div class="input-control">
-                  <label for="password2" class="input-label" hidden>Confirm Password</label>
-                  <input type="password" id="password2" name="password2" class="input-field" placeholder="Confirm Password" required>
-                </div>
-                <div class="input-control">
-                  <p class="error-message" id="password-confirm-error"></p>
-                </div>
-                
-                <div class="input-control">
-                    <button type="submit" id="signup-button" class="input-submit" disabled>Sign Up</button>
-                </div>
-                <div class="auth-options">
-                    <span>Already have an account? <a href="{% url 'login' %}" class="text text-links">Log In</a></span>
-                </div>
-            </form>
+            <div class="input-control">
+              <label for="email" class="input-label" hidden>Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="input-field"
+                placeholder="Email"
+                required
+              />
+              <p class="error-message" id="email-error"></p>
+            </div>
+            <div class="input-control">
+              <label for="first_name" class="input-label" hidden
+                >First Name</label
+              >
+              <input
+                type="text"
+                id="first_name"
+                name="first_name"
+                class="input-field"
+                placeholder="First Name"
+                required
+              />
+            </div>
+            <div class="input-control">
+              <label for="last_name" class="input-label" hidden
+                >Last Name</label
+              >
+              <input
+                type="text"
+                id="last_name"
+                name="last_name"
+                class="input-field"
+                placeholder="Last Name"
+                required
+              />
+            </div>
+            <div class="input-control">
+              <label for="org" class="input-label" hidden>Organization</label>
+              <input
+                type="text"
+                id="org"
+                name="org"
+                class="input-field"
+                placeholder="Organization"
+                required
+              />
+            </div>
+            <div class="input-control">
+              <label for="password1" class="input-label" hidden>Password</label>
+              <input
+                type="password"
+                id="password1"
+                name="password1"
+                class="input-field"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <div class="input-control">
+              <meter max="2" id="password-strength-meter"></meter>
+            </div>
+            <div class="input-control">
+              <p id="password-strength-text"></p>
+              <p class="error-message" id="password-error"></p>
+            </div>
+
+            <div class="input-control">
+              <label for="password2" class="input-label" hidden
+                >Confirm Password</label
+              >
+              <input
+                type="password"
+                id="password2"
+                name="password2"
+                class="input-field"
+                placeholder="Confirm Password"
+                required
+              />
+            </div>
+            <div class="input-control">
+              <p class="error-message" id="password-confirm-error"></p>
+            </div>
+
+            <div class="input-control">
+              <button
+                type="submit"
+                id="signup-button"
+                class="input-submit"
+                disabled
+              >
+                Sign Up
+              </button>
+            </div>
+            <div class="auth-options">
+              <span
+                >Already have an account?
+                <a href="{% url 'login' %}" class="text text-links"
+                  >Log In</a
+                ></span
+              >
+            </div>
+          </form>
         </section>
-    </div>
-</main>
+      </div>
+    </main>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const usernameField = document.getElementById("username");
-    const emailField = document.getElementById("email");
-    const passwordField = document.getElementById("password1");
-    const passwordConfirmField = document.getElementById("password2");
-    const signupButton = document.getElementById("signup-button");
-    const strengthMeter = document.getElementById("password-strength-meter");
-    const strengthText = document.getElementById("password-strength-text");
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const usernameField = document.getElementById("username");
+        const emailField = document.getElementById("email");
+        const passwordField = document.getElementById("password1");
+        const passwordConfirmField = document.getElementById("password2");
+        const signupButton = document.getElementById("signup-button");
+        const strengthMeter = document.getElementById(
+          "password-strength-meter"
+        );
+        const strengthText = document.getElementById("password-strength-text");
 
-    function isEmailValid(email) {
-        const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        return pattern.test(email);
-    }
+        function isEmailValid(email) {
+          const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+          return pattern.test(email);
+        }
 
-    function checkPasswordMatch() {
-        const password = passwordField.value;
-        const confirmPassword = passwordConfirmField.value;
-        const errorElement = document.getElementById('password-confirm-error');
+        function checkPasswordMatch() {
+          const password = passwordField.value;
+          const confirmPassword = passwordConfirmField.value;
+          const errorElement = document.getElementById(
+            "password-confirm-error"
+          );
 
-        if (password !== confirmPassword) {
+          if (password !== confirmPassword) {
             errorElement.textContent = "Passwords do not match.";
             return false;
-        } else {
+          } else {
             errorElement.textContent = "";
             return true;
+          }
         }
-    }
 
-    function updateSignupButton() {
-        const isUsernameValid = usernameField.value.trim().length >= 5;
-        const isEmailValidValue = isEmailValid(emailField.value.trim());
-        const password = passwordField.value;
-        const isPasswordValid = zxcvbn(password).score >= 1;
-        const isPasswordConfirmValid = checkPasswordMatch();
+        function updateSignupButton() {
+          const isUsernameValid = usernameField.value.trim().length >= 5;
+          const isEmailValidValue = isEmailValid(emailField.value.trim());
+          const password = passwordField.value;
+          const isPasswordValid = zxcvbn(password).score >= 1;
+          const isPasswordConfirmValid = checkPasswordMatch();
 
-        signupButton.disabled = !(isUsernameValid && isEmailValidValue && isPasswordValid && isPasswordConfirmValid);
-    }
+          signupButton.disabled = !(
+            isUsernameValid &&
+            isEmailValidValue &&
+            isPasswordValid &&
+            isPasswordConfirmValid
+          );
+        }
 
-    usernameField.addEventListener("input", function() {
-      const usernameErrorElement = document.getElementById("username-error");
-      if (usernameField.value.length > 0 && usernameField.value.length < 5) {
-          usernameErrorElement.textContent = "Username must be at least 5 characters.";
-          usernameErrorElement.style.display = "block";  // Show the error
-      } else {
-          usernameErrorElement.textContent = "";
-          usernameErrorElement.style.display = "none";   // Hide the error
-      }
-      updateSignupButton();
-  });
+        usernameField.addEventListener("input", function () {
+          const usernameErrorElement =
+            document.getElementById("username-error");
+          if (
+            usernameField.value.length > 0 &&
+            usernameField.value.length < 5
+          ) {
+            usernameErrorElement.textContent =
+              "Username must be at least 5 characters.";
+            usernameErrorElement.style.display = "block"; // Show the error
+          } else {
+            usernameErrorElement.textContent = "";
+            usernameErrorElement.style.display = "none"; // Hide the error
+          }
+          updateSignupButton();
+        });
 
-    emailField.addEventListener("input", updateSignupButton);
+        emailField.addEventListener("input", updateSignupButton);
 
-    passwordField.addEventListener("input", function() {
-        const password = passwordField.value;
-        const result = zxcvbn(password);
+        passwordField.addEventListener("input", function () {
+          const password = passwordField.value;
+          const result = zxcvbn(password);
 
-        strengthMeter.value = result.score;
+          strengthMeter.value = result.score;
 
-        let feedbackMessage;
-        if (result.score === 0) {
-            feedbackMessage = "Password is weak. Try adding a few more characters.";
-        } else if (result.score === 1) {
-            feedbackMessage = "Password is moderate. Consider adding a number or a special character for more security.";
-        } else {
+          let feedbackMessage;
+          if (result.score === 0) {
+            feedbackMessage =
+              "Password is weak. Try adding a few more characters.";
+          } else if (result.score >= 1) {
             feedbackMessage = "Password is strong. Good job!";
-        }
+          }
 
-        strengthText.textContent = feedbackMessage;
+          strengthText.textContent = feedbackMessage;
 
-        const colors = [
-            "#FF0000",
-            "#FFD700",
-            "#00FF00",
-        ];
-        const colorIndex = result.score === 0 ? 0 : (result.score === 1 ? 1 : 2);
-        strengthMeter.style.backgroundColor = colors[colorIndex];
+          const colors = ["#FF0000", "#FFD700", "#00FF00"];
+          const colorIndex =
+            result.score === 0 ? 0 : result.score === 1 ? 1 : 2;
+          strengthMeter.style.backgroundColor = colors[colorIndex];
 
-        checkPasswordMatch();
-        updateSignupButton();
-    });
+          checkPasswordMatch();
+          updateSignupButton();
+        });
 
-    passwordConfirmField.addEventListener("input", function() {
-        checkPasswordMatch();
-        updateSignupButton();
-    });
-});
-
-</script>
-
-
-</body>
+        passwordConfirmField.addEventListener("input", function () {
+          checkPasswordMatch();
+          updateSignupButton();
+        });
+      });
+    </script>
+  </body>
 </html>
