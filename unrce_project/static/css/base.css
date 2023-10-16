@@ -246,7 +246,6 @@ button {
   .container {
     padding: 1.2rem;
     position:relative;
-    z-index:1000;
   }
 
   .menu {
