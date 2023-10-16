@@ -168,6 +168,22 @@ h1 {
     color: rgb(85, 4, 85);
   }
 
+  .edit-button {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #058610;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background-color: #035715; 
+}
+
+
   .delete-button {
     color: white;
     background-color: red;
