@@ -365,7 +365,7 @@ button {
 .profile-dropdown {
   position: absolute;
   top: 30px; /* Move it down by adjusting the top value */
-  left: -23px; /* Move it left by adjusting the left value */
+  left: -180px; /* Move it left by adjusting the left value */
 
   background-color: var(--white);
   border-radius: 10px;
