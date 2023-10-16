@@ -257,7 +257,10 @@
           if (result.score === 0) {
             feedbackMessage =
               "Password is weak. Try adding a few more characters.";
-          } else if (result.score >= 1) {
+          } else if (result.score === 1) {
+            feedbackMessage =
+              "Password is moderate. Consider adding a number or a special character for more security.";
+          } else {
             feedbackMessage = "Password is strong. Good job!";
           }
 

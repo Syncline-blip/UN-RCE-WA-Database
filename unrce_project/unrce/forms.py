@@ -100,14 +100,6 @@ class RegistrationForm(UserCreationForm):
         model = User
         fields = ("username", "email", "password1", "password2", "first_name", "last_name")
 
-    def clean_password1(self):
-        """Validates the strength of the password"""
-        password1 = self.cleaned_data.get("password1")
-        if password1:
-            result = zxcvbn(password1)
-            if result['score'] < 3:
-                raise forms.ValidationError("Password is too weak. Please choose a stronger password.")
-        return password1
 
     def save(self, commit=True):
         """Overrides the save method to add extended fields data"""
