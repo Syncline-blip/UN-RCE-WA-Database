@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from . import views
-
+# rice
 urlpatterns = [
     # Home and landing page
     path('', views.home, name='initial-landing'),
