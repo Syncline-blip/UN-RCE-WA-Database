@@ -14,6 +14,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
+from django.core.exceptions import PermissionDenied
+
 
 # Local application/library specific imports
 from .forms import (AccountForm, EditProfileForm, InterestForm, OrganizationInlineFormSet,
@@ -35,24 +37,34 @@ project = [
         'project_code': 22341
     }
 ]
+# Renders the home page
 def home(request):
     return render(request, 'unrce/initial-landing.html')
 
+# Checks if the logged-in user is an admin
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
 
+# Checks if the logged-in user is a member or an admin
 def is_member(user):
     return user.groups.filter(name='Member').exists() or is_admin(user)
 
+# Checks if the logged-in user is a visitor, member, or an admin
 def is_visitor(user):
     return user.groups.filter(name='Visitor').exists() or is_member(user) or is_admin(user)
 
+# This view is responsible for creating a report; only accessible to members or admins
 @login_required
 @user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
 def create_report(request): 
+    """
+    This is where the reports are created that are saved in the database, handles all the fields
+    that are needed and returns them in forms
+    """
     try:
     
         if request.method == 'POST':
+            # Instantiate forms with POST data and FILES
             report_form = ReportForm(request.POST)
             images_form = ReportImagesForm(request.POST, request.FILES)
             files_form = ReportFilesForm(request.POST, request.FILES)
@@ -60,7 +72,7 @@ def create_report(request):
             images = request.FILES.getlist('image')
             files = request.FILES.getlist('file')
             
-
+            # Processing selected SDGs 
             direct_sdgs = []
             indirect_sdgs = []
             for i in range(1, 18):
@@ -70,6 +82,7 @@ def create_report(request):
                 elif option == 'indirect':
                     indirect_sdgs.append(str(i))
 
+            # Processing selected ESD themes
             direct_esd = []
             indirect_esd = []
             for theme in themes_esd:
@@ -78,7 +91,8 @@ def create_report(request):
                     direct_esd.append(theme)
                 elif option == 'indirect':
                     indirect_esd.append(theme)
-
+            
+            # Processing selected priority areas
             direct_priority = []
             indirect_priority = []
             for area in priority_action_areas:
@@ -87,7 +101,8 @@ def create_report(request):
                     direct_priority.append(area)
                 elif option == 'indirect':
                     indirect_priority.append(area)
-
+            
+            # If all forms are valid, save the report and associated data
             if report_form.is_valid() and organization_formset.is_valid():
                 report = report_form.save(commit=False)
                 report.author = request.user
@@ -100,19 +115,22 @@ def create_report(request):
                 if 'submit_for_approval' in request.POST:
                     report.submitted = True
                 report.save()
-
+                
+                #Handle the Organization formset
                 organization_formset = OrganizationInlineFormSet(request.POST, instance=report)
                 if organization_formset.is_valid():
                     organization_formset.save()
                 report_form.save_m2m()  
-
+                
+                #Image handling
                 if images:
                     for image in images:
                         ReportImages.objects.create(
                             report=report,
                             image=image
                         )
-
+                
+                #File handling
                 if files:
                     for file in files:
                         ReportFiles.objects.create(
@@ -121,11 +139,12 @@ def create_report(request):
                         )
 
                 return redirect('report_list')
+            #Logging errors
             else:
                 for form in [report_form, images_form, files_form, organization_formset]:
                     if not form.is_valid():
                         logger.error(f'{form.__class__.__name__} errors: {form.errors}')
-
+        #Handle get requests
         else:
             report_form = ReportForm()
             images_form = ReportImagesForm()
@@ -133,6 +152,7 @@ def create_report(request):
             report = Report()
             organization_formset = OrganizationInlineFormSet(instance=report)
 
+        #Preparing SDG numbers for list
         sdg_list = [str(i) for i in range(1, 18)]
         context = {
             'report_form': report_form,
@@ -155,22 +175,29 @@ def create_report(request):
 
 def add_interest(request):
     """
-    Handles the creation of a new Expression of Interest. This view initializes and validates
-    the InterestForm. Upon validation, it associates the current user as the author, saves the form,
-    and redirects to the initial landing page.
+    Handles the Expression of Interest form submission. 
+    It initializes and validates the InterestForm and, if valid, associates 
+    the current user as the author, saves the form, and redirects to the initial landing page.
     """
+    # Handle POST request, meaning the form has been submitted
     if request.method == 'POST':
         Interest_Form = InterestForm(request.POST)
 
+        # If the form is valid, save it and associate the current user as the author
         if Interest_Form.is_valid():
             interest = Interest_Form.save(commit=False)
             interest.author = request.user
             interest.save()
-            return redirect('initial-landing')
-    else:
-        report_form = InterestForm()
 
-    return render(request, 'unrce/eoi.html', {'form': InterestForm})
+            # Redirect to the initial landing page after saving the form
+            return redirect('initial-landing')
+
+    # If it's a GET request, provide an empty form for the user to fill out
+    else:
+        Interest_Form = InterestForm()
+
+    # Render the page with the form
+    return render(request, 'unrce/eoi.html', {'form': Interest_Form})
 
 
 def contact(request):
@@ -178,22 +205,25 @@ def contact(request):
 
 
 @login_required
-@user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
+@user_passes_test(is_member, login_url=reverse_lazy('initial-landing'))
 def report_list(request):
     """
-    Lists all the Report objects authored by the currently logged-in user.
-    Fetches and filters the Report objects by the current user and renders them in 'unrce/report_list.html'.
+    Lists all reports created by the currently logged-in user.
+    The user must be logged in and belong to the 'member' or 'admin' group to view this page.
     """
+    # Fetch all reports authored by the current user
     reports = Report.objects.filter(author=request.user)
+
+    # Render the report list page with the user's reports
     return render(request, 'unrce/report_list.html', {'reports': reports})
 
 
 def browse_reports(request):
     """
-    Lists all the approved Report objects.
-    Fetches and filters the Report objects by approved attribute being True 
-    and renders them in 'unrce/approved_reports_list.html'.
+    Displays all approved reports, allowing users to filter reports 
+    based on certain criteria like status, region, frequency, and audience.
     """
+    # Collect filters from the GET request parameters
     filters = {
         'status': request.GET.get('statusFilter'),
         'region': request.GET.get('regionFilter'),
@@ -201,13 +231,18 @@ def browse_reports(request):
         'approved': True
     }
 
+    # Apply audience filter if present in the GET request parameters
     audience_filter = request.GET.getlist('audienceFilter')
     if audience_filter:
         filters['audience__overlap'] = audience_filter
 
+    # Remove any filters that are not set (i.e., are None)
     filters = {k: v for k, v in filters.items() if v}
+
+    # Fetch reports that match the filters
     approved_reports = Report.objects.filter(**filters)
 
+    # Apply SDG filter if present in the GET request parameters
     sdg_filter = request.GET.getlist('sdgFilter')
     if sdg_filter:
         q_objects = Q()
@@ -219,6 +254,7 @@ def browse_reports(request):
         # Filter the queryset with the OR'ed Q objects
         approved_reports = approved_reports.filter(q_objects)
 
+    # Prepare the context with SDGs and filtered reports, and render the page
     context = {
         'sdgs': range(1, 18),
         'reports': approved_reports
@@ -227,90 +263,130 @@ def browse_reports(request):
     return render(request, 'unrce/browse_reports.html', context)
 
 @login_required
-@user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
+@user_passes_test(is_member, login_url=reverse_lazy('initial-landing'))
 def delete_image(request, image_id):
     """
-    Allows users to delete images they have uploaded to reports
+    Allows a user to delete an image from a report. The user must be logged in and 
+    either a member or an admin. The user can only delete images from their own reports.
     """
+    # Retrieve the image by ID or return a 404 error if not found
     image = get_object_or_404(ReportImages, id=image_id)
-    report = image.report
+    
+    # Ensure the request user is the author of the report containing the image
     if image.report.author == request.user:
         image.delete()
-    return redirect('report_edit', report_id=report.id)
+
+    # Redirect to the report edit page
+    return redirect('report_edit', report_id=image.report.id)
 
 @login_required
-@user_passes_test(is_member, login_url=reverse_lazy('initial-landing')) 
+@user_passes_test(is_member, login_url=reverse_lazy('initial-landing'))
 def delete_file(request, file_id):
-    file = get_object_or_404(ReportFiles, id=file_id)  
-    report = file.report  
-    if report.author == request.user:  
+    """
+    Allows a user to delete a file attached to a report. The user must be logged in and 
+    either a member or an admin. The user can only delete files from their own reports.
+    """
+    # Retrieve the file by ID or return a 404 error if not found
+    file = get_object_or_404(ReportFiles, id=file_id)
+    
+    # Ensure the request user is the author of the report containing the file
+    if file.report.author == request.user:
         file.delete()
-    return redirect('report_edit', report_id=report.id) 
+
+    # Redirect to the report edit page
+    return redirect('report_edit', report_id=file.report.id)
 
 
 @login_required
-@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
+@user_passes_test(is_admin, login_url=reverse_lazy('initial-landing'))
 def users_list(request):
+    """
+    Lists all users for admins. Admins can search for users by username, 
+    first name, last name, email, or organization. Displays all users if no search term is provided.
+    """
+    # Extract the search query from the GET parameters
     query = request.GET.get('q') 
 
+    # If a search query is provided, filter users based on the search term
     if query:
-        # Filter users by search term while looking into username, first name, last name, and email
         users = User.objects.filter(
             Q(username__icontains=query) |
             Q(first_name__icontains=query) |
             Q(last_name__icontains=query) |
-            Q(email__icontains=query)|
+            Q(email__icontains=query) |
             Q(account__organization__icontains=query)
         ).prefetch_related('groups', 'account')
+
+    # If no search query is provided, return all users
     else:
-        # If there's no search term, get all users
         users = User.objects.all().prefetch_related('groups', 'account')
 
+    # Create the context dictionary to provide data to the template
     context = {
         'users': users,
         'all_groups': Group.objects.all()
     }
+
+    # Render the users list page with the context
     return render(request, 'unrce/users_list.html', context)
 
+
 @login_required
-@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
+@user_passes_test(is_admin, login_url=reverse_lazy('initial-landing'))
 def report_review(request):
     """
-    Lists all the Report objects available in the system, without filtering by author.
-    Fetches all the Report objects and renders them in 'unrce/report_review.html'.
+    Allows administrators to review all reports submitted in the system. Admins can 
+    view all reports, irrespective of the author, for the purpose of review.
     """
-    reports = Report.objects.filter()
+    # Retrieve all reports
+    reports = Report.objects.all()
+    
+    # Render the report review page with the list of reports
     return render(request, 'unrce/report_review.html', {'reports': reports})
 
 def report_details(request, report_id):
     """
-    Lists the entire report for review, this is accessed from the report_review list of all reports
+    Displays the detailed view of a specific report for review. The detailed view includes 
+    all the information and files associated with the report.
     """
+    # Retrieve the specific report by ID or return a 404 error if not found
     report = get_object_or_404(Report, id=report_id)
+    
+    # Create a form instance to display the report details
     report_form = ReportForm(instance=report)
+    
+    # Retrieve associated images and files for the report
     existing_images = ReportImages.objects.filter(report=report)
     existing_files = ReportFiles.objects.filter(report=report)
     
+    # Create a context dictionary to hold all data to be displayed in the template
     context = {
         'form': report_form, 
         'existing_images': existing_images,
         'report': report,
         'existing_files': existing_files
     }
+    
+    # Render the report details page with the context
     return render(request, 'unrce/report_details.html', context)
 
 
 @login_required
 @user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
 def report_edit(request, report_id):
+    """
+    Allows the member to edit their own report. This view enables members to update
+    the report fields, including attached images and files.
+    """
     report = get_object_or_404(Report, id=report_id)
+    if report.author != request.user and not request.user.groups.filter(name='Admin').exists():
+        raise PermissionDenied
 
     # Ensure the request.user is the author of the report or has permission
-    if report.author != request.user:
-        return redirect('report_list')
 
     try:
         if request.method == 'POST':
+            # Getting list of uploaded images and files
             report_form = ReportForm(request.POST, instance=report)
             images_form = ReportImagesForm(request.POST, request.FILES)
             files_form = ReportFilesForm(request.POST, request.FILES)
@@ -320,8 +396,9 @@ def report_edit(request, report_id):
             if 'submit_for_approval' in request.POST:
                 report.submitted = True
 
+            # If both report form and organization formset are valid, proceed with saving
             if report_form.is_valid() and organization_formset.is_valid():
-                report = report_form.save(commit=False)  # Do not save immediately
+                report = report_form.save(commit=False)  
 
                 # Capture the radio button selections for SDGs, ESD Themes, and Priority Areas
                 direct_sdgs = []
@@ -383,12 +460,14 @@ def report_edit(request, report_id):
                     if not form.is_valid():
                         logger.error(f'{form.__class__.__name__} errors: {form.errors}')
 
+        # Handling the GET request to render the edit page with initial data
         else:
             report_form = ReportForm(instance=report)
             images_form = ReportImagesForm()
             files_form = ReportFilesForm()
             organization_formset = OrganizationInlineFormSet(instance=report)
-
+        
+        # Preparing context data for rendering the template
         sdg_list = [str(i) for i in range(1, 18)]
         context = {
             'report': report,
@@ -410,7 +489,7 @@ def report_edit(request, report_id):
         logger.error(f'Error editing report: {str(e)}')
         return redirect('report_list')
 
-# johN
+
 def register(request):
     try:
         if request.method == 'POST':
@@ -442,50 +521,38 @@ def register(request):
     form = RegistrationForm()
     return render(request, 'unrce/register.html', {'form': form})
 
+
 @login_required
 def profile(request):
+    """
+    Displays the profile of the currently logged-in user.
+    It fetches the associated Account object for additional user details.
+    If the Account object does not exist, it sets the account to None.
+    Renders the 'unrce/profile.html' template.
+    """
     try:
         user = request.user  
         account = Account.objects.get(user=user)  
     except Account.DoesNotExist:
-
         account = None
+    
     return render(request, 'unrce/profile.html', {'user': user, 'account': account})
-
-def must_be_signed_in(request):
-    return render(request, 'unrce/redirect.html')
 
 
 @login_required
 def edit_reporting(request):
     return render(request, 'unrce/report_list.html')
 
-# JOHN
-@login_required
-def org_eoi(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        organization = request.POST.get('organization')
-        message = request.POST.get('message')
 
-
-        subject = 'Expression of Interest'
-        email_message = f'Username: {username}\nOrganization: {organization}\nMessage: {message}'
-
-
-        send_mail(
-            subject,
-            email_message,
-            settings.EMAIL_HOST_USER,
-            ['miltonyong@gmail.com'],  # OWNER EMAIL
-            fail_silently=False,
-        )
-        return redirect('success_page')
-    return render(request, 'unrce/organization_eoi.html')
 
 @login_required
 @user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def approve_report(request, report_id):
+    """
+    Allows an admin to approve a report.
+    Fetches the report by ID, sets its 'approved' attribute to True, and saves the update.
+    Redirects to the report details page to view the approved report.
+    """
     report = get_object_or_404(Report, id=report_id)
     report.approved = True
     report.save()
@@ -494,6 +561,12 @@ def approve_report(request, report_id):
 @login_required
 @user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def change_group(request, user_id):
+    """
+    Allows an admin to change the group of a specific user.
+    If the request method is POST, it captures the selected group from the request,
+    removes the user from all current groups, and adds the user to the selected group.
+    Redirects to the users list page to view the update.
+    """
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
         group_id = request.POST.get('group')
@@ -501,12 +574,17 @@ def change_group(request, user_id):
         user.groups.clear()  # Remove user from all current groups
         user.groups.add(group)  # Add user to the selected group
         user.save()
+    
     return redirect('users_list')
 
 
 
 @login_required
 def edit_profile(request):
+    """
+    Allows the logged-in user to edit their own profile.
+    Handles both the GET and POST methods. 
+    """
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance=request.user)
 
@@ -522,11 +600,9 @@ def edit_profile(request):
             user.save()
 
             if new_password:
-                update_session_auth_hash(request, user)
+                update_session_auth_hash(request, user)  # Updates the session hash to keep the user authenticated
 
             return redirect('profile')
-        else:
-            print(form.errors)  # Print form errors to console for diagnosis
     else:
         form = EditProfileForm(instance=request.user)
 
@@ -535,6 +611,10 @@ def edit_profile(request):
 
 @login_required
 def membership_request(request):
+    """
+    Handles membership requests.
+    Logged-in users can request for membership by filling out the form.
+    """
     try:
         # Try to get the existing account for the logged-in user
         account = Account.objects.get(user=request.user)
@@ -565,6 +645,11 @@ def membership_request(request):
 @login_required
 @user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def approve_membership(request, account_id):
+    """
+    Allows an admin to approve membership requests.
+    Fetches the Account by ID, marks it as approved, adds the user to the Member group, 
+    and redirects to the membership review page.
+    """
     account = get_object_or_404(Account, id=account_id)
     account.approved = True
     account.requesting = False  
@@ -576,6 +661,10 @@ def approve_membership(request, account_id):
 @login_required
 @user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
 def membership_review(request):
+    """
+    Displays a list of all membership requests for admin review.
+    Fetches all accounts where requesting is True and approved is False, and renders them for review.
+    """
     accounts = Account.objects.select_related('user').filter(requesting=True, approved=False)
 
     return render(request, 'unrce/membership_review.html', {'accounts': accounts})
@@ -585,6 +674,11 @@ def membership_review(request):
 @login_required
 @user_passes_test(is_member,login_url=reverse_lazy('initial-landing'))
 def report_delete(request, id):
+    """
+    Allows a member to delete a specific report by ID.
+    Fetches the report by ID, deletes it, and redirects to the report list page.
+    The function is protected against CSRF attacks and requires the user to be a member.
+    """
     report = get_object_or_404(Report, id=id)
     report.delete()
     return redirect('report_list') 
