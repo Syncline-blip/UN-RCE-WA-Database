@@ -86,57 +86,62 @@
   This Table contains all the reports that the current user is the author for, the headings are the fields in the report
 -->
 <div class="table-container">
-  <table  border="1">
-    <thead>
-        <tr>
-
-            <th>Name of Project</th>
-            <th>Report Status</th>
-            <th>Region</th>
-            <th>Audience</th>
-            <th>Frequency</th>
-            <th>SDG</th>
-        </tr>
-    </thead>
-<!-- 
-  This is the where it prints all the reports out into the table, clicking on any row will allow you to edit that report
--->
-    <tbody>
-        {% for report in reports %}
-        <tr>
-             <td>{{ report.title_project }}</td>
-             <td>
-                  {% if report.status == "ongoing" %}
-                      <span class="status-ongoing">Ongoing</span>
-                  {% elif report.status == "completed" %}
-                      <span class="status-completed">Completed</span>
-                  {% elif report.status == "new_report" %}
-                      <span class="status-new">New Report</span>
-                  {% endif %}
-             </td>
-             <td>{{ report.region|title }}</td> <!-- Converted to title case -->
-         <td>
-          {% for audience in report.audience %}
-                 {{ audience|title}}{% if not forloop.last %}, {% endif %}
-             {% endfor %}
-         </td> 
-         <td>{{ report.frequency|title }} </td>
-         <td>
-            <strong>Direct SDGs:</strong>
-            {% for sdg in report.direct_sdgs %}
-                {{ sdg }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-            <br>
-            <strong>Indirect SDGs:</strong>
-            {% for sdg in report.indirect_sdgs %}
-                {{ sdg }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-         </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-</div>
+    <table  border="1">
+      <thead>
+          <tr>
+              <th>Name of Project</th>
+              <th>Report Status</th>
+              <th>Region</th>
+              <th>Audience</th>
+              <th>Frequency</th>
+              <th>SDG</th>
+              <th>Detials of Report</th>
+          </tr>
+      </thead>
+  <!--
+    This is the where it prints all the reports out into the table, clicking on any row will allow you to edit that report
+  -->
+      <tbody>
+          {% for report in reports %}
+          <tr>
+               <td>{{ report.title_project }}</td>
+               <td>
+                    {% if report.status == "ongoing" %}
+                        <span class="status-ongoing">Ongoing</span>
+                    {% elif report.status == "completed" %}
+                        <span class="status-completed">Completed</span>
+                    {% elif report.status == "new_report" %}
+                        <span class="status-new">New Report</span>
+                    {% endif %}
+               </td>
+               <td>{{ report.region|title }}</td> <!-- Converted to title case -->
+           <td>
+            {% for audience in report.audience %}
+                   {{ audience|title}}{% if not forloop.last %}, {% endif %}
+               {% endfor %}
+           </td>
+           <td>{{ report.frequency|title }} </td>
+           <td>
+              <strong>Direct SDGs:</strong>
+              {% for sdg in report.direct_sdgs %}
+                  {{ sdg }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+              <br>
+              <strong>Indirect SDGs:</strong>
+              {% for sdg in report.indirect_sdgs %}
+                  {{ sdg }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+           </td>
+           <td>
+              <div class="details">
+                  <a href="{% url 'report_details' report.id %}" >Details</a>
+              </div>
+           </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  </div>
 </body>
 <script>
   document.getElementById('toggleFiltersBtn').addEventListener('click', function() {
