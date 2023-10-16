@@ -50,6 +50,7 @@
     <!-- status -->
     <div class="form-group {% if report_form.status.errors %}has-error{% endif %}">
         <label for="{{ report_form.status.id_for_label }}">{{ report_form.status.label }}</label>
+        <div class="text">This is where you input your status</div>
         {{ report_form.status }}
         {% for error in report_form.status.errors %}
             <span class="help-block">{{ error }}</span>
@@ -73,7 +74,9 @@
 
 <div class="form-group-section">
     <h3>Focal point(s) and affiliation(s)</h3>
+    <div class="org-title">Organisation</div>
     <div class="organization-formsets">
+        <div class="text">This is where you input the organisation associated to your project</div>
         {{ organization_formset.management_form }}
         {% for form in organization_formset %}
     <div class="organization-form" data-prefix="{{ form.prefix }}">
@@ -92,6 +95,7 @@
     <!-- delivery -->
     <div class="form-group {% if report_form.delivery.errors %}has-error{% endif %}">
         <label for="{{ report_form.delivery.id_for_label }}">{{ report_form.delivery.label }}</label>
+        <div class="text">This is where you put your preference in regards to how your project will be delivered to the public</div>
         {{ report_form.delivery }}
         {% for error in report_form.delivery.errors %}
             <span class="help-block">{{ error }}</span>
@@ -111,6 +115,7 @@
     <!-- web_link -->
     <div class="form-group {% if report_form.web_link.errors %}has-error{% endif %}">
         <label for="{{ report_form.web_link.id_for_label }}">{{ report_form.web_link.label }}</label>
+        <div class="text">This should have the format of https:// (e.g. https://example.com.au)</div>
         {{ report_form.web_link }}
         {% for error in report_form.web_link.errors %}
             <span class="help-block">{{ error }}</span>
@@ -134,6 +139,7 @@
 
     <!-- region -->
     <div class="form-group {% if report_form.region.errors %}has-error{% endif %}">
+        <div class="text">This is where you input the demographic associated to your project</div>
         <label for="{{ report_form.region.id_for_label }}">{{ report_form.region.label }}</label>
         {{ report_form.region }}
         {% for error in report_form.region.errors %}
@@ -155,6 +161,7 @@
     <!-- audience -->
     <div class="form-group {% if report_form.audience.errors %}has-error{% endif %}">
         <label for="{{ report_form.audience.id_for_label }}">{{ report_form.audience.label }}</label>
+        <div class="text">Key demographic for your intended main audience</div>
         {{ report_form.audience }}
         {% for error in report_form.audience.errors %}
             <span class="help-block">{{ error }}</span>
@@ -164,6 +171,7 @@
     <!-- socio_economic_characteristics -->
     <div class="form-group {% if report_form.socio_economic_characteristics.errors %}has-error{% endif %}">
         <label for="{{ report_form.socio_economic_characteristics.id_for_label }}">{{ report_form.socio_economic_characteristics.label }}</label>
+        <div class="text">The details about the socio economic characteristics of the project</div>
         {{ report_form.socio_economic_characteristics }}
         {% for error in report_form.socio_economic_characteristics.errors %}
             <span class="help-block">{{ error }}</span>
@@ -173,6 +181,7 @@
     <!-- development_challenges -->
     <div class="form-group {% if report_form.development_challenges.errors %}has-error{% endif %}">
         <label for="{{ report_form.development_challenges.id_for_label }}">{{ report_form.development_challenges.label }}</label>
+        <div class="text">This is where you input any development challenges associated with the project</div>
         {{ report_form.development_challenges }}
         {% for error in report_form.development_challenges.errors %}
             <span class="help-block">{{ error }}</span>
@@ -205,6 +214,7 @@
     <!-- rationale -->
     <div class="form-group {% if report_form.rationale.errors %}has-error{% endif %}">
         <label for="{{ report_form.rationale.id_for_label }}">{{ report_form.rationale.label }}</label>
+        <div class="text">This is where you input any rationale associated with the project</div>
         {{ report_form.rationale }}
         {% for error in report_form.rationale.errors %}
             <span class="help-block">{{ error }}</span>
@@ -214,6 +224,7 @@
     <!-- objectives -->
     <div class="form-group {% if report_form.objectives.errors %}has-error{% endif %}">
         <label for="{{ report_form.objectives.id_for_label }}">{{ report_form.objectives.label }}</label>
+        <div class="text">This is where you input any main objectives associated with the project</div>
         {{ report_form.objectives }}
         {% for error in report_form.objectives.errors %}
             <span class="help-block">{{ error }}</span>
@@ -223,6 +234,7 @@
     <!-- activities_practices -->
     <div class="form-group {% if report_form.activities_practices.errors %}has-error{% endif %}">
         <label for="{{ report_form.activities_practices.id_for_label }}">{{ report_form.activities_practices.label }}</label>
+        <div class="text">This is where you input any activities practices involved with your project</div>
         {{ report_form.activities_practices }}
         {% for error in report_form.activities_practices.errors %}
             <span class="help-block">{{ error }}</span>
@@ -232,6 +244,7 @@
     <!-- size_academic -->
     <div class="form-group {% if report_form.size_academic.errors %}has-error{% endif %}">
         <label for="{{ report_form.size_academic.id_for_label }}">{{ report_form.size_academic.label }}</label>
+        <div class="text">This is where you pick the academic target audience size for your project</div>
         {{ report_form.size_academic }}
         {% for error in report_form.size_academic.errors %}
             <span class="help-block">{{ error }}</span>
@@ -241,6 +254,7 @@
     <!-- results -->
     <div class="form-group {% if report_form.results.errors %}has-error{% endif %}">
         <label for="{{ report_form.results.id_for_label }}">{{ report_form.results.label }}</label>
+        <div class="text">Any current results or expected results for your project</div>
         {{ report_form.results }}
         {% for error in report_form.results.errors %}
             <span class="help-block">{{ error }}</span>
@@ -250,6 +264,7 @@
     <!-- lessons_learned -->
     <div class="form-group {% if report_form.lessons_learned.errors %}has-error{% endif %}">
         <label for="{{ report_form.lessons_learned.id_for_label }}">{{ report_form.lessons_learned.label }}</label>
+        <div class="text">Key lesson learned in regards to the project should be inputted here</div>
         {{ report_form.lessons_learned }}
         {% for error in report_form.lessons_learned.errors %}
             <span class="help-block">{{ error }}</span>
@@ -259,6 +274,7 @@
     <!-- key_message -->
     <div class="form-group {% if report_form.key_message.errors %}has-error{% endif %}">
         <label for="{{ report_form.key_message.id_for_label }}">{{ report_form.key_message.label }}</label>
+        <div class="text">Input any key message associated to the project</div>
         {{ report_form.key_message }}
         {% for error in report_form.key_message.errors %}
             <span class="help-block">{{ error }}</span>
@@ -268,6 +284,7 @@
     <!-- relationship_activities -->
     <div class="form-group {% if report_form.relationship_activities.errors %}has-error{% endif %}">
         <label for="{{ report_form.relationship_activities.id_for_label }}">{{ report_form.relationship_activities.label }}</label>
+        <div class="text">This should include any relationship activities that is associated with the project</div>
         {{ report_form.relationship_activities }}
         {% for error in report_form.relationship_activities.errors %}
             <span class="help-block">{{ error }}</span>
@@ -277,6 +294,7 @@
     <!-- funding -->
     <div class="form-group {% if report_form.funding.errors %}has-error{% endif %}">
         <label for="{{ report_form.funding.id_for_label }}">{{ report_form.funding.label }}</label>
+        <div class="text">This should include any funding associated with the project</div>
         {{ report_form.funding }}
         {% for error in report_form.funding.errors %}
             <span class="help-block">{{ error }}</span>
@@ -332,11 +350,13 @@
       <!-- Image upload -->
       <div class="form-group">
         <label for="image">Upload Images</label>
+        <div class="text">This is where you upload any images associated with the project in the format of .png, .jpg, .jpeg, .svg</div>
         <input type="file" name="image" id="image" multiple>
     </div>
     <!--File upload-->
     <div class="form-group">
         <label for="files">Upload Files</label>
+        <div class="text">This is where you can upload files in the format of .pdf, .txt, .doc, .docx, .xls </div>
         <input type="file" name="file" id="files" multiple>
     </div>
   
