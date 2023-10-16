@@ -43,7 +43,9 @@ border-radius: 1px;
 .subpage2,
 .subpage3,
 .subpage4 {
+    overflow: auto;
     display: grid;
+    word-wrap: break-word;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     padding: 20px;
