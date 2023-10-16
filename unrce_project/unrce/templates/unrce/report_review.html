@@ -27,6 +27,11 @@
     It has only some of the headers for the report, not all info, button to bring up details.
 -->
 <div class="table-container">
+    <div style="float: right;">
+        <form method="get" action="{% url 'download_reports' %}">
+          <button type="submit" style="padding: 10px 20px; color: white; background-color: #4CAF50; border: none; border-radius: 5px; cursor: pointer;">Download Reports as CSV</button>
+        </form>
+      </div>
   <table border="1">
     <thead>
         <tr>
@@ -40,7 +45,6 @@
             <th>Submitted</th>   
             <th>Approved</th>
             <th>Report Details</th>
-            <th>Report Download</th>
             <th>Delete Report</th>
         </tr>
     </thead>
@@ -78,11 +82,6 @@
               <td>
                 <div class="details">
                     <a href="{% url 'report_details' report.id %}" >Details</a>
-                </div>
-              </td>
-              <td>
-                <div class="download">
-                    <a href="{% url 'report_edit' report.id %}" >Download</a>
                 </div>
               </td>
               <td>

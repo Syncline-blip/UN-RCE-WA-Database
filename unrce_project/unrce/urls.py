@@ -29,6 +29,7 @@ urlpatterns = [
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('users_list/', views.users_list, name='users_list'),
     path('change-group/<int:user_id>/', views.change_group, name='change_group'),
+    path('download_users_csv/', views.download_users_csv, name='download_users_csv'),
 
     # Report-related paths
     path('report_list/', views.report_list, name='report_list'),
@@ -41,6 +42,7 @@ urlpatterns = [
     path('approve_report/<int:report_id>/', views.approve_report, name='approve_report'),
     path('delete_image/<int:image_id>/', views.delete_image, name='delete_image'),
     path('delete-file/<int:file_id>/', views.delete_file, name='delete_file'),
+    path('download_reports/', views.download_reports, name='download_reports'),
 
     # Membership-related paths
     path('membership_request/', views.membership_request, name='membership_request'),

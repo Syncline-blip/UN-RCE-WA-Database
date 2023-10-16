@@ -244,7 +244,7 @@
     <!-- size_academic -->
     <div class="form-group {% if report_form.size_academic.errors %}has-error{% endif %}">
         <label for="{{ report_form.size_academic.id_for_label }}">{{ report_form.size_academic.label }}</label>
-        <div class="text">This is where you pick the academic target audience size for your project</div>
+        <div class="text">This is where you pick the academic target audience size for your project, number only</div>
         {{ report_form.size_academic }}
         {% for error in report_form.size_academic.errors %}
             <span class="help-block">{{ error }}</span>

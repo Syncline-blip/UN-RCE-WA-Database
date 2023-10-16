@@ -26,6 +26,9 @@
       <input type="text" name="q" placeholder="Search users..." value="{{ request.GET.q }}">
       <input type="submit" value="Search">
       <a href="{% url 'users_list' %}" class="btn">Reset</a>
+      <a href="{% url 'download_users_csv' %}" class="btn" style="background-color: green; color: white;">Download Users as a CSV</a>
+
+
   </form>
 </div>
 
@@ -40,7 +43,7 @@
               <th>Last Name</th>
               <th>Email</th>
               <th>Organization</th>
-              <th>Groups</th>
+              <th>Group</th>
               <th>Change Group</th>
           </tr>
       </thead>
@@ -51,7 +54,7 @@
                   <td>{{ user.first_name }}</td>
                   <td>{{ user.last_name }}</td>
                   <td>{{ user.email }}</td>
-                  <td>{{ user.organization }}</td> 
+                  <td>{{ user.account.organization }}</td>
                   <td>{{ user.groups.all|join:", " }}</td> 
                   <td>
                     <form method="post" action="{% url 'change_group' user.id %}">

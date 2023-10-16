@@ -1,5 +1,6 @@
 # Standard library imports
 import logging
+import csv
 
 # Third-party imports
 import pandas as pd
@@ -9,7 +10,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group, User
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponseServerError
+from django.http import HttpResponseServerError, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
@@ -682,3 +683,82 @@ def report_delete(request, id):
     report = get_object_or_404(Report, id=id)
     report.delete()
     return redirect('report_list') 
+
+
+@login_required
+@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
+def download_reports(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="reports.csv"'
+
+    writer = csv.writer(response)
+
+    # Write your header names here
+    writer.writerow([
+        'Report ID', 'Title of Project', 'Delivery', 'Frequency', 'Web Link',
+        'Additional Resources', 'Region', 'Ecosystem', 'Audience',
+        'Socio-Economic Characteristics', 'Development Challenges',
+        'Sustainable Development Policy', 'Status', 'Start Project',
+        'End Project', 'Rationale', 'Objectives', 'Activities/Practices',
+        'Size Academic', 'Results', 'Lessons Learned', 'Key Message',
+        'Relationship Activities', 'Funding', 'Created At', 'Last Modified',
+        'Author', 'Approved', 'Submitted', 'Direct SDGs', 'Indirect SDGs',
+        'Direct ESD Themes', 'Indirect ESD Themes', 'Direct Priority Areas',
+        'Indirect Priority Areas'
+    ])
+
+    reports = Report.objects.all()
+
+    for report in reports:
+        writer.writerow([
+            report.id, report.title_project, ', '.join(report.delivery) if report.delivery else '',
+            report.frequency, report.web_link, report.additional_resources, report.region, 
+            report.ecosystem, ', '.join(report.audience) if report.audience else '',
+            report.socio_economic_characteristics, report.development_challenges,
+            report.sustainable_development_policy, report.status, report.start_project,
+            report.end_project, report.rationale, report.objectives, report.activities_practices,
+            report.size_academic, report.results, report.lessons_learned, report.key_message,
+            report.relationship_activities, report.funding, report.created_at, report.last_modified,
+            report.author, report.approved, report.submitted, ', '.join(map(str, report.direct_sdgs)) if report.direct_sdgs else '',
+            ', '.join(map(str, report.indirect_sdgs)) if report.indirect_sdgs else '', 
+            ', '.join(report.direct_esd_themes) if report.direct_esd_themes else '',
+            ', '.join(report.indirect_esd_themes) if report.indirect_esd_themes else '', 
+            ', '.join(report.direct_priority_areas) if report.direct_priority_areas else '',
+            ', '.join(report.indirect_priority_areas) if report.indirect_priority_areas else ''
+        ])
+
+    return response
+
+@login_required
+@user_passes_test(is_admin,login_url=reverse_lazy('initial-landing'))
+def download_users_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="users.csv"'
+
+    writer = csv.writer(response)
+    
+    # Write headers to CSV file
+    writer.writerow([
+        "User ID", "Username", "First Name", "Last Name", "Email",
+        "Organization", "Profile SDG", "Sector", "Approved", "Requesting", "Message"
+    ])
+    
+    # Query all users
+    users = User.objects.all()
+    
+    for user in users:
+        writer.writerow([
+            user.id,
+            user.username,
+            user.first_name,
+            user.last_name,
+            user.email,
+            user.account.organization if hasattr(user, 'account') else '',
+            ', '.join(user.account.profile_sdg) if hasattr(user, 'account') else '',
+            user.account.sector if hasattr(user, 'account') else '',
+            user.account.approved if hasattr(user, 'account') else '',
+            user.account.requesting if hasattr(user, 'account') else '',
+            user.account.message if hasattr(user, 'account') else '',
+        ])
+    
+    return response
