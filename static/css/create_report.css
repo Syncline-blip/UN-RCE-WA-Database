@@ -179,3 +179,9 @@ input[type="radio"] {
   padding-top: 10px;
   font-weight: bold;
 }
+
+.btn-danger{
+  max-width:fit-content;
+  background-color: rgb(212, 11, 11);
+  margin-top: 10px;
+}
