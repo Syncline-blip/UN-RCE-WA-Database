@@ -25,9 +25,6 @@ This repository contains the coide base for the United Nations Regional Centre o
 ## Links
 Official Trello and task management link https://trello.com/invite/b/iPAnwGp0/ATTI5f7cae36c300abe42d9ce01f5701fdf33B83BB21/cits3200-unrce-project-board
 
-## Official Post
-<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7120423143898320899" height="711" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
-
 
 ## Disclaimer
 Please contact the authors and/or the client for any disclosures or further information about the project and refer to the Creative Commons Zero v1.0 Universal License for information regarding the use of any source code for
