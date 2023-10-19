@@ -17,7 +17,8 @@ The project was developed for the UN RCE with Kate McGee as our primary contact.
 In this particular academic period, the Unit Coordinator is Professor Michael Wise of the University of Western Australia. 
 
 ## About
-(WIP)
+This repository contains the coide base for the United Nations Regional Centre of Expertise WA's concept for their new project database repository. The project has been deployed at: https://unrcewa.onrender.com/ via Render, though deployment will change during handover.
+
 
 
 ## Links
