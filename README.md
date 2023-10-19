@@ -19,8 +19,10 @@ In this particular academic period, the Unit Coordinator is Professor Michael Wi
 
 ## About
 This repository contains the coide base for the United Nations Regional Centre of Expertise WA's concept for their new project database repository. The project has been deployed at: https://unrcewa.onrender.com/ via Render, though deployment will change during handover.
-
-
+The project was built on:
+  - HTML/CSS/JS/BootStrap 5
+  - Django Framework
+  - PostgreSQL 15 Database
 
 ## Links
 Official Trello and task management link https://trello.com/invite/b/iPAnwGp0/ATTI5f7cae36c300abe42d9ce01f5701fdf33B83BB21/cits3200-unrce-project-board
