@@ -142,6 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
+#follow perth
 TIME_ZONE = 'Australia/Perth'
 
 USE_I18N = True
