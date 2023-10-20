@@ -107,7 +107,7 @@ WSGI_APPLICATION = "unrce_project.wsgi.application"
 #         "ENGINE": 'django.db.backends.postgresql',
 #         "NAME": 'unrce',
 #         'USER': 'postgres',
-#         'PASSWORD': '123',
+#         'PASSWORD': 'admin',
 #         'HOST': 'localhost',
 #         'PORT': '5432',
 #     }
