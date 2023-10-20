@@ -115,6 +115,9 @@ WSGI_APPLICATION = "unrce_project.wsgi.application"
 
 DATABASES = {
     "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    'OPTIONS': {
+            'init_command': "SET TIME ZONE 'Australia/Perth';",
+        },
 }
 
 
